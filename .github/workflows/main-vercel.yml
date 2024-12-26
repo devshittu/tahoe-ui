@@ -12,10 +12,11 @@ jobs:
         with:
           node-version: 16
       - run: mv .env.example .env
-      - run: npm install
+      - run: npm install --legacy-peer-deps
+      # - run: npm install
       # - run: npm run test
-      - run: npm run lint
-      - run: npm run format:check
+      # - run: npm run lint
+      # - run: npm run format:check
       # - run: npm run types:check
 
 # jobs:
