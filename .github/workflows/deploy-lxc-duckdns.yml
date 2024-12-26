@@ -16,6 +16,8 @@ env:
   DOCKER_INTERNAL_NETWORK_NAME: "my_media_network"
   DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+  SUBDOMAINS: ${{ secrets.SUBDOMAINS }}
+  DUCKDNS_TOKEN: ${{ secrets.DUCKDNS_TOKEN }}
   REPOSITORY_NAME: mediaapp
 
 jobs:
@@ -26,7 +28,7 @@ jobs:
 
     steps:
       - name: Fix permissions before checkout
-        run: sudo chown -R $USER:$USER /home/mediavmuser/action-runners/backend/_work/tahoe-ui/
+        run: sudo chown -R $USER:$USER /home/mediavmuser/action-runners/frontend/_work/tahoe-ui/
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -39,6 +41,8 @@ jobs:
           echo "APP_CODE_NAME=${{ vars.APP_CODE_NAME }}" >> .env.docker-compose
           echo "APP_VERSION=${{ vars.APP_VERSION }}" >> .env.docker-compose
           echo "APP_DESCRIPTION=${{ vars.APP_DESCRIPTION }}" >> .env.docker-compose
+          echo "SUBDOMAINS=${{ secrets.SUBDOMAINS }}" >> .env.docker-compose
+          echo "DUCKDNS_TOKEN=${{ secrets.DUCKDNS_TOKEN }}" >> .env.docker-compose
 
       # - name: Print .env.docker-compose for debugging
       #   run: cat .env.docker-compose
@@ -53,7 +57,22 @@ jobs:
           fi
       - name: Pull Docker image
         run: |
-          sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/mediaapp:web-app-latest
+          sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/mediaapp:tahoe-ui-latest
+
+        
+      # Deploy DuckDNS service using Docker Compose
+      - name: Deploy DuckDNS
+        run: |
+          docker compose -f docker-compose.staging.yml up -d
+        env:
+          SUBDOMAINS: ${{ secrets.SUBDOMAINS }}
+          DUCKDNS_TOKEN: ${{ secrets.DUCKDNS_TOKEN }}
+
+      # Verify that the service is running
+      - name: Verify DuckDNS Service
+        run: |
+          docker ps | grep duckdns
+
 
       # - name: Delete Old docker container for web app
       #   run: sudo docker compose -f docker-compose.staging.yml down web-app || true
@@ -79,20 +98,12 @@ jobs:
             sudo docker compose -f docker-compose.staging.yml down || true
             sudo docker compose --env-file .env.docker-compose -f docker-compose.staging.yml up -d
           else
-            echo "Restarting only web-app and celery containers..."
-            sudo docker compose -f docker-compose.staging.yml down web-app celery celery-beat redis || true
-            sudo docker compose --env-file .env.docker-compose -f docker-compose.staging.yml up -d --no-recreate web-app celery celery-beat redis 
+            echo "Restarting only frontend-app "
+            sudo docker compose -f docker-compose.staging.yml down frontend-app  || true
+            sudo docker compose --env-file .env.docker-compose -f docker-compose.staging.yml up -d --no-recreate frontend-app  
           fi
 
-      - name: Run init-web-app.sh in backend-app container
-        run: sudo docker exec backend-app bash -c "./k8s/scripts/init-web-app.sh"
+      # - name: Run init-web-app.sh in backend-app container
+      #   run: sudo docker exec backend-app bash -c "./k8s/scripts/init-web-app.sh"
 
-    #   - name: Remove Untagged Docker Images
-    #     run: |
-    #       dangling_images=$(sudo docker images -f "dangling=true" -q)
-    #       if [ -n "$dangling_images" ]; then
-    #         sudo docker rmi $dangling_images
-    #       else
-    #         echo "No dangling images to remove"
-    #       fi
 # .github/workflows/cd-vm-deploy.yml
