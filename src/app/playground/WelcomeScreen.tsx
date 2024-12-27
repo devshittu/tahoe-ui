@@ -79,7 +79,7 @@ export const WhatsNewScreen: React.FC<ScreenProps> = ({ onContinue }) => {
       className="min-h-screen w-full px-6 md:px-12"
     >
       <StackBox direction="col" gap="6" className="max-w-md text-center">
-        <Heading level={1}>What's New in Apple Music</Heading>
+        <Heading level={1}>{"What's New in Apple Music"}</Heading>
 
         <StackBox direction="col" gap="4">
           <FlexBox align="center" gap="3">
