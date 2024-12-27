@@ -7,20 +7,20 @@ import FlexBox from './FlexBox';
 
 type StackBoxProps = {
   children: ReactNode;
-  direction?: 'column' | 'row';
+  direction?: 'col' | 'row';
   gap?: '0' | '1' | '2' | '4' | '6' | '8';
   className?: string;
 } & React.ComponentProps<typeof FlexBox>;
 
 const StackBox = ({
   children,
-  direction = 'column',
+  direction = 'col',
   gap = '4',
   className,
   ...props
 }: StackBoxProps) => {
   const stackClasses = clsx(
-    direction === 'column' ? 'flex-col' : 'flex-row',
+    direction === 'col' ? 'flex-col' : 'flex-row',
     `gap-${gap}`,
     className,
   );

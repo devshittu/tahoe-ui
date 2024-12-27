@@ -1,4 +1,3 @@
-// app/components/Emphasis.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
@@ -16,10 +15,12 @@ const Emphasis = ({
   color = 'primary',
 }: EmphasisProps) => {
   return (
-    <Text fontStyle="italic" color={color} className={className}>
+    <Text color={color} className={`italic ${className}`}>
       {children}
     </Text>
   );
 };
 
 export default Emphasis;
+
+// src/components/Typography/Emphasis.tsx

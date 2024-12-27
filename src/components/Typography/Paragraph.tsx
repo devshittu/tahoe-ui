@@ -1,4 +1,4 @@
-// app/components/Paragraph.tsx
+
 'use client';
 
 import React, { ReactNode } from 'react';
@@ -6,13 +6,14 @@ import Text from './Text';
 
 type ParagraphProps = {
   children: ReactNode;
+  className?: string;
   fontFamily?: 'primary' | 'secondary' | 'mono';
   fontWeight?: 'light' | 'regular' | 'bold' | 'extrabold';
   color?: 'primary' | 'secondary' | 'accent' | string;
   align?: 'left' | 'center' | 'right' | 'justify';
   lineHeight?: 'tight' | 'normal' | 'loose';
   letterSpacing?: 'tight' | 'normal' | 'wide';
-  textTransform?: 'uppercase' | 'lowercase' | 'capitalize';
+  textTransform?: 'uppercase' | 'lowercase' | 'capitalize' | 'none';
   textDecoration?: 'underline' | 'line-through' | 'none';
   background?: string;
   truncate?: boolean;
@@ -21,6 +22,7 @@ type ParagraphProps = {
 
 const Paragraph = ({
   children,
+  className = '',
   fontFamily = 'primary',
   fontWeight = 'regular',
   color = 'primary',
@@ -34,7 +36,7 @@ const Paragraph = ({
   margin = 'my-2',
 }: ParagraphProps) => {
   return (
-    <p className={margin}>
+    <p className={`${margin} ${className}`}>
       <Text
         fontFamily={fontFamily}
         fontWeight={fontWeight}

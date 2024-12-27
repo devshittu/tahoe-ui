@@ -3,9 +3,11 @@
 // import React, { ReactNode, useEffect, useRef } from 'react';
 // import Prism from 'prismjs';
 // import 'prismjs/components/prism-jsx'; // Import additional languages as needed
-// import 'prismjs/plugins/line-numbers/prism-line-numbers.css'; // If using line numbers
+// import 'prismjs/components/prism-css'; // CSS
+// import 'prismjs/plugins/line-numbers/prism-line-numbers.css'; // Line numbers CSS
 // import 'prismjs/plugins/line-numbers/prism-line-numbers'; // Line numbers plugin
-// import Text from './Text';
+// import clsx from 'clsx';
+// import BaseBox from '../Box/BaseBox';
 
 // type CodeProps = {
 //   children: ReactNode;
@@ -14,12 +16,13 @@
 //   showLineNumbers?: boolean;
 //   className?: string;
 //   wrapLines?: boolean;
-// };
+//   ariaLabel?: string;
+// } & React.HTMLAttributes<HTMLElement>;
 
 // const themeClasses: Record<CodeProps['theme'], string> = {
 //   default: 'prism',
 //   tomorrow: 'prism-tomorrow',
-//   custom: '', // Add custom theme classes if any
+//   custom: '',
 // };
 
 // const Code = ({
@@ -27,8 +30,10 @@
 //   language = 'javascript',
 //   theme = 'default',
 //   showLineNumbers = false,
-//   className = '',
+//   className,
 //   wrapLines = false,
+//   ariaLabel,
+//   ...props
 // }: CodeProps) => {
 //   const codeRef = useRef<HTMLElement>(null);
 
@@ -39,21 +44,29 @@
 //   }, [children, language]);
 
 //   return (
-//     <pre
-//       className={`${themeClasses[theme]} ${
-//         showLineNumbers ? 'line-numbers' : ''
-//       } ${wrapLines ? 'whitespace-pre-wrap' : 'whitespace-pre'} ${className}`}
+//     <BaseBox
+//       as="pre"
+//       className={clsx(
+//         themeClasses[theme],
+//         showLineNumbers ? 'line-numbers' : '',
+//         wrapLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
+//         'overflow-x-auto',
+//         className,
+//       )}
+//       aria-label={ariaLabel}
+//       suppressHydrationWarning
+//       {...props}
 //     >
 //       <code ref={codeRef} className={`language-${language}`}>
 //         {children}
 //       </code>
-//     </pre>
+//     </BaseBox>
 //   );
 // };
 
 // export default Code;
+// // src/components/Typography/Code.tsx
 
-// src/components/Typography/Code.tsx// src/components/Typography/Code.tsx
 'use client';
 
 import React, { ReactNode, useEffect, useRef } from 'react';
@@ -75,10 +88,10 @@ type CodeProps = {
   ariaLabel?: string;
 } & React.HTMLAttributes<HTMLElement>;
 
-const themeClasses: Record<CodeProps['theme'], string> = {
+const themeClasses: Record<NonNullable<CodeProps['theme']>, string> = {
   default: 'prism',
   tomorrow: 'prism-tomorrow',
-  custom: '',
+  custom: '', // Custom theme allows for additional external styling
 };
 
 const Code = ({
@@ -103,11 +116,11 @@ const Code = ({
     <BaseBox
       as="pre"
       className={clsx(
-        themeClasses[theme],
+        themeClasses[theme], // Apply the appropriate theme class
         showLineNumbers ? 'line-numbers' : '',
         wrapLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
         'overflow-x-auto',
-        className,
+        className
       )}
       aria-label={ariaLabel}
       suppressHydrationWarning
@@ -121,4 +134,3 @@ const Code = ({
 };
 
 export default Code;
-// src/components/Typography/Code.tsx

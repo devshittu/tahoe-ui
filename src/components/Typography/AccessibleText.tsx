@@ -1,4 +1,3 @@
-// app/components/AccessibleText.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
@@ -34,3 +33,5 @@ const AccessibleText = ({
 };
 
 export default AccessibleText;
+
+// src/components/Typography/AccessibleText.tsx
