@@ -4,6 +4,7 @@
 import React from 'react';
 import { FlexBox, StackBox, BaseBox } from '@/components/Box';
 import { Heading, Paragraph, Span, LinkText } from '@/components/Typography';
+import BaseImage from '@/components/Image/BaseImage';
 
 type ScreenProps = {
   onContinue: () => void;
@@ -20,15 +21,24 @@ export const WelcomeScreen: React.FC<ScreenProps> = ({ onContinue }) => {
     >
       <StackBox direction="col" gap="6" className="max-w-md text-center">
         <BaseBox
-          as="img"
-          src="/apple-music-icon.png"
-          alt="Apple Music Logo"
           width="auto"
           height="auto"
           className="mx-auto w-16 h-16"
+        >
+          <BaseImage
+        src="https://dummyimage.com/500x300"
+          alt="Sample Image"
+          width={600}
+          height={400}
+          shape="rounded"
+          fallback={{ fallbackSrc: '/images/fallback.jpg' }}
+          onLoaded={() => console.log('Image Loaded')}
+          onErrorFallback={() => console.log('Fallback also failed')}
+          className="shadow-md"
         />
+        </BaseBox>
         <Heading level={1}>
-          Welcome to <Span className="text-red-500">Apple Music</Span>
+          Welcome to <Span fontWeight='extrabold' className="text-red-500">Apple Music</Span>
         </Heading>
 
         <Paragraph className="text-gray-400 text-sm md:text-base">
