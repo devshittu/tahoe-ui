@@ -46,7 +46,8 @@ export function usePageModeConfig(position: PageModePosition) {
     },
   };
 
-  const dragDirection = position === "left" || position === "right" ? "x" : "y";
+  const dragDirection: "x" | "y"  = position === "left" || position === "right" ? "x" : "y";
+
   let dragConstraints: DragConstraints = {};
   const dragElastic = 0.1; // Slight rubber band
 
