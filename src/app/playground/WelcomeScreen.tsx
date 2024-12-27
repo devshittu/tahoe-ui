@@ -1,4 +1,3 @@
-// src/components/Typography/WelcomeScreen.tsx
 'use client';
 
 import React from 'react';
@@ -123,3 +122,4 @@ export const WhatsNewScreen: React.FC<ScreenProps> = ({ onContinue }) => {
     </FlexBox>
   );
 };
+// src/components/Typography/WelcomeScreen.tsx
