@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { WelcomeScreen, WhatsNewScreen } from './WelcomeScreen';
 
 const PlaygroundPage = () => {
-  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'whatsNew'>(
+  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'whatsNew'| 'mainContent'>(
     'welcome',
   );
 
