@@ -71,17 +71,30 @@ export function PageMode({
   const register = useUIManager((s) => s.register);
   const unregister = useUIManager((s) => s.unregister);
 
+
+  const focusRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
+    if (isOpen && focusRef.current) {
+      focusRef.current.focus();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+  const currentId = componentId.current;
     if (isOpen) {
-      register({ id: componentId.current, onEscape: escapeClose ? close : undefined });
+      register({ id: currentId, onEscape: escapeClose ? close : undefined });
       trackPageModeEvent("PageModeOpened");
     }
     return () => {
-      unregister(componentId.current);
+    if (currentId) {
+      unregister(currentId);
       if (isOpen && isClosing) trackPageModeEvent("PageModeClosed");
       // eslint-disable-next-line react-hooks/exhaustive-deps
     };
-  }, [isOpen, isClosing, close, escapeClose]);
+  }
+
+  }, [isOpen, isClosing, close, escapeClose, register, unregister]);
 
   useEffect(() => {
     if (isOpen && lockScroll) {
@@ -206,9 +219,11 @@ export function PageMode({
               </motion.div>
             )}
 
-            <FocusLock autoFocus returnFocus>
+            <FocusLock returnFocus>
               <motion.div
                 {...dialogProps}
+                ref={focusRef}
+                tabIndex={-1}
                 className={containerClasses}
                 style={layoutStyles}
                 custom={position}
@@ -248,3 +263,5 @@ export function PageMode({
     </Portal>
   );
 }
+
+// src/components/PageMode/PageMode.tsx
