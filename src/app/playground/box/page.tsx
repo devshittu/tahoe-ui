@@ -67,8 +67,8 @@ const DemoPage = () => {
   >('stretch');
 
   // StackBox State
-  const [stackDirection, setStackDirection] = useState<'column' | 'row'>(
-    'column',
+  const [stackDirection, setStackDirection] = useState<'col' | 'row'>(
+    'col',
   );
   const [stackGap, setStackGap] = useState<'0' | '1' | '2' | '4' | '6' | '8'>(
     '4',
@@ -547,7 +547,7 @@ const DemoPage = () => {
         <DraggableBox
           disabled={draggableDisabled}
           padding="4"
-          background="blue-100"
+          background="blue-50"
           rounded="lg"
         >
           <p>Drag me around!</p>
