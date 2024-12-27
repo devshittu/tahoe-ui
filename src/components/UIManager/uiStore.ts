@@ -1,6 +1,6 @@
 // src/components/UIManager/uiStore.ts
-"use client";
-import { create } from "zustand";
+'use client';
+import { create } from 'zustand';
 
 type UIComponent = {
   id: string;

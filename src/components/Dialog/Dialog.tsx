@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useDragControls } from "framer-motion";
-import FocusLock from "react-focus-lock";
-import { Portal } from "../PageMode/Portal";
-import { useUIManager } from "../UIManager/uiStore";
-import { twMerge } from "tailwind-merge";
-import { HandlebarZone } from "./HandlebarZone";
-import { useDialogConfig } from "./useDialogConfig";
-import { v4 as uuidv4 } from "uuid";
-import type { DialogProps } from "./types";
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence, useDragControls } from 'framer-motion';
+import FocusLock from 'react-focus-lock';
+import { Portal } from '../PageMode/Portal';
+import { useUIManager } from '../UIManager/uiStore';
+import { twMerge } from 'tailwind-merge';
+import { HandlebarZone } from './HandlebarZone';
+import { useDialogConfig } from './useDialogConfig';
+import { v4 as uuidv4 } from 'uuid';
+import type { DialogProps } from './types';
 
 type ExtendedDialogProps = DialogProps & {
   rubberBandOnDrag?: boolean;
@@ -18,8 +18,8 @@ type ExtendedDialogProps = DialogProps & {
 export function Dialog({
   isOpen,
   onClose,
-  showFrom = "top",
-  handlebarPosition = "top",
+  showFrom = 'top',
+  handlebarPosition = 'top',
   roundedEdges = false,
   themeable = false,
   a11yOptions = {},
@@ -33,10 +33,11 @@ export function Dialog({
     ariaDescribedby,
     ariaModal = true,
     lockScroll = false,
-    closeOnOutsideClick = true
+    closeOnOutsideClick = true,
   } = a11yOptions;
 
-  const { variants, dialogContainerClasses, dialogClasses } = useDialogConfig(showFrom);
+  const { variants, dialogContainerClasses, dialogClasses } =
+    useDialogConfig(showFrom);
   const dragControls = useDragControls();
   const [isBeyondLimit, setIsBeyondLimit] = useState(false);
   const componentId = useRef(uuidv4());
@@ -54,7 +55,10 @@ export function Dialog({
     const currentComponentId = componentId.current; // Copy to a stable variable
 
     if (isOpen) {
-      register({ id: currentComponentId, onEscape: escapeClose ? onClose : undefined });
+      register({
+        id: currentComponentId,
+        onEscape: escapeClose ? onClose : undefined,
+      });
     }
 
     return () => {
@@ -65,7 +69,7 @@ export function Dialog({
   useEffect(() => {
     if (isOpen && lockScroll) {
       const orig = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
       return () => {
         document.body.style.overflow = orig;
       };
@@ -75,28 +79,31 @@ export function Dialog({
   const pullDist = 50;
   const threshold = 0.6; // For non-rubber band
 
-  const handleDrag = (e: PointerEvent, info: { offset: { x: number; y: number } }) => {
+  const handleDrag = (
+    e: PointerEvent,
+    info: { offset: { x: number; y: number } },
+  ) => {
     const { x, y } = info.offset;
     let beyond = false;
 
     if (rubberBandOnDrag) {
-      if (handlebarPosition === "top" || handlebarPosition === "bottom") {
+      if (handlebarPosition === 'top' || handlebarPosition === 'bottom') {
         if (Math.abs(y) > pullDist) beyond = true;
       } else {
         if (Math.abs(x) > pullDist) beyond = true;
       }
     } else {
       switch (handlebarPosition) {
-        case "top":
+        case 'top':
           if (y > window.innerHeight * threshold) beyond = true;
           break;
-        case "bottom":
+        case 'bottom':
           if (-y > window.innerHeight * threshold) beyond = true;
           break;
-        case "left":
+        case 'left':
           if (x > window.innerWidth * threshold) beyond = true;
           break;
-        case "right":
+        case 'right':
           if (-x > window.innerWidth * threshold) beyond = true;
           break;
       }
@@ -116,13 +123,20 @@ export function Dialog({
 
   const handleHandlebarClick = () => onClose();
 
-  const roundedClasses = roundedEdges ? "rounded-lg sm:rounded-xl" : "";
-  const themeClasses = themeable ? "dark:bg-gray-800 dark:text-gray-100 bg-white text-gray-900" : "bg-white text-gray-900";
+  const roundedClasses = roundedEdges ? 'rounded-lg sm:rounded-xl' : '';
+  const themeClasses = themeable
+    ? 'dark:bg-gray-800 dark:text-gray-100 bg-white text-gray-900'
+    : 'bg-white text-gray-900';
 
-  const finalDialogClasses = twMerge(dialogClasses, roundedClasses, themeClasses);
+  const finalDialogClasses = twMerge(
+    dialogClasses,
+    roundedClasses,
+    themeClasses,
+  );
 
   // **Make it stiffer** => reduce dragElastic
-  const dragAxis = handlebarPosition === "top" || handlebarPosition === "bottom" ? "y" : "x";
+  const dragAxis =
+    handlebarPosition === 'top' || handlebarPosition === 'bottom' ? 'y' : 'x';
   const dragProps = rubberBandOnDrag
     ? {
         drag: dragAxis,
@@ -165,12 +179,12 @@ export function Dialog({
               >
                 <motion.div
                   role="dialog"
-                  aria-modal={ariaModal ? "true" : undefined}
+                  aria-modal={ariaModal ? 'true' : undefined}
                   aria-label={ariaLabel}
                   aria-labelledby={ariaLabelledby}
                   aria-describedby={ariaDescribedby}
-                  className={finalDialogClasses + " relative"}
-                  style={{ touchAction: "none" }}
+                  className={finalDialogClasses + ' relative'}
+                  style={{ touchAction: 'none' }}
                   onDrag={handleDrag}
                   onDragEnd={handleDragEnd}
                   {...dragProps}
@@ -182,9 +196,7 @@ export function Dialog({
                     isBeyondLimit={isBeyondLimit}
                   />
 
-                  <div className="p-4 overflow-auto">
-                    {children}
-                  </div>
+                  <div className="p-4 overflow-auto">{children}</div>
                 </motion.div>
               </motion.div>
             </FocusLock>

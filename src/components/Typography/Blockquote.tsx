@@ -19,13 +19,11 @@ const Blockquote = ({
   className = '',
 }: BlockquoteProps) => {
   return (
-    <blockquote className={`border-l-4 ${borderColor} pl-4 italic ${className}`}>
+    <blockquote
+      className={`border-l-4 ${borderColor} pl-4 italic ${className}`}
+    >
       <Text>{children}</Text>
-      {cite && (
-        <footer className="mt-2 text-sm text-gray-500">
-          — {cite}
-        </footer>
-      )}
+      {cite && <footer className="mt-2 text-sm text-gray-500">— {cite}</footer>}
     </blockquote>
   );
 };

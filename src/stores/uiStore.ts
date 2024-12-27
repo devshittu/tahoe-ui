@@ -22,7 +22,11 @@ export interface UIComponentState {
   type: UIComponentType | null;
   position: Position;
   content: ReactNode | null;
-  open: (type: UIComponentType, content: ReactNode, position?: Position) => void;
+  open: (
+    type: UIComponentType,
+    content: ReactNode,
+    position?: Position,
+  ) => void;
   close: () => void;
 }
 
@@ -37,7 +41,11 @@ export const useUIStore = create<UIComponentState>((set) => ({
     set({ isOpen: true, type, content, position }),
   close: () =>
     set((state) => {
-      setTimeout(() => set({ isOpen: false, isClosing: false, type: null, content: null }), state.closeDelay);
+      setTimeout(
+        () =>
+          set({ isOpen: false, isClosing: false, type: null, content: null }),
+        state.closeDelay,
+      );
       return { isClosing: true };
     }),
 }));

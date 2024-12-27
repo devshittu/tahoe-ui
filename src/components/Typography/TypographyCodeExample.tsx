@@ -9,41 +9,34 @@ import Badge from './Badge';
 import InlineCode from './InlineCode';
 
 const TypographyCodeExample = () => {
-
   return (
     <div className="p-8 space-y-12">
       {/* 1. Basic Code Example */}
       <section>
-
-
-
-
         <Heading level={2} align="left" color="accent">
           Basic InlineCode Example
         </Heading>
 
-    <Paragraph>
-      To declare a constant in JavaScript, use the <InlineCode>const</InlineCode> keyword.
-    </Paragraph>
-
+        <Paragraph>
+          To declare a constant in JavaScript, use the{' '}
+          <InlineCode>const</InlineCode> keyword.
+        </Paragraph>
 
         <Heading level={2} align="left" color="accent">
           Basic AdvancedInlineCode Example
         </Heading>
-<Paragraph>
-      In React, you can manage state using the{' '}
-      <InlineCode language="javascript" ariaLabel="useState hook">
-        useState
-      </InlineCode>{' '}
-      hook for functional components.
-    </Paragraph>
+        <Paragraph>
+          In React, you can manage state using the{' '}
+          <InlineCode language="javascript" ariaLabel="useState hook">
+            useState
+          </InlineCode>{' '}
+          hook for functional components.
+        </Paragraph>
 
         <Heading level={2} align="left" color="accent">
           Basic Code Example
         </Heading>
-        <Paragraph>
-          Below is a simple JavaScript function:
-        </Paragraph>
+        <Paragraph>Below is a simple JavaScript function:</Paragraph>
         <Code language="javascript">
           {`const add = (a, b) => {
   return a + b;
@@ -85,7 +78,8 @@ const getUser = (id: number): User => {
           Code Example with Unsupported Language
         </Heading>
         <Paragraph>
-          If an unsupported language is provided, Prism.js will render the code without highlighting:
+          If an unsupported language is provided, Prism.js will render the code
+          without highlighting:
         </Paragraph>
         <Code language="unknown">
           {`This is some code in an unsupported language.`}
@@ -98,7 +92,8 @@ const getUser = (id: number): User => {
           Preformatted Code with Long Lines
         </Heading>
         <Paragraph>
-          This example demonstrates how the component handles long lines of code with horizontal scrolling:
+          This example demonstrates how the component handles long lines of code
+          with horizontal scrolling:
         </Paragraph>
         <Preformatted
           language="css"
@@ -126,7 +121,8 @@ const getUser = (id: number): User => {
           Code Example with Custom Class Names
         </Heading>
         <Paragraph>
-          You can pass additional Tailwind classes to further customize the code block:
+          You can pass additional Tailwind classes to further customize the code
+          block:
         </Paragraph>
         <Code
           language="jsx"
@@ -150,7 +146,8 @@ const getUser = (id: number): User => {
           Code Example with Badge
         </Heading>
         <Paragraph>
-          You can integrate badges or other components within or around your code blocks:
+          You can integrate badges or other components within or around your
+          code blocks:
         </Paragraph>
         <div className="flex items-center space-x-2">
           <Badge variant="filled" color="accent" size="md">
@@ -169,6 +166,6 @@ const getUser = (id: number): User => {
       </section>
     </div>
   );
-}
+};
 
-export default TypographyCodeExample
+export default TypographyCodeExample;

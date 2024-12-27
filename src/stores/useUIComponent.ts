@@ -1,7 +1,6 @@
-
-"use client";
-import { createStore, useStore } from "zustand";
-import React from "react";
+'use client';
+import { createStore, useStore } from 'zustand';
+import React from 'react';
 
 export type UIComponentState = {
   isOpen: boolean;
@@ -22,7 +21,7 @@ export const useUIComponentStore = createStore<UIComponentState>((set) => ({
     set((state) => {
       setTimeout(
         () => set({ isOpen: false, isClosing: false, content: null }),
-        state.closeDelay
+        state.closeDelay,
       );
       return { isClosing: true };
     }),

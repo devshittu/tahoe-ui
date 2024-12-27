@@ -22,7 +22,7 @@ const InlineCode = ({
     <code
       className={clsx(
         `px-1 py-0.5 rounded bg-gray-100 text-sm font-mono`,
-        className
+        className,
       )}
       aria-label={ariaLabel}
       {...props}

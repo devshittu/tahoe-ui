@@ -8,10 +8,9 @@ import React, { useState } from 'react';
 
 const DemoPage = () => (
   <>
-
-          <DialogExampleTrigger />
-          <TypographyExampleUsage />
+    <DialogExampleTrigger />
+    <TypographyExampleUsage />
   </>
-)
+);
 
 export default DemoPage;

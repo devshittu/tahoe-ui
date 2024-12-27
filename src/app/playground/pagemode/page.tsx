@@ -6,12 +6,11 @@ import React, { useState } from 'react';
 
 const DemoPage = () => (
   <>
-  
-      <ExampleButton />
+    <ExampleButton />
 
-          {/* <DialogExampleTrigger />
+    {/* <DialogExampleTrigger />
           <TypographyExampleUsage /> */}
   </>
-)
+);
 
 export default DemoPage;

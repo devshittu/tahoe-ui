@@ -16,11 +16,7 @@ const Strong = ({
   color = 'primary',
 }: StrongProps) => {
   return (
-    <Text
-      fontWeight="bold"
-      color={color}
-      className={className}
-    >
+    <Text fontWeight="bold" color={color} className={className}>
       {children}
     </Text>
   );

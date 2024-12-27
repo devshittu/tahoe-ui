@@ -52,7 +52,8 @@ const TypographyExampleUsage = () => {
       {/* 2. Paragraph Component */}
       <section>
         <Paragraph>
-          This is a <Span color="accent">basic paragraph</Span> demonstrating the use of the Paragraph component.
+          This is a <Span color="accent">basic paragraph</Span> demonstrating
+          the use of the Paragraph component.
         </Paragraph>
         <Paragraph
           fontFamily="secondary"
@@ -66,26 +67,30 @@ const TypographyExampleUsage = () => {
           background="yellow-100"
           margin="mt-4"
         >
-          Advanced paragraph with customized font family, weight, color, alignment, line height, letter spacing,
-          text transformation, decoration, and background.
+          Advanced paragraph with customized font family, weight, color,
+          alignment, line height, letter spacing, text transformation,
+          decoration, and background.
         </Paragraph>
       </section>
 
       {/* 3. Span Component */}
       <section>
         <Paragraph>
-          This is a paragraph with a <Span fontWeight="bold">bold span</Span> inside.
+          This is a paragraph with a <Span fontWeight="bold">bold span</Span>{' '}
+          inside.
         </Paragraph>
         <Paragraph>
-          Another example with a <Span color="accent" textDecoration="underline">colored and underlined span</Span>.
+          Another example with a{' '}
+          <Span color="accent" textDecoration="underline">
+            colored and underlined span
+          </Span>
+          .
         </Paragraph>
       </section>
 
       {/* 4. Lead Component */}
       <section>
-        <Lead>
-          This is a basic lead paragraph, serving as an introduction.
-        </Lead>
+        <Lead>This is a basic lead paragraph, serving as an introduction.</Lead>
         <Lead className="bg-gray-100 p-4 rounded">
           Advanced lead paragraph with background, padding, and rounded corners.
         </Lead>
@@ -103,23 +108,17 @@ const TypographyExampleUsage = () => {
 
       {/* 6. Display Components */}
       <section>
-        <DisplayLarge>
-          Basic Display Large Text
-        </DisplayLarge>
+        <DisplayLarge>Basic Display Large Text</DisplayLarge>
         <DisplayLarge align="left" color="secondary" margin="my-10">
           Advanced Display Large Text with alignment, color, and custom margin
         </DisplayLarge>
 
-        <DisplayMedium>
-          Basic Display Medium Text
-        </DisplayMedium>
+        <DisplayMedium>Basic Display Medium Text</DisplayMedium>
         <DisplayMedium align="right" color="accent" margin="my-8">
           Advanced Display Medium Text with alignment, color, and custom margin
         </DisplayMedium>
 
-        <DisplaySmall>
-          Basic Display Small Text
-        </DisplaySmall>
+        <DisplaySmall>Basic Display Small Text</DisplaySmall>
         <DisplaySmall align="justify" color="primary" margin="my-6">
           Advanced Display Small Text with alignment, color, and custom margin
         </DisplaySmall>
@@ -128,16 +127,28 @@ const TypographyExampleUsage = () => {
       {/* 7. Inline Text Elements */}
       <section>
         <Paragraph>
-          Visit <LinkText href="https://nextjs.org/" target="_blank" rel="noopener noreferrer">Next.js</LinkText> for more information.
+          Visit{' '}
+          <LinkText
+            href="https://nextjs.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Next.js
+          </LinkText>{' '}
+          for more information.
         </Paragraph>
         <Paragraph>
-          Emphasizing text with <Emphasis>italic styling</Emphasis> for better readability.
+          Emphasizing text with <Emphasis>italic styling</Emphasis> for better
+          readability.
         </Paragraph>
         <Paragraph>
-          Strong text can be rendered as <Strong>bold</Strong> to highlight important parts.
+          Strong text can be rendered as <Strong>bold</Strong> to highlight
+          important parts.
         </Paragraph>
         <Paragraph>
-          Highlighting text with <Highlight bgColor="yellow-200">background color</Highlight> for emphasis.
+          Highlighting text with{' '}
+          <Highlight bgColor="yellow-200">background color</Highlight> for
+          emphasis.
         </Paragraph>
       </section>
 
@@ -213,12 +224,11 @@ const getUser = (id: number): User => {
       <section>
         <Label>Form Label</Label>
         <Paragraph>
-          Example of a <Label color="accent">custom label</Label> within a paragraph.
+          Example of a <Label color="accent">custom label</Label> within a
+          paragraph.
         </Paragraph>
 
-        <Caption>
-          Image caption goes here.
-        </Caption>
+        <Caption>Image caption goes here.</Caption>
         <Caption className="text-gray-700">
           Advanced caption with custom color.
         </Caption>
@@ -261,7 +271,8 @@ const getUser = (id: number): User => {
           align="center"
           className="mt-4"
         >
-          Fluid typography that scales between 1rem and 2rem based on viewport width.
+          Fluid typography that scales between 1rem and 2rem based on viewport
+          width.
         </FluidTypography>
       </section>
 
@@ -289,17 +300,24 @@ const getUser = (id: number): User => {
 
       {/* 12. Accessibility-Focused Components */}
       <section>
-        <AccessibleText ariaLabel="Accessible button" role="button" tabIndex={0} focusable className="focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <AccessibleText
+          ariaLabel="Accessible button"
+          role="button"
+          tabIndex={0}
+          focusable
+          className="focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
           Accessible Text with ARIA attributes and focus styles
         </AccessibleText>
 
         <ReadableText>
-          This text is optimized for readability with appropriate font size, line height, and color contrast.
+          This text is optimized for readability with appropriate font size,
+          line height, and color contrast.
         </ReadableText>
       </section>
 
       <section>
-        <TypographyCodeExample/>
+        <TypographyCodeExample />
       </section>
     </div>
   );

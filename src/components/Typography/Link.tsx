@@ -35,7 +35,7 @@ const Link = ({
         underline ? 'underline' : 'no-underline',
         'text-blue-600 dark:text-blue-400',
         'hover:opacity-80 transition-opacity',
-        className
+        className,
       )}
     >
       {children}

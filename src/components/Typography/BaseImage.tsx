@@ -1,9 +1,7 @@
 // src/components/Typography/Image.tsx
 'use client';
 
-import React, {
-  forwardRef, useState, useCallback, CSSProperties,
-} from 'react';
+import React, { forwardRef, useState, useCallback, CSSProperties } from 'react';
 import NextImage from 'next/image';
 import clsx from 'clsx';
 
@@ -73,16 +71,19 @@ const Image = forwardRef<HTMLDivElement, ImageProps>(
       onLoad,
       onError,
     },
-    ref
+    ref,
   ) => {
     const [hasError, setHasError] = useState(false);
 
     /** Convert width/height to safe numbers if they are numeric strings. */
-    const parseSafeNumber = useCallback((val: string | number | undefined): number | undefined => {
-      if (typeof val === 'number') return val;
-      if (val && !isNaN(Number(val))) return Number(val);
-      return undefined;
-    }, []);
+    const parseSafeNumber = useCallback(
+      (val: string | number | undefined): number | undefined => {
+        if (typeof val === 'number') return val;
+        if (val && !isNaN(Number(val))) return Number(val);
+        return undefined;
+      },
+      [],
+    );
 
     const safeWidth = parseSafeNumber(width);
     const safeHeight = parseSafeNumber(height);
@@ -90,13 +91,13 @@ const Image = forwardRef<HTMLDivElement, ImageProps>(
     /** Common Tailwind classes for images. */
     const baseClasses = clsx(
       'h-auto', // keep ratio
-      'max-w-full', // or user can override with w-{size} 
+      'max-w-full', // or user can override with w-{size}
       variant === 'rounded' && 'rounded-lg',
       variant === 'circle' && 'rounded-full',
       variant === 'shadow' && 'shadow-xl dark:shadow-gray-800',
       grayscale && 'filter grayscale hover:grayscale-0',
       blurOnHover && 'transition-all duration-300 filter blur-0 hover:blur-sm',
-      className
+      className,
     );
 
     /** If retina is true, we encourage srcSet usage. Example usage:
@@ -123,32 +124,33 @@ const Image = forwardRef<HTMLDivElement, ImageProps>(
     };
 
     /** Render actual NextImage or fallback. */
-    const imageContent = hasError && fallbackSrc ? (
-      <NextImage
-        src={fallbackSrc}
-        alt="fallback"
-        width={safeWidth}
-        height={safeHeight}
-        priority={priority}
-        className={baseClasses}
-        onLoad={handleLoad}
-      />
-    ) : hasError ? (
-      <DefaultFallback />
-    ) : (
-      <NextImage
-        src={src}
-        alt={alt}
-        width={safeWidth}
-        height={safeHeight}
-        priority={priority}
-        onError={handleError}
-        onLoad={handleLoad}
-        className={baseClasses}
-        style={style}
-        fill={fill}
-      />
-    );
+    const imageContent =
+      hasError && fallbackSrc ? (
+        <NextImage
+          src={fallbackSrc}
+          alt="fallback"
+          width={safeWidth}
+          height={safeHeight}
+          priority={priority}
+          className={baseClasses}
+          onLoad={handleLoad}
+        />
+      ) : hasError ? (
+        <DefaultFallback />
+      ) : (
+        <NextImage
+          src={src}
+          alt={alt}
+          width={safeWidth}
+          height={safeHeight}
+          priority={priority}
+          onError={handleError}
+          onLoad={handleLoad}
+          className={baseClasses}
+          style={style}
+          fill={fill}
+        />
+      );
 
     /** If variant=caption, wrap in <figure> & <figcaption>. */
     if (variant === 'caption' && caption) {
@@ -173,7 +175,7 @@ const Image = forwardRef<HTMLDivElement, ImageProps>(
           ref={ref}
           className={clsx(
             'relative max-w-sm transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0',
-            className
+            className,
           )}
         >
           {link ? (
@@ -198,7 +200,7 @@ const Image = forwardRef<HTMLDivElement, ImageProps>(
         {imageContent}
       </div>
     );
-  }
+  },
 );
 
 Image.displayName = 'Image';

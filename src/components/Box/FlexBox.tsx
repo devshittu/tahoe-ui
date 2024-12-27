@@ -32,7 +32,7 @@ const FlexBox = ({
     `items-${align}`,
     `flex-${wrap}`,
     `gap-${gap}`,
-    className
+    className,
   );
 
   return (

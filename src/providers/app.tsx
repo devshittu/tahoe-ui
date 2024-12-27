@@ -22,14 +22,14 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
 
   return (
     <>
-    {/* <ThemeProvider attribute="class" forcedTheme={theme || undefined}> */}
-      
-        {/* <ThemeProvider attribute="class" enableSystem={true} defaultTheme="light"> */}
-        <QueryClientProvider client={queryClient}>
-          {IS_DEVELOPMENT && <ReactQueryDevtools initialIsOpen={false} />}
-          <UIProvider>
-            <Suspense fallback={<Loading />}>{children}</Suspense>
-</UIProvider>
+      {/* <ThemeProvider attribute="class" forcedTheme={theme || undefined}> */}
+
+      {/* <ThemeProvider attribute="class" enableSystem={true} defaultTheme="light"> */}
+      <QueryClientProvider client={queryClient}>
+        {IS_DEVELOPMENT && <ReactQueryDevtools initialIsOpen={false} />}
+        <UIProvider>
+          <Suspense fallback={<Loading />}>{children}</Suspense>
+        </UIProvider>
 
         {/* <Overlay /> */}
         {/* <PageMode />
@@ -37,9 +37,8 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
         <Dialog />
         <DrawerMenu /> */}
 
-
         <PageMode
-  enableContentScroll={true} // default
+          enableContentScroll={true} // default
           position="bottom"
           useContainer={true}
           roundedEdges={true}
@@ -48,63 +47,63 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
           enhancedCloseBox={true} // Enable enhanced close box
           a11yOptions={{
             escapeClose: true,
-            role: "dialog",
-            ariaLabel: "Example Page Mode",
+            role: 'dialog',
+            ariaLabel: 'Example Page Mode',
             lockScroll: true,
             closeOnOutsideClick: true,
-            handlebarAriaLabel: "Drag handle to close or press Escape",
+            handlebarAriaLabel: 'Drag handle to close or press Escape',
           }}
         />
-        
-      <Dialog
-        showFrom="right"
-        handlebarPosition="right"
-        a11yOptions={{
-          escapeClose: true,
-          role: "dialog",
-          ariaLabel: "Confirmation Dialog",
-          ariaModal: true,
-          ariaLabelledby: "dialog-title",
-          ariaDescribedby: "dialog-description",
-          handlebarAriaLabel: "Drag handle to close or press Escape",
-        }}
-        useContainer={true}
-        roundedEdges={true}
-        themeable={true}
-        lockScroll={true}
-        closeOnOutsideClick={true}
-        closeThreshold={0.5} // 50% threshold
-        enhancedCloseBox={true}
-        // onClose={() => setIsOpen(false)}
-      >
-        <h2 id="dialog-title" className="text-xl font-bold mb-4">
-          Confirm Action
-        </h2>
-        <p id="dialog-description" className="mb-6">
-          Are you sure you want to perform this action? This cannot be undone.
-        </p>
-        <div className="flex justify-end space-x-4">
-          <button
-            onClick={() => setIsOpen(false)}
-            className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => {
-              // Perform your action here
-              setIsOpen(false);
-            }}
-            className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded"
-          >
-            Confirm
-          </button>
-        </div>
-      </Dialog>
+
+        <Dialog
+          showFrom="right"
+          handlebarPosition="right"
+          a11yOptions={{
+            escapeClose: true,
+            role: 'dialog',
+            ariaLabel: 'Confirmation Dialog',
+            ariaModal: true,
+            ariaLabelledby: 'dialog-title',
+            ariaDescribedby: 'dialog-description',
+            handlebarAriaLabel: 'Drag handle to close or press Escape',
+          }}
+          useContainer={true}
+          roundedEdges={true}
+          themeable={true}
+          lockScroll={true}
+          closeOnOutsideClick={true}
+          closeThreshold={0.5} // 50% threshold
+          enhancedCloseBox={true}
+          // onClose={() => setIsOpen(false)}
+        >
+          <h2 id="dialog-title" className="text-xl font-bold mb-4">
+            Confirm Action
+          </h2>
+          <p id="dialog-description" className="mb-6">
+            Are you sure you want to perform this action? This cannot be undone.
+          </p>
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                // Perform your action here
+                setIsOpen(false);
+              }}
+              className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded"
+            >
+              Confirm
+            </button>
+          </div>
+        </Dialog>
         <ToastProvider />
-        </QueryClientProvider>
-        {/* <ConfettiEffect /> */}
-    {/* </ThemeProvider> */}
+      </QueryClientProvider>
+      {/* <ConfettiEffect /> */}
+      {/* </ThemeProvider> */}
     </>
   );
 };

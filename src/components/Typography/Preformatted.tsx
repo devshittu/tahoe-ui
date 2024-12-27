@@ -37,7 +37,6 @@
 
 // export default Preformatted;
 
-
 // app/components/Preformatted.tsx
 
 // src/components/Typography/Preformatted.tsx

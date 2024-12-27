@@ -22,11 +22,16 @@ const StackBox = ({
   const stackClasses = clsx(
     direction === 'column' ? 'flex-col' : 'flex-row',
     `gap-${gap}`,
-    className
+    className,
   );
 
   return (
-    <FlexBox direction={direction} gap={gap} className={stackClasses} {...props}>
+    <FlexBox
+      direction={direction}
+      gap={gap}
+      className={stackClasses}
+      {...props}
+    >
       {children}
     </FlexBox>
   );

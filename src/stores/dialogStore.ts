@@ -40,9 +40,8 @@
 
 // export const useDialog = () => useStore(dialogStore);
 
-
 // /stores/dialogStore.ts
-"use client";
+'use client';
 
 import { create } from 'zustand';
 
@@ -65,7 +64,7 @@ type DialogState = {
     position: Position,
     size: Size,
     horizontalAlign?: AlignmentHorizontal,
-    verticalAlign?: AlignmentVertical
+    verticalAlign?: AlignmentVertical,
   ) => void;
   close: () => void;
   finalizeClose: () => void;
@@ -84,7 +83,7 @@ export const useDialog = create<DialogState>((set) => ({
     position,
     size,
     horizontalAlign = 'center',
-    verticalAlign = 'middle'
+    verticalAlign = 'middle',
   ) =>
     set({
       isOpen: true,

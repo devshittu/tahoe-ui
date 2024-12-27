@@ -14,11 +14,11 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 /** Basic shape presets */
 type ImageShape =
-  | 'none'        // no special rounding or clipping
-  | 'rounded'     // standard rounded corners
-  | 'circle'      // fully rounded
-  | 'polygon'     // example: diamond or hex, or user can override
-  | 'custom';     // completely user-defined clip-path
+  | 'none' // no special rounding or clipping
+  | 'rounded' // standard rounded corners
+  | 'circle' // fully rounded
+  | 'polygon' // example: diamond or hex, or user can override
+  | 'custom'; // completely user-defined clip-path
 
 /** Basic theme presets for container styling */
 type ImageTheme = 'light' | 'dark' | 'custom';
@@ -91,7 +91,7 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
       className, // className for the actual <Image> itself
       ...rest
     },
-    ref
+    ref,
   ) => {
     // Tracks if the main src has failed
     const [hasError, setHasError] = useState(false);
@@ -131,7 +131,7 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
       effects?.grayscale && 'filter grayscale hover:grayscale-0',
       effects?.blurOnHover && 'hover:blur-sm',
       effects?.transition && 'transition-all duration-300',
-      effects?.custom
+      effects?.custom,
     );
 
     // Combine everything into the container's classes
@@ -140,7 +140,7 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
       shapeClasses[shape],
       themeClasses[theme],
       effectClasses,
-      containerClassName
+      containerClassName,
     );
 
     /** 2) Determine what image or fallback to show */
@@ -218,7 +218,7 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
         {imageElement}
       </div>
     );
-  }
+  },
 );
 
 BaseImage.displayName = 'BaseImage';

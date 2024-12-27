@@ -32,7 +32,7 @@ const InteractiveBox = ({
     activeEffect === 'scale' && 'active:scale-95',
     activeEffect === 'shadow' && 'active:shadow-inner',
     disabled && 'opacity-50 cursor-not-allowed',
-    className
+    className,
   );
 
   return (

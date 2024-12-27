@@ -30,26 +30,30 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-          <AppProvider>
-
-            <Link href="/playground/box" className="text-white hover:text-gray-300">
-              Playground Box
-            </Link>
-            {"  "}
-            &nbsp;
-            &nbsp;
-            &nbsp;
-            <Link href="/playground/pagemode" className="text-white hover:text-gray-300">
-              Playground Pagemode
-            </Link>
-            &nbsp;
-            &nbsp;
-            &nbsp;
-            <Link href="/playground/typo" className="text-white hover:text-gray-300">
-              Playground Typography
-            </Link>
-        {children}
-          </AppProvider>
+        <AppProvider>
+          <Link
+            href="/playground/box"
+            className="text-white hover:text-gray-300"
+          >
+            Playground Box
+          </Link>
+          {'  '}
+          &nbsp; &nbsp; &nbsp;
+          <Link
+            href="/playground/pagemode"
+            className="text-white hover:text-gray-300"
+          >
+            Playground Pagemode
+          </Link>
+          &nbsp; &nbsp; &nbsp;
+          <Link
+            href="/playground/typo"
+            className="text-white hover:text-gray-300"
+          >
+            Playground Typography
+          </Link>
+          {children}
+        </AppProvider>
       </body>
     </html>
   );

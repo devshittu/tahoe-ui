@@ -37,12 +37,7 @@ const Heading = ({
 
   return (
     <Tag className={`${sizeClass} ${margin}`}>
-      <Text
-        fontWeight={weight}
-        color={color}
-        align={align}
-        truncate={truncate}
-      >
+      <Text fontWeight={weight} color={color} align={align} truncate={truncate}>
         {children}
       </Text>
     </Tag>

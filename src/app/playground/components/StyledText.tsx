@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 type StyledTextProps = {
   text: string;
@@ -12,10 +12,10 @@ type StyledTextProps = {
 export const StyledText: React.FC<StyledTextProps> = ({
   text,
   highlight,
-  highlightClass = "text-red-500",
-  className = "",
+  highlightClass = 'text-red-500',
+  className = '',
 }) => {
-  const parts = text.split(new RegExp(`(${highlight})`, "gi"));
+  const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
 
   return (
     <span className={className}>
@@ -26,7 +26,7 @@ export const StyledText: React.FC<StyledTextProps> = ({
           </span>
         ) : (
           part
-        )
+        ),
       )}
     </span>
   );

@@ -1,6 +1,5 @@
-
-export type DialogShowFrom = "top" | "bottom" | "left" | "right";
-export type DialogHandlebarPosition = "top" | "bottom" | "left" | "right";
+export type DialogShowFrom = 'top' | 'bottom' | 'left' | 'right';
+export type DialogHandlebarPosition = 'top' | 'bottom' | 'left' | 'right';
 
 export type A11yOptions = {
   escapeClose?: boolean; // Default: true

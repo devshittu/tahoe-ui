@@ -16,11 +16,7 @@ const Emphasis = ({
   color = 'primary',
 }: EmphasisProps) => {
   return (
-    <Text
-      fontStyle="italic"
-      color={color}
-      className={className}
-    >
+    <Text fontStyle="italic" color={color} className={className}>
       {children}
     </Text>
   );

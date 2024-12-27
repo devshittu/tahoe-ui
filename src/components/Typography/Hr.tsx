@@ -34,7 +34,7 @@ const Hr = ({ className, thickness = 'normal', color = 'gray' }: HrProps) => {
         'w-full border-0',
         thicknessMap[thickness],
         colorMap[color],
-        className
+        className,
       )}
     />
   );

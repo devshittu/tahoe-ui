@@ -37,7 +37,7 @@ const GridBox = ({
     autoFlow && `grid-flow-${autoFlow}`,
     justify && `justify-${justify}`,
     align && `items-${align}`,
-    className
+    className,
   );
 
   return (

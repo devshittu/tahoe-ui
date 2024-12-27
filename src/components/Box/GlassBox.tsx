@@ -24,7 +24,7 @@ const GlassBox = ({
     `backdrop-filter backdrop-blur-${blur}`,
     'border border-white border-opacity-20',
     'shadow-lg',
-    className
+    className,
   );
 
   return (
