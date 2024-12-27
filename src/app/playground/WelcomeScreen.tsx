@@ -27,7 +27,6 @@ export const WelcomeScreen: React.FC<ScreenProps> = ({ onContinue }) => {
           height="auto"
           className="mx-auto w-16 h-16"
         />
-
         <Heading level={1}>
           Welcome to <Span className="text-red-500">Apple Music</Span>
         </Heading>
@@ -83,7 +82,7 @@ export const WhatsNewScreen: React.FC<ScreenProps> = ({ onContinue }) => {
         <Heading level={1}>{"What's New in Apple Music"}</Heading>
 
         <StackBox direction="col" gap="4">
-          <FlexBox align="center" gap="3">
+          <FlexBox align="center" gap="4">
             <BaseBox className="w-8 h-8 bg-red-500 flex items-center justify-center rounded-full">
               <Span className="text-white text-lg font-bold">*</Span>
             </BaseBox>
@@ -93,7 +92,7 @@ export const WhatsNewScreen: React.FC<ScreenProps> = ({ onContinue }) => {
             </Paragraph>
           </FlexBox>
 
-          <FlexBox align="center" gap="3">
+          <FlexBox align="center" gap="4">
             <BaseBox className="w-8 h-8 bg-red-500 flex items-center justify-center rounded-full">
               <Span className="text-white text-lg font-bold">+</Span>
             </BaseBox>

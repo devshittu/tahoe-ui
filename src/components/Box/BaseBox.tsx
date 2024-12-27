@@ -1,4 +1,3 @@
-// src/components/Box/BaseBox.tsx
 'use client';
 
 import React, { ElementType, ReactNode } from 'react';
@@ -15,7 +14,7 @@ type BaseBoxProps = {
   className?: string;
 
   /** Sizing */
-  width?: 'full' | '1/2' | '1/3' | '1/4';
+  width?: 'full' | '1/2' | '1/3' | '1/4' | 'auto';
   height?: 'full' | 'screen' | 'auto';
   minWidth?: '0' | 'full';
   minHeight?: '0' | 'screen';
@@ -51,8 +50,13 @@ const widthClasses = {
   '1/2': 'w-1/2',
   '1/3': 'w-1/3',
   '1/4': 'w-1/4',
+  auto: 'w-auto',
 };
-const heightClasses = { full: 'h-full', screen: 'h-screen', auto: 'h-auto' };
+const heightClasses = {
+  full: 'h-full',
+  screen: 'h-screen',
+  auto: 'h-auto',
+};
 const minWidthClasses = { '0': 'min-w-0', full: 'min-w-full' };
 const minHeightClasses = { '0': 'min-h-0', screen: 'min-h-screen' };
 const maxWidthClasses = {
