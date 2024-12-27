@@ -54,6 +54,9 @@ export function HandlebarZone({
       onPointerDown={onPointerDown}
       onClick={onClick}
       role="button"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') onClick();
+      }}
       aria-label={ariaLabel}
       tabIndex={0}
     >
