@@ -6,7 +6,10 @@ interface UseImageStatusProps {
   onErrorFallback?: () => void;
 }
 
-export const useImageStatus = ({ fallbackSrc, onErrorFallback }: UseImageStatusProps) => {
+export const useImageStatus = ({
+  fallbackSrc,
+  onErrorFallback,
+}: UseImageStatusProps) => {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 

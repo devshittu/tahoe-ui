@@ -41,7 +41,7 @@ const CardImage = ({
             'absolute left-0 w-full p-2 text-white',
             overlayBgColor,
             positionClasses[overlayPosition],
-            'text-center'
+            'text-center',
           )}
           title={caption.toString()}
         >

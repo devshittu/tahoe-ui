@@ -1,5 +1,3 @@
-
-
 // src/components/Typography/Preformatted.tsx
 'use client';
 

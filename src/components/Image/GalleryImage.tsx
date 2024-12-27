@@ -13,7 +13,8 @@ type GalleryImageProps = BaseImageProps & {
 const hoverEffectClasses = {
   none: '',
   zoom: 'transform transition-transform duration-300 hover:scale-105',
-  grayscale: 'filter grayscale hover:grayscale-0 transition-filter duration-300',
+  grayscale:
+    'filter grayscale hover:grayscale-0 transition-filter duration-300',
 };
 
 const GalleryImage = ({
@@ -25,17 +26,16 @@ const GalleryImage = ({
 }: GalleryImageProps) => {
   return (
     <div
-    tabIndex={0}
+      tabIndex={0}
       className={clsx(
         'cursor-pointer',
         hoverEffectClasses[hoverEffect],
-        containerClassName
+        containerClassName,
       )}
-
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') onClick?.();
       }}
-        role="button"
+      role="button"
       onClick={onClick}
     >
       <BaseImage

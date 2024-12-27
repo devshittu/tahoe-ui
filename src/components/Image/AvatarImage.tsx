@@ -32,7 +32,7 @@ const AvatarImage = ({
       containerClassName={clsx(
         sizeMap[size],
         border && 'ring-2 ring-white dark:ring-gray-800',
-        containerClassName
+        containerClassName,
       )}
       {...props}
     />

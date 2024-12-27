@@ -120,7 +120,7 @@ const Code = ({
         showLineNumbers ? 'line-numbers' : '',
         wrapLines ? 'whitespace-pre-wrap' : 'whitespace-pre',
         'overflow-x-auto',
-        className
+        className,
       )}
       aria-label={ariaLabel}
       suppressHydrationWarning

@@ -36,7 +36,7 @@ const Badge = ({
         'inline-flex items-center justify-center rounded-full',
         variantClasses[variant],
         sizeClasses[size],
-        className
+        className,
       )}
     >
       <Text color={variant === 'filled' ? 'white' : color}>{children}</Text>

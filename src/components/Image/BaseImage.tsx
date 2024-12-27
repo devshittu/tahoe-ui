@@ -41,7 +41,7 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
       className = '',
       ...rest
     },
-    ref
+    ref,
   ) => {
     const { hasError, isLoaded, handleLoad, handleError } = useImageStatus({
       fallbackSrc: fallback?.fallbackSrc,
@@ -57,7 +57,7 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
     const containerClasses = clsx(
       'relative inline-block',
       shapeClass,
-      containerClassName
+      containerClassName,
     );
 
     // Determine which image to display
@@ -121,7 +121,7 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 BaseImage.displayName = 'BaseImage';

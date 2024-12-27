@@ -201,7 +201,7 @@ const Text = ({
     textDecorationClasses[textDecoration],
     background ? `bg-[${background}]` : '',
     { truncate },
-    className
+    className,
   );
 
   return (
@@ -212,6 +212,5 @@ const Text = ({
 };
 
 export default Text;
-
 
 // src/components/Typography/Text.tsx
