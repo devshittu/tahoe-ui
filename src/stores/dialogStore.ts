@@ -45,7 +45,7 @@
 
 import { create } from 'zustand';
 
-export type Position = 'top' | 'bottom' | 'left' | 'right';
+export type Position = 'top' | 'bottom' | 'left' | 'right' | 'center';
 export type Size = 'full' | 'half' | 'normal';
 export type AlignmentHorizontal = 'left' | 'center' | 'right';
 export type AlignmentVertical = 'top' | 'middle' | 'bottom';

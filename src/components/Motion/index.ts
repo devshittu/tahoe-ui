@@ -1,1 +1,1 @@
-export { default } from './MotionDiv';
+export * from './MotionDiv';

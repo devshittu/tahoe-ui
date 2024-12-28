@@ -12,7 +12,7 @@ type LabelProps = {
   className?: string;
 };
 
-const sizeClasses: Record<LabelProps['size'], string> = {
+const sizeClasses: Record<NonNullable<LabelProps['size']>, string> = {
   sm: 'text-xs',
   md: 'text-sm',
 };

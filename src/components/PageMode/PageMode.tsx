@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence, useDragControls } from 'framer-motion';
+import { motion, AnimatePresence, useDragControls, PanInfo } from 'framer-motion';
 import FocusLock from 'react-focus-lock';
-import { Portal } from './Portal';
+import { Portal } from '@/HOC/Portal';
 import { useUIManager } from '../UIManager/uiStore';
 import { twMerge } from 'tailwind-merge';
 import { CardStack } from '@/components/background/CardStack';
@@ -14,8 +14,10 @@ import { HandlebarZone } from './HandlebarZone';
 import { v4 as uuidv4 } from 'uuid';
 import { useUIComponent } from '@/stores/useUIComponent';
 
+// Allowed positions for the page mode
 export type PageModePosition = 'top' | 'bottom' | 'left' | 'right';
 
+// Accessibility options for the dialog
 export type A11yOptions = {
   escapeClose?: boolean;
   role?: 'dialog' | 'alertdialog';
@@ -28,6 +30,7 @@ export type A11yOptions = {
   closeOnOutsideClick?: boolean;
 };
 
+// Main props for PageMode
 type PageModeProps = {
   position?: PageModePosition;
   a11yOptions?: A11yOptions;
@@ -36,6 +39,12 @@ type PageModeProps = {
   themeable?: boolean;
   closeThreshold?: number;
   enhancedCloseBox?: boolean;
+
+  /**
+   * If false, the content area is not scrollable (e.g., for left/right transitions).
+   * Default is true.
+   */
+  enableContentScroll?: boolean;
 };
 
 export function PageMode({
@@ -46,7 +55,9 @@ export function PageMode({
   themeable = false,
   closeThreshold = 0.5,
   enhancedCloseBox = true,
+  enableContentScroll = true, // default to true
 }: PageModeProps) {
+  // Deconstruct a11y options
   const {
     escapeClose = true,
     role = 'dialog',
@@ -59,11 +70,15 @@ export function PageMode({
     closeOnOutsideClick = true,
   } = a11yOptions;
 
+  // Pull from global UI store
   const { isOpen, isClosing, content, close } = useUIComponent();
+
+  // Framer Motion
   const dragControls = useDragControls();
   const [showCloseZone, setShowCloseZone] = useState(false);
   const [isBeyondLimit, setIsBeyondLimit] = useState(false);
 
+  // PageMode Config
   const {
     variants,
     dragDirection,
@@ -73,18 +88,22 @@ export function PageMode({
   } = usePageModeConfig(position);
   const normalizedCloseThreshold = Math.min(Math.max(closeThreshold, 0), 1);
 
+  // ID for UI Manager registration
   const componentId = useRef(uuidv4());
   const register = useUIManager((s) => s.register);
   const unregister = useUIManager((s) => s.unregister);
 
+  // Focus management
   const focusRef = useRef<HTMLDivElement | null>(null);
 
+  // Autofocus if open
   useEffect(() => {
     if (isOpen && focusRef.current) {
       focusRef.current.focus();
     }
   }, [isOpen]);
 
+  // Register/unregister with UI manager
   useEffect(() => {
     const currentId = componentId.current;
     if (isOpen) {
@@ -94,12 +113,15 @@ export function PageMode({
     return () => {
       if (currentId) {
         unregister(currentId);
-        if (isOpen && isClosing) trackPageModeEvent('PageModeClosed');
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // Only track close event if was open and is now closing
+        if (isOpen && isClosing) {
+          trackPageModeEvent('PageModeClosed');
+        }
       }
     };
   }, [isOpen, isClosing, close, escapeClose, register, unregister]);
 
+  // Lock scroll if specified
   useEffect(() => {
     if (isOpen && lockScroll) {
       const orig = document.body.style.overflow;
@@ -110,64 +132,38 @@ export function PageMode({
     }
   }, [isOpen, lockScroll]);
 
+  // Called by Framer Motion at the end of a drag gesture
   const handleDragEnd = (
-    _e: PointerEvent,
-    info: { offset: { x: number; y: number } },
+    _event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
   ) => {
     const { x, y } = info.offset;
-    if (
-      position === 'bottom' &&
-      y > window.innerHeight * normalizedCloseThreshold
-    )
-      close();
-    if (
-      position === 'top' &&
-      -y > window.innerHeight * normalizedCloseThreshold
-    )
-      close();
-    if (
-      position === 'left' &&
-      -x > window.innerWidth * normalizedCloseThreshold
-    )
-      close();
-    if (
-      position === 'right' &&
-      x > window.innerWidth * normalizedCloseThreshold
-    )
-      close();
+
+    if (position === 'bottom' && y > window.innerHeight * normalizedCloseThreshold) close();
+    if (position === 'top' && -y > window.innerHeight * normalizedCloseThreshold) close();
+    if (position === 'left' && -x > window.innerWidth * normalizedCloseThreshold) close();
+    if (position === 'right' && x > window.innerWidth * normalizedCloseThreshold) close();
+
     setShowCloseZone(false);
     setIsBeyondLimit(false);
   };
 
+  // Called continuously by Framer Motion during drag
   const handleDrag = (
-    _e: PointerEvent,
-    info: { offset: { x: number; y: number } },
+    _event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
   ) => {
     const { x, y } = info.offset;
     let inCloseZone = false;
 
-    if (
-      position === 'bottom' &&
-      y > window.innerHeight * normalizedCloseThreshold
-    )
-      inCloseZone = true;
-    if (
-      position === 'top' &&
-      -y > window.innerHeight * normalizedCloseThreshold
-    )
-      inCloseZone = true;
-    if (
-      position === 'left' &&
-      -x > window.innerWidth * normalizedCloseThreshold
-    )
-      inCloseZone = true;
-    if (
-      position === 'right' &&
-      x > window.innerWidth * normalizedCloseThreshold
-    )
-      inCloseZone = true;
+    // Check if we exceed threshold for closing
+    if (position === 'bottom' && y > window.innerHeight * normalizedCloseThreshold) inCloseZone = true;
+    if (position === 'top' && -y > window.innerHeight * normalizedCloseThreshold) inCloseZone = true;
+    if (position === 'left' && -x > window.innerWidth * normalizedCloseThreshold) inCloseZone = true;
+    if (position === 'right' && x > window.innerWidth * normalizedCloseThreshold) inCloseZone = true;
     setShowCloseZone(inCloseZone);
 
+    // Track if we exceed the container in the opposite direction
     let beyondLimit = false;
     if (position === 'bottom' && y < 0) beyondLimit = true;
     if (position === 'top' && y > 0) beyondLimit = true;
@@ -177,11 +173,13 @@ export function PageMode({
   };
 
   const handleHandlebarClick = () => close();
+
   const onHandlebarPointerDown = (event: React.PointerEvent) => {
     event.preventDefault();
     dragControls.start(event);
   };
 
+  // Rounded edges depending on position
   function getRoundedClasses(pos: PageModePosition) {
     switch (pos) {
       case 'bottom':
@@ -197,12 +195,14 @@ export function PageMode({
     }
   }
 
+  // Container classes for main motion div
   const containerClasses = twMerge(
     'fixed z-[9999] flex flex-col h-full will-change-transform shadow-xl',
     roundedEdges && getRoundedClasses(position),
-    themeable ? 'dark:bg-gray-800 bg-white' : 'bg-white',
+    themeable ? 'dark:bg-gray-800 bg-white' : 'bg-white'
   );
 
+  // Accessibility-related props
   const dialogProps: React.HTMLAttributes<HTMLDivElement> = {
     role,
     'aria-modal': ariaModal ? 'true' : undefined,
@@ -211,18 +211,26 @@ export function PageMode({
     'aria-describedby': ariaDescribedby,
   };
 
-  // For top/bottom => vertical scroll, left/right => hidden
-  let contentOverflow = 'overflow-hidden';
-  if (position === 'top' || position === 'bottom') {
-    contentOverflow = 'overflow-y-auto';
+  // If enableContentScroll = false => 'overflow-hidden', else handle by position
+  let contentOverflow: string;
+  if (!enableContentScroll) {
+    contentOverflow = 'overflow-hidden';
+  } else {
+    if (position === 'top' || position === 'bottom') {
+      contentOverflow = 'overflow-y-auto';
+    } else {
+      contentOverflow = 'overflow-hidden';
+    }
   }
 
-  // Minimal margin to avoid overlapping handlebar
-  let marginClass = '';
-  if (position === 'bottom') marginClass = 'mt-12';
-  else if (position === 'top') marginClass = 'mb-12';
+  // Minimal margin if top or bottom to not overlap handlebar
+  const marginClass =
+    position === 'bottom'
+      ? 'mt-12'
+      : position === 'top'
+      ? 'mb-12'
+      : '';
 
-  // If user wants container layout
   const renderedContent = useContainer ? (
     <div className="container mx-auto h-full">{content}</div>
   ) : (
@@ -234,6 +242,7 @@ export function PageMode({
       <AnimatePresence>
         {isOpen && (
           <>
+            {/* Overlay */}
             <motion.div
               className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[9998]"
               initial={{ opacity: 0 }}
@@ -245,25 +254,28 @@ export function PageMode({
               <CardStack />
             </motion.div>
 
+            {/* Close zone overlay */}
             {showCloseZone && enhancedCloseBox && (
-              <motion.div
-                className="fixed inset-0 flex items-center justify-center z-[10000] pointer-events-none"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                aria-live="assertive"
-              >
+              <AnimatePresence>
                 <motion.div
-                  className="border-4 border-dashed border-blue-400 p-6 text-blue-600 dark:text-blue-400 bg-white/90 dark:bg-gray-700/90 rounded-lg shadow-lg"
-                  initial={{ scale: 0.8, opacity: 0 }}
+                  className="fixed inset-0 flex items-center justify-center z-[10000] pointer-events-none"
+                  initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
+                  exit={{ scale: 0, opacity: 0 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  aria-live="assertive"
                 >
-                  {t('releaseToClose')}
+                  <motion.div
+                    className="border-4 border-dashed border-blue-400 p-6 text-blue-600 dark:text-blue-400 bg-white/90 dark:bg-gray-700/90 rounded-lg shadow-lg"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  >
+                    {t('releaseToClose')}
+                  </motion.div>
                 </motion.div>
-              </motion.div>
+              </AnimatePresence>
             )}
 
             <FocusLock returnFocus>
@@ -286,19 +298,17 @@ export function PageMode({
                 onDrag={handleDrag}
                 onDragEnd={handleDragEnd}
               >
+                {/* Handlebar for drag */}
                 <HandlebarZone
                   position={position}
                   onPointerDown={onHandlebarPointerDown}
                   onClick={handleHandlebarClick}
                   isBeyondLimit={isBeyondLimit}
+                  ariaLabel={handlebarAriaLabel}
                 />
 
                 <div
-                  className={twMerge(
-                    'flex-1 p-4',
-                    contentOverflow,
-                    marginClass,
-                  )}
+                  className={twMerge('flex-1 p-4', contentOverflow, marginClass)}
                 >
                   {renderedContent}
                 </div>
@@ -310,5 +320,6 @@ export function PageMode({
     </Portal>
   );
 }
+
 
 // src/components/PageMode/PageMode.tsx

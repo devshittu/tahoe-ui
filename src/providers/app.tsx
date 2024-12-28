@@ -17,8 +17,6 @@ type AppProviderProps = {
 };
 
 export const AppProvider = ({ children, theme }: AppProviderProps) => {
-  // Initialize the Zustand store with default settings when the App component mounts
-  // useInitializeStore();
 
   return (
     <>
@@ -31,11 +29,6 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </UIProvider>
 
-        {/* <Overlay /> */}
-        {/* <PageMode />
-        <PromptDialog />
-        <Dialog />
-        <DrawerMenu /> */}
 
         <PageMode
           enableContentScroll={true} // default
@@ -75,34 +68,9 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
           closeThreshold={0.5} // 50% threshold
           enhancedCloseBox={true}
           // onClose={() => setIsOpen(false)}
-        >
-          <h2 id="dialog-title" className="text-xl font-bold mb-4">
-            Confirm Action
-          </h2>
-          <p id="dialog-description" className="mb-6">
-            Are you sure you want to perform this action? This cannot be undone.
-          </p>
-          <div className="flex justify-end space-x-4">
-            <button
-              onClick={() => setIsOpen(false)}
-              className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => {
-                // Perform your action here
-                setIsOpen(false);
-              }}
-              className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded"
-            >
-              Confirm
-            </button>
-          </div>
-        </Dialog>
+        />
         <ToastProvider />
       </QueryClientProvider>
-      {/* <ConfettiEffect /> */}
       {/* </ThemeProvider> */}
     </>
   );

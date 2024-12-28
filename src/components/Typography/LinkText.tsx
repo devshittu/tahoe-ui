@@ -15,7 +15,7 @@ type LinkTextProps = {
   className?: string;
 };
 
-const hoverEffectClasses: Record<LinkTextProps['hoverEffect'], string> = {
+const hoverEffectClasses: Record<NonNullable<LinkTextProps['hoverEffect']>, string> = {
   underline: 'hover:underline',
   'color-change': 'hover:text-red-500',
   none: '',
