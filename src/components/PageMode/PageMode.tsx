@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   motion,
   AnimatePresence,
   useDragControls,
   PanInfo,
+  HTMLMotionProps,
+  Variants,
 } from 'framer-motion';
 import FocusLock from 'react-focus-lock';
 import { Portal } from '@/HOC/Portal';
@@ -17,6 +19,7 @@ import { t } from '@/app/i18n';
 import { usePageModeConfig } from './usePageModeConfig';
 import { HandlebarZone } from './HandlebarZone';
 import { v4 as uuidv4 } from 'uuid';
+import SafeMotionDiv from '../Motion/SafeMotionDiv'; // Ensure correct path
 import { useUIComponent } from '@/stores/useUIComponent';
 
 // Allowed positions for the page mode
@@ -137,41 +140,13 @@ export function PageMode({
     }
   }, [isOpen, lockScroll]);
 
-  // Called by Framer Motion at the end of a drag gesture
-  const handleDragEnd = (
-    _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo,
-  ) => {
-    const { x, y } = info.offset;
-
-    if (
-      position === 'bottom' &&
-      y > window.innerHeight * normalizedCloseThreshold
-    )
-      close();
-    if (
-      position === 'top' &&
-      -y > window.innerHeight * normalizedCloseThreshold
-    )
-      close();
-    if (
-      position === 'left' &&
-      -x > window.innerWidth * normalizedCloseThreshold
-    )
-      close();
-    if (
-      position === 'right' &&
-      x > window.innerWidth * normalizedCloseThreshold
-    )
-      close();
-
-    setShowCloseZone(false);
-    setIsBeyondLimit(false);
-  };
-
-  // Called continuously by Framer Motion during drag
+  /**
+   * Handles the drag movement to determine if the dialog should close.
+   * @param event - The event object.
+   * @param info - Information about the drag.
+   */
   const handleDrag = (
-    _event: MouseEvent | TouchEvent | PointerEvent,
+    event: PointerEvent | MouseEvent | TouchEvent,
     info: PanInfo,
   ) => {
     const { x, y } = info.offset;
@@ -209,6 +184,43 @@ export function PageMode({
     setIsBeyondLimit(beyondLimit);
   };
 
+  /**
+   * Handles the end of the drag gesture.
+   * Closes the dialog if the drag exceeded the threshold.
+   * @param event - The event object.
+   * @param info - Information about the drag.
+   */
+  const handleDragEnd = (
+    event: PointerEvent | MouseEvent | TouchEvent,
+    info: PanInfo,
+  ) => {
+    const { x, y } = info.offset;
+
+    if (
+      position === 'bottom' &&
+      y > window.innerHeight * normalizedCloseThreshold
+    )
+      close();
+    if (
+      position === 'top' &&
+      -y > window.innerHeight * normalizedCloseThreshold
+    )
+      close();
+    if (
+      position === 'left' &&
+      -x > window.innerWidth * normalizedCloseThreshold
+    )
+      close();
+    if (
+      position === 'right' &&
+      x > window.innerWidth * normalizedCloseThreshold
+    )
+      close();
+
+    setShowCloseZone(false);
+    setIsBeyondLimit(false);
+  };
+
   const handleHandlebarClick = () => close();
 
   const onHandlebarPointerDown = (event: React.PointerEvent) => {
@@ -236,11 +248,11 @@ export function PageMode({
   const containerClasses = twMerge(
     'fixed z-[9999] flex flex-col h-full will-change-transform shadow-xl',
     roundedEdges && getRoundedClasses(position),
-    themeable ? 'dark:bg-gray-800 bg-white' : 'bg-white',
+    themeable ? 'dark:bg-gray-800 bg-white' : 'bg-white text-gray-900',
   );
 
   // Accessibility-related props
-  const dialogProps: React.HTMLAttributes<HTMLDivElement> = {
+  const dialogProps: Partial<HTMLMotionProps<'div'>> = {
     role,
     'aria-modal': ariaModal ? 'true' : undefined,
     'aria-label': ariaLabel,
@@ -312,8 +324,8 @@ export function PageMode({
             )}
 
             <FocusLock returnFocus>
-              <motion.div
-                // {...dialogProps}
+              <SafeMotionDiv
+                {...dialogProps}
                 ref={focusRef}
                 tabIndex={-1}
                 className={containerClasses}
@@ -349,7 +361,7 @@ export function PageMode({
                 >
                   {renderedContent}
                 </div>
-              </motion.div>
+              </SafeMotionDiv>
             </FocusLock>
           </>
         )}
@@ -358,4 +370,5 @@ export function PageMode({
   );
 }
 
+// src/components/PageMode/PageMode.tsx
 // src/components/PageMode/PageMode.tsx

@@ -31,7 +31,7 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
 
         <PageMode
           enableContentScroll={true} // default
-          position="bottom"
+          position="top"
           useContainer={true}
           roundedEdges={true}
           themeable={true}
