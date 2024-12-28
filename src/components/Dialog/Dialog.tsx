@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import FocusLock from 'react-focus-lock';
-import { Portal } from '../PageMode/Portal';
+import { Portal } from '@/HOC/Portal';
 import { useUIManager } from '../UIManager/uiStore';
 import { twMerge } from 'tailwind-merge';
 import { HandlebarZone } from './HandlebarZone';
@@ -135,7 +135,10 @@ export function Dialog({
   );
 
   // **Make it stiffer** => reduce dragElastic
-  const dragAxis =
+  // const dragAxis =
+  //   handlebarPosition === 'top' || handlebarPosition === 'bottom' ? 'y' : 'x';
+
+  const dragAxis: 'x' | 'y' =
     handlebarPosition === 'top' || handlebarPosition === 'bottom' ? 'y' : 'x';
   const dragProps = rubberBandOnDrag
     ? {
