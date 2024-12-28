@@ -29,3 +29,4 @@ export const useUIManager = create<UIState>((set, get) => ({
     return st[st.length - 1];
   },
 }));
+// src/components/UIManager/uiStore.ts

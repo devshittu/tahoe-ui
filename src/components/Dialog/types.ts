@@ -9,6 +9,8 @@ export type A11yOptions = {
   ariaModal?: boolean; // Default: true
   lockScroll?: boolean; // Default: false
   closeOnOutsideClick?: boolean; // Default: true
+  role?: 'dialog' | 'alertdialog'; // Add the `role` property
+  handlebarAriaLabel?: string; // Added to fix the error
 };
 
 export type DialogProps = {
@@ -21,3 +23,5 @@ export type DialogProps = {
   a11yOptions?: A11yOptions;
   children: React.ReactNode;
 };
+
+// src/components/Dialog/types.ts

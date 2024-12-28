@@ -67,9 +67,7 @@ const DemoPage = () => {
   >('stretch');
 
   // StackBox State
-  const [stackDirection, setStackDirection] = useState<'col' | 'row'>(
-    'col',
-  );
+  const [stackDirection, setStackDirection] = useState<'col' | 'row'>('col');
   const [stackGap, setStackGap] = useState<'0' | '1' | '2' | '4' | '6' | '8'>(
     '4',
   );

@@ -92,5 +92,4 @@ const Heading = ({
 
 export default Heading;
 
-
 // src/components/Typography/Heading.tsx

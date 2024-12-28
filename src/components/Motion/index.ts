@@ -1,1 +1,1 @@
-export * from './MotionDiv';
+export * from './SafeMotionDiv';

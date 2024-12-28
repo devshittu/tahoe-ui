@@ -75,7 +75,7 @@ const BaseBox = forwardRef<HTMLElement, BaseBoxProps>(
       overflow,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const classes = clsx(
       theme === 'light' ? 'text-black bg-white' : '',
@@ -100,7 +100,7 @@ const BaseBox = forwardRef<HTMLElement, BaseBoxProps>(
       right && `right-${right}`,
       bottom && `bottom-${bottom}`,
       left && `left-${left}`,
-      overflow && `overflow-${overflow}`
+      overflow && `overflow-${overflow}`,
     );
 
     return (
@@ -114,7 +114,7 @@ const BaseBox = forwardRef<HTMLElement, BaseBoxProps>(
         {children}
       </Component>
     );
-  }
+  },
 );
 
 BaseBox.displayName = 'BaseBox';

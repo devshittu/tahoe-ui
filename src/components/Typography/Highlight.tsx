@@ -57,17 +57,12 @@ const Highlight = ({
     `bg-${bgColor}`,
     `text-${textColor}`,
     padding,
-    className
+    className,
   );
 
-  return (
-    <Text className={computedClassName}>
-      {children}
-    </Text>
-  );
+  return <Text className={computedClassName}>{children}</Text>;
 };
 
 export default Highlight;
-
 
 // src/components/Typography/Highlight.tsx

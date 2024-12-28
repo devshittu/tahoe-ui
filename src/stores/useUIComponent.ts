@@ -28,3 +28,4 @@ export const useUIComponentStore = createStore<UIComponentState>((set) => ({
 }));
 
 export const useUIComponent = () => useStore(useUIComponentStore);
+// src/stores/useUIComponent.ts

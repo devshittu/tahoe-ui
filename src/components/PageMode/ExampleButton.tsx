@@ -6,9 +6,9 @@ import { DialogExampleTrigger } from '../Dialog/DialogExampleTrigger';
 import { WelcomeScreen, WhatsNewScreen } from '@/app/playground/WelcomeScreen';
 
 export function ExampleButton() {
-  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'whatsNew' | 'mainContent' | null>(
-    'welcome',
-  );
+  const [currentScreen, setCurrentScreen] = useState<
+    'welcome' | 'whatsNew' | 'mainContent' | null
+  >('welcome');
 
   const handleContinue = () => {
     setCurrentScreen((prev) =>

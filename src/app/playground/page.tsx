@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { WelcomeScreen, WhatsNewScreen } from './WelcomeScreen';
 
 const PlaygroundPage = () => {
-  const [currentScreen, setCurrentScreen] = useState<'welcome' | 'whatsNew'| 'mainContent'>(
-    'welcome',
-  );
+  const [currentScreen, setCurrentScreen] = useState<
+    'welcome' | 'whatsNew' | 'mainContent'
+  >('welcome');
 
   const handleContinue = () => {
     setCurrentScreen((prev) =>

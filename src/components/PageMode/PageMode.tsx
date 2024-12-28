@@ -1,7 +1,12 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence, useDragControls, PanInfo } from 'framer-motion';
+import {
+  motion,
+  AnimatePresence,
+  useDragControls,
+  PanInfo,
+} from 'framer-motion';
 import FocusLock from 'react-focus-lock';
 import { Portal } from '@/HOC/Portal';
 import { useUIManager } from '../UIManager/uiStore';
@@ -135,14 +140,30 @@ export function PageMode({
   // Called by Framer Motion at the end of a drag gesture
   const handleDragEnd = (
     _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
+    info: PanInfo,
   ) => {
     const { x, y } = info.offset;
 
-    if (position === 'bottom' && y > window.innerHeight * normalizedCloseThreshold) close();
-    if (position === 'top' && -y > window.innerHeight * normalizedCloseThreshold) close();
-    if (position === 'left' && -x > window.innerWidth * normalizedCloseThreshold) close();
-    if (position === 'right' && x > window.innerWidth * normalizedCloseThreshold) close();
+    if (
+      position === 'bottom' &&
+      y > window.innerHeight * normalizedCloseThreshold
+    )
+      close();
+    if (
+      position === 'top' &&
+      -y > window.innerHeight * normalizedCloseThreshold
+    )
+      close();
+    if (
+      position === 'left' &&
+      -x > window.innerWidth * normalizedCloseThreshold
+    )
+      close();
+    if (
+      position === 'right' &&
+      x > window.innerWidth * normalizedCloseThreshold
+    )
+      close();
 
     setShowCloseZone(false);
     setIsBeyondLimit(false);
@@ -151,16 +172,32 @@ export function PageMode({
   // Called continuously by Framer Motion during drag
   const handleDrag = (
     _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
+    info: PanInfo,
   ) => {
     const { x, y } = info.offset;
     let inCloseZone = false;
 
     // Check if we exceed threshold for closing
-    if (position === 'bottom' && y > window.innerHeight * normalizedCloseThreshold) inCloseZone = true;
-    if (position === 'top' && -y > window.innerHeight * normalizedCloseThreshold) inCloseZone = true;
-    if (position === 'left' && -x > window.innerWidth * normalizedCloseThreshold) inCloseZone = true;
-    if (position === 'right' && x > window.innerWidth * normalizedCloseThreshold) inCloseZone = true;
+    if (
+      position === 'bottom' &&
+      y > window.innerHeight * normalizedCloseThreshold
+    )
+      inCloseZone = true;
+    if (
+      position === 'top' &&
+      -y > window.innerHeight * normalizedCloseThreshold
+    )
+      inCloseZone = true;
+    if (
+      position === 'left' &&
+      -x > window.innerWidth * normalizedCloseThreshold
+    )
+      inCloseZone = true;
+    if (
+      position === 'right' &&
+      x > window.innerWidth * normalizedCloseThreshold
+    )
+      inCloseZone = true;
     setShowCloseZone(inCloseZone);
 
     // Track if we exceed the container in the opposite direction
@@ -199,7 +236,7 @@ export function PageMode({
   const containerClasses = twMerge(
     'fixed z-[9999] flex flex-col h-full will-change-transform shadow-xl',
     roundedEdges && getRoundedClasses(position),
-    themeable ? 'dark:bg-gray-800 bg-white' : 'bg-white'
+    themeable ? 'dark:bg-gray-800 bg-white' : 'bg-white',
   );
 
   // Accessibility-related props
@@ -225,11 +262,7 @@ export function PageMode({
 
   // Minimal margin if top or bottom to not overlap handlebar
   const marginClass =
-    position === 'bottom'
-      ? 'mt-12'
-      : position === 'top'
-      ? 'mb-12'
-      : '';
+    position === 'bottom' ? 'mt-12' : position === 'top' ? 'mb-12' : '';
 
   const renderedContent = useContainer ? (
     <div className="container mx-auto h-full">{content}</div>
@@ -280,7 +313,7 @@ export function PageMode({
 
             <FocusLock returnFocus>
               <motion.div
-                {...dialogProps}
+                // {...dialogProps}
                 ref={focusRef}
                 tabIndex={-1}
                 className={containerClasses}
@@ -308,7 +341,11 @@ export function PageMode({
                 />
 
                 <div
-                  className={twMerge('flex-1 p-4', contentOverflow, marginClass)}
+                  className={twMerge(
+                    'flex-1 p-4',
+                    contentOverflow,
+                    marginClass,
+                  )}
                 >
                   {renderedContent}
                 </div>
@@ -320,6 +357,5 @@ export function PageMode({
     </Portal>
   );
 }
-
 
 // src/components/PageMode/PageMode.tsx

@@ -150,9 +150,8 @@ const TypographyExampleUsage = () => {
           <Highlight bgColor="yellow-200">background color</Highlight> for
           emphasis.
           <Highlight bgColor="blue-100" textColor="accent" padding="px-2 py-1">
-  This text has a custom background, text color, and padding.
-</Highlight>
-
+            This text has a custom background, text color, and padding.
+          </Highlight>
         </Paragraph>
       </section>
 
