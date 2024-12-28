@@ -6,7 +6,8 @@ import {
   AnimatePresence,
   useDragControls,
   PanInfo,
-  Variants, // Import Variants
+  HTMLMotionProps, // Correct import
+  Variants, // Import Variants if needed
 } from 'framer-motion';
 import FocusLock from 'react-focus-lock';
 import { Portal } from '@/HOC/Portal'; // Adjust the path as needed
@@ -178,11 +179,11 @@ export function Dialog({
 
   /**
    * Handles the drag movement to determine if the dialog should close.
-   * @param _ev - The event object.
+   * @param event - The event object.
    * @param info - Information about the drag.
    */
   function handleDrag(
-    _ev: PointerEvent | MouseEvent | TouchEvent,
+    event: PointerEvent | MouseEvent | TouchEvent,
     info: PanInfo,
   ) {
     const { x, y } = info.offset;
@@ -220,8 +221,13 @@ export function Dialog({
   /**
    * Handles the end of the drag gesture.
    * Closes the dialog if the drag exceeded the threshold.
+   * @param event - The event object.
+   * @param info - Information about the drag.
    */
-  function handleDragEnd() {
+  function handleDragEnd(
+    event: PointerEvent | MouseEvent | TouchEvent,
+    info: PanInfo,
+  ) {
     if (!rubberBandOnDrag && isBeyondLimit) {
       handleClose();
     }
@@ -253,7 +259,7 @@ export function Dialog({
   const finalDialogClasses = twMerge(dialogClasses, roundClass, themeClass);
 
   // Accessibility attributes
-  const ariaProps: React.HTMLAttributes<HTMLDivElement> = {
+  const ariaProps: Partial<HTMLMotionProps<'div'>> = {
     role,
     'aria-modal': ariaModal ? 'true' : undefined,
     'aria-label': ariaLabel,
@@ -324,7 +330,7 @@ export function Dialog({
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                // {...ariaProps}
+                {...ariaProps}
               >
                 <SafeMotionDiv
                   className={twMerge(finalDialogClasses, 'relative')}

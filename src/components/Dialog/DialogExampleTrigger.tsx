@@ -31,8 +31,8 @@ export function DialogExampleTrigger() {
       <Dialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
-        showFrom="right" // Slides in from the left
-        handlebarPosition="right" // Handlebar is on the left
+        showFrom="top" // Slides in from the left
+        handlebarPosition="top" // Handlebar is on the left
         roundedEdges={true} // Rounded corners
         themeable={true} // Themeable styles
         lockScroll={true} // Locks background scroll
