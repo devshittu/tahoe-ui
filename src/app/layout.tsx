@@ -48,27 +48,12 @@ export default function RootLayout({
               containerWidth="w-full max-w-[370px]" // Makes it responsive
             />
           </div>
-          <Link
-            href="/playground/box"
-            className="text-white hover:text-gray-300"
-          >
-            Playground Box
-          </Link>
+          <Link href="/playground/box">Playground Box</Link>
           {'  '}
           &nbsp; &nbsp; &nbsp;
-          <Link
-            href="/playground/pagemode"
-            className="text-white hover:text-gray-300"
-          >
-            Playground Pagemode
-          </Link>
+          <Link href="/playground/pagemode">Playground Pagemode</Link>
           &nbsp; &nbsp; &nbsp;
-          <Link
-            href="/playground/typo"
-            className="text-white hover:text-gray-300"
-          >
-            Playground Typography
-          </Link>
+          <Link href="/playground/typo">Playground Typography</Link>
           {children}
         </AppProvider>
       </body>
