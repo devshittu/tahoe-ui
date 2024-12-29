@@ -1,6 +1,13 @@
 {
   "name": "tahoe-ui",
   "version": "0.0.0",
+  "description": "Futuristic UI library for React",
+  "license": "MIT",
+  "repository": "https://github.com/devshittu/tahoe-ui",
+  "author": "Muhammed Shittu <andrey@okonet.ru>",
+  "maintainers": [
+    "Muhammed Shittu <devshittu@gmail.com>"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -60,5 +67,15 @@
     "storybook": "^8.4.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "keywords": [
+    "react",
+    "ui",
+    "design",
+    "component",
+    "library",
+    "tailwindcss",
+    "typescript",
+    "nextjs"
+  ]
 }
