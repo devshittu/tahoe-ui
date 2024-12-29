@@ -1,6 +1,6 @@
 {
-  "name": "new-next",
-  "version": "0.1.0",
+  "name": "tahoe-ui",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
