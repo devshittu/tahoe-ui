@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 type ThemeType = 'light' | 'dark' | 'custom';
 
-type BaseBoxProps = {
+export type BaseBoxProps = {
   children: ReactNode;
   as?: ElementType;
   theme?: ThemeType;
@@ -120,3 +120,5 @@ const BaseBox = forwardRef<HTMLElement, BaseBoxProps>(
 BaseBox.displayName = 'BaseBox';
 
 export default BaseBox;
+
+// src/components/Box/BaseBox.tsx
