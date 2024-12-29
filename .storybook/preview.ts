@@ -1,5 +1,7 @@
 import type { Preview } from '@storybook/react';
 
+import '../src/app/globals.css'; // Adjust the path as needed
+
 const preview: Preview = {
   parameters: {
     controls: {
@@ -12,3 +14,5 @@ const preview: Preview = {
 };
 
 export default preview;
+
+// .storybook/preview.ts
