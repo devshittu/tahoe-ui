@@ -47,27 +47,6 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
           }}
         />
 
-        {/* <Dialog
-          showFrom="right"
-          handlebarPosition="right"
-          a11yOptions={{
-            escapeClose: true,
-            role: 'dialog',
-            ariaLabel: 'Confirmation Dialog',
-            ariaModal: true,
-            ariaLabelledby: 'dialog-title',
-            ariaDescribedby: 'dialog-description',
-            handlebarAriaLabel: 'Drag handle to close or press Escape',
-          }}
-          themeable={true}
-          roundedEdges={true}
-          lockScroll={true}
-          useContainer={true}
-          closeOnOutsideClick={true}
-          closeThreshold={0.5} // 50% threshold
-          enhancedCloseBox={true}
-        /> */}
-
         {/* Dialog Component */}
         <Dialog
           isOpen={isDialogOpen}
