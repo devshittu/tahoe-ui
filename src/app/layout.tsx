@@ -54,6 +54,8 @@ export default function RootLayout({
           <Link href="/playground/pagemode">Playground Pagemode</Link>
           &nbsp; &nbsp; &nbsp;
           <Link href="/playground/typo">Playground Typography</Link>
+          &nbsp; &nbsp; &nbsp;
+          <Link href="/demo">Demo</Link>
           {children}
         </AppProvider>
       </body>
