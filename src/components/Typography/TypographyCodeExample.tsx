@@ -7,6 +7,7 @@ import Code from './Code';
 import Preformatted from './Preformatted';
 import Badge from './Badge';
 import InlineCode from './InlineCode';
+import { MarqueeText } from './MarqueeText';
 
 const TypographyCodeExample = () => {
   return (
@@ -99,7 +100,7 @@ const getUser = (id: number): User => {
           language="css"
           showLineNumbers
           wrapLines={false}
-          className="bg-gray-800 p-4 rounded-lg"
+          className=" p-4 rounded-lg"
         >
           {`.container {
   display: flex;
@@ -163,6 +164,41 @@ const getUser = (id: number): User => {
     return f"Hello, {name}!"`}
           </Preformatted>
         </div>
+      </section>
+      <section>
+        <Heading level={2} align="left" color="accent">
+          Code Example MarqueeText
+        </Heading>
+        <main className="p-6 space-y-6">
+          {/* 1) Basic usage: lazy on hover, resets on mouse leave */}
+          <MarqueeText
+            className="max-w-[250px]"
+            speed={6}
+            direction="left"
+            cycles="infinite"
+          >
+            Hover me to see the marquee animation. Leave me to reset to start.
+          </MarqueeText>
+
+          {/* 2) Auto-run (lazyHover=false) => warns about CPU usage if repeated thousands of times */}
+          <MarqueeText
+            className="max-w-[300px]"
+            lazyHover={false}
+            speed={5}
+            cycles={2}
+            direction="right"
+          >
+            This marquee auto-runs if truncated, loops 2 times, then stops.
+            After that, no more marquee.
+          </MarqueeText>
+
+          {/* 3) Using RTL + resetOnMouseLeave is optional (defaults to true) */}
+          <MarqueeText className="max-w-[200px]" rtl direction="left" speed={7}>
+            {
+              'مرحباً! نص عربي طويل. Hover => slides, mouse leave => reset to start.'
+            }
+          </MarqueeText>
+        </main>
       </section>
     </div>
   );
