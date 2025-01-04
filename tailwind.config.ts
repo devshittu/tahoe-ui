@@ -46,6 +46,10 @@ export default {
         mono: ['"Courier New"', 'monospace'],
       },
       keyframes: {
+        'spin-slow': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
         scroll: {
           from: {
             transform: 'translateX(0);',
@@ -115,6 +119,7 @@ export default {
         // New grow/shrink animation
         'loader-grow':
           'loader-grow  2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
+        'spin-slow': 'spin-slow 5s linear infinite',
       },
     },
   },
