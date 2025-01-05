@@ -1,0 +1,61 @@
+/* app/components/Player2.module.css */
+.albumArt::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80px;
+  /* background-image: url('https://i.scdn.co/image/9dcbd30dbe0c621cbaeae427cf80eff9877b4fcd'); */
+}
+
+.albumArt::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  border-radius: 50%;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+}
+
+/* app/components/Player2.module.css */
+
+/* 
+.albumArt::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80px;
+  background-image: url('https://i.scdn.co/image/9dcbd30dbe0c621cbaeae427cf80eff9877b4fcd');
+}
+
+.albumArt::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  border-radius: 50%;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+}
+
+.albumArtActive::before {
+  animation: rotation 3s linear infinite;
+} */
