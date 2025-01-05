@@ -1,10 +1,9 @@
-// app/components/Strong.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type StrongProps = {
+export type StrongProps = {
   children: ReactNode;
   className?: string;
   color?: 'primary' | 'secondary' | 'accent' | string;
@@ -23,3 +22,5 @@ const Strong = ({
 };
 
 export default Strong;
+
+// src/components/Typography/Strong.tsx

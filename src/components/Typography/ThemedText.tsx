@@ -1,4 +1,3 @@
-// app/components/ThemedText.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
@@ -6,7 +5,7 @@ import Text from './Text';
 
 type Theme = 'light' | 'dark' | 'custom';
 
-type ThemedTextProps = {
+export type ThemedTextProps = {
   children: ReactNode;
   theme: Theme;
   variant?: string;
@@ -37,3 +36,5 @@ const ThemedText = ({
 };
 
 export default ThemedText;
+
+// src/components/Typography/ThemedText.tsx

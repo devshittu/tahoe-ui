@@ -1,10 +1,9 @@
-// app/components/FluidTypography.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type FluidTypographyProps = {
+export type FluidTypographyProps = {
   children: ReactNode;
   minSize: string;
   maxSize: string;
@@ -43,3 +42,5 @@ const FluidTypography = ({
 };
 
 export default FluidTypography;
+
+// src/components/Typography/FluidTypography.tsx

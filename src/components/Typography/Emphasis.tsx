@@ -3,7 +3,7 @@
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type EmphasisProps = {
+export type EmphasisProps = {
   children: ReactNode;
   className?: string;
   color?: 'primary' | 'secondary' | 'accent' | string;

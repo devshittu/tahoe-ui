@@ -1,4 +1,3 @@
-// app/components/Caption.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
@@ -27,3 +26,5 @@ const Caption = ({
 };
 
 export default Caption;
+
+// src/components/Typography/Caption.tsx

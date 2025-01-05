@@ -1,10 +1,9 @@
-// app/components/ReadableText.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type ReadableTextProps = {
+export type ReadableTextProps = {
   children: ReactNode;
   fontSize?: string;
   lineHeight?: string;
@@ -34,3 +33,5 @@ const ReadableText = ({
 };
 
 export default ReadableText;
+
+// src/components/Typography/ReadableText.tsx

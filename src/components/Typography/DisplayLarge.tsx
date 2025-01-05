@@ -3,7 +3,7 @@
 import React, { ReactNode } from 'react';
 import Heading from './Heading';
 
-type DisplayLargeProps = {
+export type DisplayLargeProps = {
   children: ReactNode;
   align?: 'left' | 'center' | 'right' | 'justify';
   color?: 'primary' | 'secondary' | 'accent' | string;

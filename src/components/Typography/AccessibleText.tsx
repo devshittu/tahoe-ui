@@ -3,7 +3,7 @@
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type AccessibleTextProps = {
+export type AccessibleTextProps = {
   children: ReactNode;
   ariaLabel?: string;
   role?: string;

@@ -1,11 +1,9 @@
-// app/components/Blockquote.tsx
-// src/components/Typography/Blockquote.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type BlockquoteProps = {
+export type BlockquoteProps = {
   children: ReactNode;
   cite?: string;
   borderColor?: string;
@@ -29,3 +27,4 @@ const Blockquote = ({
 };
 
 export default Blockquote;
+// src/components/Typography/Blockquote.tsx

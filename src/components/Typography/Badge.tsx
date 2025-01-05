@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react';
 import Text from './Text';
 import clsx from 'clsx';
 
-type BadgeProps = {
+export type BadgeProps = {
   children: ReactNode;
   variant?: 'filled' | 'outlined' | 'ghost';
   color?: 'primary' | 'secondary' | 'accent' | string;

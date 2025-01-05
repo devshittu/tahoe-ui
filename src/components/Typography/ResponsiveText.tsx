@@ -1,10 +1,9 @@
-// app/components/ResponsiveText.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type ResponsiveTextProps = {
+export type ResponsiveTextProps = {
   children: ReactNode;
   sizes: {
     base: string;
@@ -50,3 +49,5 @@ const ResponsiveText = ({
 };
 
 export default ResponsiveText;
+
+// src/components/Typography/ResponsiveText.tsx

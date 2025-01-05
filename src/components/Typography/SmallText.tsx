@@ -1,10 +1,9 @@
-// app/components/SmallText.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type SmallTextProps = {
+export type SmallTextProps = {
   children: ReactNode;
   className?: string;
 };
@@ -22,3 +21,5 @@ const SmallText = ({ children, className = '' }: SmallTextProps) => {
 };
 
 export default SmallText;
+
+// src/components/Typography/SmallText.tsx
