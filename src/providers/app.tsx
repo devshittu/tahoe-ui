@@ -6,7 +6,6 @@ import { queryClient } from '@/lib/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { IS_DEVELOPMENT } from '@/config/constants';
 import { Loading } from '@/components/loading';
-import ToastProvider from '@/providers/ToastProvider';
 import { PageMode } from '@/components/PageMode/PageMode';
 import { Dialog } from '@/components/Dialog/Dialog';
 import { UIProvider } from '@/components/UIManager/UIProvider';
@@ -20,9 +19,6 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   return (
     <>
-      {/* <ThemeProvider attribute="class" forcedTheme={theme || undefined}> */}
-
-      {/* <ThemeProvider attribute="class" enableSystem={true} defaultTheme="light"> */}
       <QueryClientProvider client={queryClient}>
         {IS_DEVELOPMENT && <ReactQueryDevtools initialIsOpen={false} />}
         <UIProvider>
@@ -96,9 +92,7 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
             </button>
           </div>
         </Dialog>
-        <ToastProvider />
       </QueryClientProvider>
-      {/* </ThemeProvider> */}
     </>
   );
 };
