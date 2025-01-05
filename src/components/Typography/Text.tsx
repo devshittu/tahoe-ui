@@ -4,7 +4,7 @@ import React, { ReactNode, HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 
-type TextProps = HTMLAttributes<HTMLSpanElement> & {
+export type TextProps = HTMLAttributes<HTMLSpanElement> & {
   children: ReactNode;
   className?: string;
   fontFamily?: 'primary' | 'secondary' | 'mono';

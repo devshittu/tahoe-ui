@@ -1,10 +1,9 @@
-// app/components/DisplayMedium.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Heading from './Heading';
 
-type DisplayMediumProps = {
+export type DisplayMediumProps = {
   children: ReactNode;
   align?: 'left' | 'center' | 'right' | 'justify';
   color?: 'primary' | 'secondary' | 'accent' | string;
@@ -33,3 +32,5 @@ const DisplayMedium = ({
 };
 
 export default DisplayMedium;
+
+// src/components/Typography/DisplayMedium.tsx

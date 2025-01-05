@@ -1,4 +1,3 @@
-// app/components/DisplayLarge.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
@@ -33,3 +32,5 @@ const DisplayLarge = ({
 };
 
 export default DisplayLarge;
+
+// src/components/Typography/DisplayLarge.tsx

@@ -1,10 +1,9 @@
-// app/components/DisplaySmall.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Heading from './Heading';
 
-type DisplaySmallProps = {
+export type DisplaySmallProps = {
   children: ReactNode;
   align?: 'left' | 'center' | 'right' | 'justify';
   color?: 'primary' | 'secondary' | 'accent' | string;
@@ -33,3 +32,5 @@ const DisplaySmall = ({
 };
 
 export default DisplaySmall;
+
+// src/components/Typography/DisplaySmall.tsx

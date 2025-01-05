@@ -1,12 +1,11 @@
-// app/components/ColorText.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type ColorScheme = 'blue' | 'red' | 'green' | string;
+export type ColorScheme = 'blue' | 'red' | 'green' | string;
 
-type ColorTextProps = {
+export type ColorTextProps = {
   children: ReactNode;
   colorScheme?: ColorScheme;
   gradient?: boolean;
@@ -39,3 +38,5 @@ const ColorText = ({
 };
 
 export default ColorText;
+
+// src/components/Typography/ColorText.tsx
