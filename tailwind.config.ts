@@ -46,9 +46,9 @@ export default {
         mono: ['"Courier New"', 'monospace'],
       },
       keyframes: {
-        'spin-slow': {
-          from: { transform: 'rotate(0deg)' },
-          to: { transform: 'rotate(360deg)' },
+        rotation: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         },
         scroll: {
           from: {
@@ -119,7 +119,17 @@ export default {
         // New grow/shrink animation
         'loader-grow':
           'loader-grow  2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
-        'spin-slow': 'spin-slow 5s linear infinite',
+        rotation: 'rotation 3s linear infinite',
+      },
+
+      // Ensure zIndex includes necessary values (Tailwind has z-0 to z-50 by default)
+      zIndex: {
+        '10': '10',
+        '20': '20',
+        '30': '30',
+      },
+      borderRadius: {
+        '15px': '15px',
       },
     },
   },
