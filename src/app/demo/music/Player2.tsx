@@ -39,7 +39,7 @@ const Player2: React.FC = () => {
             id="info"
             className="info absolute top-0 left-2.5 right-2.5 bg-white bg-opacity-50 p-4 pl-28 rounded-[15px] transition-all duration-500 z-0"
             initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: -60 }}
+            animate={{ opacity: 1, y: -70 }}
             exit={{ opacity: 0, y: -60 }}
             transition={{ duration: 0.5 }}
           >

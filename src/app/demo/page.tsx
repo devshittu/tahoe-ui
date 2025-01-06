@@ -10,7 +10,7 @@ export default function HomePage() {
   const handlePlayPause = () => setIsPlaying(!isPlaying);
 
   return (
-    <div className="flex items-center justify-center h-full">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="relative">
         <Player2 />
       </div>
