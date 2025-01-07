@@ -35,7 +35,16 @@ const meta: Meta<typeof Caption> = {
     },
     color: {
       control: 'select',
-      options: ['primary', 'secondary', 'accent', 'green', 'red', 'yellow', 'purple', 'custom'],
+      options: [
+        'primary',
+        'secondary',
+        'accent',
+        'green',
+        'red',
+        'yellow',
+        'purple',
+        'custom',
+      ],
       description:
         'Text color for the caption. Can be one of the predefined options or any valid CSS color string.',
       table: {

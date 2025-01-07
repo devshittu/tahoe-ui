@@ -126,3 +126,5 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
 
 BaseImage.displayName = 'BaseImage';
 export default React.memo(BaseImage);
+
+// src/components/Image/BaseImage.tsx

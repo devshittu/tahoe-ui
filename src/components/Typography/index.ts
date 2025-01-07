@@ -32,4 +32,3 @@ export { default as ReadableText } from './ReadableText';
 export { default as Hr } from './Hr';
 export { default as Link } from './Link';
 export { UnorderedList, OrderedList, ListItem } from './Lists';
-export { default as Image } from './BaseImage';

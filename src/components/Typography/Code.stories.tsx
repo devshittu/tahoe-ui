@@ -40,10 +40,21 @@ const meta: Meta<typeof Code> = {
     },
     language: {
       control: 'select',
-      options: ['javascript', 'python', 'html', 'css', 'bash', 'jsx', 'typescript', 'none'],
+      options: [
+        'javascript',
+        'python',
+        'html',
+        'css',
+        'bash',
+        'jsx',
+        'typescript',
+        'none',
+      ],
       description: 'Programming language for syntax highlighting.',
       table: {
-        type: { summary: `'javascript' | 'python' | 'html' | 'css' | 'bash' | 'jsx' | 'typescript' | 'none'` },
+        type: {
+          summary: `'javascript' | 'python' | 'html' | 'css' | 'bash' | 'jsx' | 'typescript' | 'none'`,
+        },
         defaultValue: { summary: `'javascript'` },
       },
     },
@@ -323,22 +334,16 @@ export const Showcase: Story = {
       </Code>
 
       {/* 10) With Line Numbers */}
-      <Code
-        {...args}
-        showLineNumbers={true}
-      >
+      <Code {...args} showLineNumbers={true}>
         {`function greet() {
   console.log("Hello, World!");
 }`}
       </Code>
 
       {/* 11) Wrapped Lines */}
-      <Code
-        {...args}
-          wrapLines={true}
-        >
-          {`const veryLongVariableName = "This is a very long line of code that should be wrapped within the code block to demonstrate line wrapping functionality in the component."`}
-        </Code>
+      <Code {...args} wrapLines={true}>
+        {`const veryLongVariableName = "This is a very long line of code that should be wrapped within the code block to demonstrate line wrapping functionality in the component."`}
+      </Code>
 
       {/* 12) Custom ClassName */}
       <Code
