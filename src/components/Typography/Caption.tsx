@@ -3,7 +3,7 @@
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type CaptionProps = {
+export type CaptionProps = {
   children: ReactNode;
   color?: 'primary' | 'secondary' | 'accent' | string;
   fontWeight?: 'light' | 'regular' | 'bold' | 'extrabold';
