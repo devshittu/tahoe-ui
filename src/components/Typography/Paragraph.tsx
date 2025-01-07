@@ -3,7 +3,7 @@
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type ParagraphProps = {
+export type ParagraphProps = {
   children: ReactNode;
   className?: string;
   fontFamily?: 'primary' | 'secondary' | 'mono';
@@ -55,3 +55,5 @@ const Paragraph = ({
 };
 
 export default Paragraph;
+
+// src/components/Typography/Paragraph.tsx
