@@ -184,6 +184,28 @@ export default {
     {
       pattern: /^prism-/,
     },
+
+    {
+      pattern: /^text-(blue|red|green|yellow|purple|pink|cyan|indigo)-500$/,
+    },
+    {
+      pattern: /^bg-gradient-to-r$/,
+    },
+    {
+      pattern: /^from-(blue|red|green|yellow|purple|pink|cyan|indigo)-400$/,
+    },
+    {
+      pattern: /^to-(blue|red|green|yellow|purple|pink|cyan|indigo)-600$/,
+    },
+    {
+      pattern: /^text-transparent$/,
+    },
+    {
+      pattern: /^bg-clip-text$/,
+    },
+    {
+      pattern: /^opacity-(10|20|30|40|50|60|70|80|90|100)$/,
+    },
     // Add more patterns as needed
   ],
 } satisfies Config;
