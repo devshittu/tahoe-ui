@@ -1,11 +1,10 @@
-// src/components/Typography/Preformatted.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import clsx from 'clsx';
 import Code from './Code';
 
-type PreformattedProps = {
+export type PreformattedProps = {
   children: ReactNode;
   language?: string;
   theme?: 'default' | 'tomorrow' | 'custom';
@@ -41,3 +40,5 @@ const Preformatted = ({
 };
 
 export default Preformatted;
+
+// src/components/Typography/Preformatted.tsx
