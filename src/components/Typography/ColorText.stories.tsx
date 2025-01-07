@@ -1,5 +1,3 @@
-// src/components/Typography/ColorText.stories.tsx
-
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import ColorText, { ColorTextProps } from './ColorText';
@@ -180,3 +178,5 @@ export const Showcase: Story = {
     </div>
   ),
 };
+
+// src/components/Typography/ColorText.stories.tsx
