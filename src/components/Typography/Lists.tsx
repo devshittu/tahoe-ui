@@ -4,7 +4,7 @@
 import React, { ReactNode } from 'react';
 import clsx from 'clsx';
 
-type ListProps = {
+export type ListProps = {
   children: ReactNode;
   className?: string;
 };
@@ -17,7 +17,7 @@ export const OrderedList = ({ children, className }: ListProps) => (
   <ol className={clsx('list-decimal pl-5', className)}>{children}</ol>
 );
 
-type ListItemProps = {
+export type ListItemProps = {
   children: ReactNode;
   className?: string;
 };
@@ -25,3 +25,5 @@ type ListItemProps = {
 export const ListItem = ({ children, className }: ListItemProps) => (
   <li className={clsx(className)}>{children}</li>
 );
+
+// src/components/Typography/Lists.tsx
