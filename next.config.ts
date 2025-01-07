@@ -5,11 +5,22 @@ const nextConfig: NextConfig = {
 
   reactStrictMode: true,
   images: {
-    domains: [
-      'flowbite.s3.amazonaws.com', // Add external image domains here
-      'your-other-domain.com', // Include any other domains hosting images
-      'dummyimage.com', // Include any other domains hosting images
-      'i.scdn.co',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'flowbite.s3.amazonaws.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'dummyimage.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.scdn.co',
+        pathname: '**',
+      },
     ],
   },
 };
