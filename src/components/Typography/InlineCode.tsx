@@ -1,10 +1,9 @@
-// src/components/Typography/InlineCode.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import clsx from 'clsx';
 
-type InlineCodeProps = {
+export type InlineCodeProps = {
   children: ReactNode;
   language?: string;
   className?: string;
@@ -33,3 +32,4 @@ const InlineCode = ({
 };
 
 export default InlineCode;
+// src/components/Typography/InlineCode.tsx
