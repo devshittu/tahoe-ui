@@ -1,10 +1,9 @@
-// app/components/Lead.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Paragraph from './Paragraph';
 
-type LeadProps = {
+export type LeadProps = {
   children: ReactNode;
   className?: string;
 };
@@ -22,3 +21,5 @@ const Lead = ({ children, className = '' }: LeadProps) => {
 };
 
 export default Lead;
+
+// src/components/Typography/Lead.tsx
