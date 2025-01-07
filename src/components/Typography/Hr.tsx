@@ -4,7 +4,7 @@
 import React from 'react';
 import clsx from 'clsx';
 
-type HrProps = {
+export type HrProps = {
   className?: string;
   thickness?: 'thin' | 'normal' | 'thick';
   color?: 'gray' | 'blue' | 'red' | 'custom';
@@ -41,3 +41,5 @@ const Hr = ({ className, thickness = 'normal', color = 'gray' }: HrProps) => {
 };
 
 export default Hr;
+
+// src/components/Typography/Hr.tsx
