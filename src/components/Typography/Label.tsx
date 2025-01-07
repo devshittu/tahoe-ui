@@ -1,10 +1,9 @@
-// app/components/Label.tsx
 'use client';
 
 import React, { ReactNode } from 'react';
 import Text from './Text';
 
-type LabelProps = {
+export type LabelProps = {
   children: ReactNode;
   size?: 'sm' | 'md';
   color?: 'primary' | 'secondary' | 'accent' | string;
@@ -34,3 +33,5 @@ const Label = ({
 };
 
 export default Label;
+
+// src/components/Typography/Label.tsx
