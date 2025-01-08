@@ -28,6 +28,7 @@ import ColorText from './ColorText';
 import AccessibleText from './AccessibleText';
 import ReadableText from './ReadableText';
 import TypographyCodeExample from './TypographyCodeExample';
+import LinkExample from '../Link/LinkExample';
 
 const TypographyExampleUsage = () => {
   return (
@@ -319,6 +320,9 @@ const getUser = (id: number): User => {
         </ReadableText>
       </section>
 
+      <section>
+        <LinkExample />
+      </section>
       <section>
         <TypographyCodeExample />
       </section>
