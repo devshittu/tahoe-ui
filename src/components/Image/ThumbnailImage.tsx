@@ -6,7 +6,7 @@ import BaseImage, { BaseImageProps } from './BaseImage';
 import clsx from 'clsx';
 import Link from '@/components/Typography/Link'; // Assuming you have a Link component
 
-type ThumbnailImageProps = BaseImageProps & {
+export type ThumbnailImageProps = BaseImageProps & {
   href: string;
 };
 
