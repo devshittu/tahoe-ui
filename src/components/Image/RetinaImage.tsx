@@ -1,7 +1,7 @@
 import React, { forwardRef, CSSProperties } from 'react';
 import NextImage, { StaticImageData } from 'next/image';
 
-type RetinaImageProps = {
+export type RetinaImageProps = {
   src: string | StaticImageData; // Might come from static import or string
   alt: string;
   width?: number;
