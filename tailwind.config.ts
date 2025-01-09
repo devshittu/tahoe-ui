@@ -100,6 +100,16 @@ export default {
             transform: 'translate3d(-50%, -50%, -1px) scale(100)',
           }, // Adjusted for a more reasonable scale
         },
+
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' },
+        },
+        bounce: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
       },
       animation: {
         scroll: 'scroll 10s linear infinite',
@@ -120,6 +130,8 @@ export default {
         'loader-grow':
           'loader-grow  2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
         rotation: 'rotation 3s linear infinite',
+        shake: 'shake 0.5s ease-in-out',
+        bounce: 'bounce 1s infinite',
       },
 
       // Ensure zIndex includes necessary values (Tailwind has z-0 to z-50 by default)
