@@ -5,7 +5,7 @@ import React from 'react';
 import BaseImage, { BaseImageProps } from './BaseImage';
 import clsx from 'clsx';
 
-type GalleryImageProps = BaseImageProps & {
+export type GalleryImageProps = BaseImageProps & {
   onClick?: () => void;
   hoverEffect?: 'none' | 'zoom' | 'grayscale';
 };
