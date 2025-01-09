@@ -5,7 +5,7 @@ import React from 'react';
 import BaseImage, { BaseImageProps } from './BaseImage';
 import clsx from 'clsx';
 
-type HeroImageProps = BaseImageProps & {
+export type HeroImageProps = BaseImageProps & {
   overlayText?: React.ReactNode;
 };
 
