@@ -7,7 +7,7 @@ import clsx from 'clsx';
 
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-type AvatarImageProps = BaseImageProps & {
+export type AvatarImageProps = BaseImageProps & {
   size?: AvatarSize;
   border?: boolean;
 };
