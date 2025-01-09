@@ -5,7 +5,7 @@ import React from 'react';
 import BaseImage, { BaseImageProps } from './BaseImage';
 import clsx from 'clsx';
 
-type CardImageProps = BaseImageProps & {
+export type CardImageProps = BaseImageProps & {
   overlayText?: React.ReactNode;
   overlayPosition?: 'top' | 'center' | 'bottom';
   overlayBgColor?: string; // e.g., 'bg-black bg-opacity-50'
