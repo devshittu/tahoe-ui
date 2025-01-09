@@ -34,7 +34,9 @@ const meta: Meta<typeof GalleryImage> = {
       description: 'Source URL of the gallery image.',
       table: {
         type: { summary: 'string | StaticImageData' },
-        defaultValue: { summary: 'https://dummyimage.com/300x200/000/fff&text=Gallery' },
+        defaultValue: {
+          summary: 'https://dummyimage.com/300x200/000/fff&text=Gallery',
+        },
       },
     },
     alt: {

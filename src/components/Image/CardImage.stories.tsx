@@ -36,7 +36,9 @@ const meta: Meta<typeof CardImage> = {
       description: 'Source URL of the card image.',
       table: {
         type: { summary: 'string | StaticImageData' },
-        defaultValue: { summary: 'https://dummyimage.com/600x400/000/fff&text=Card' },
+        defaultValue: {
+          summary: 'https://dummyimage.com/600x400/000/fff&text=Card',
+        },
       },
     },
     alt: {

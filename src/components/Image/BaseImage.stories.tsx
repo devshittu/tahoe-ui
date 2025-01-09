@@ -333,7 +333,6 @@
 //   ),
 // };
 
-
 // src/components/Image/BaseImage.stories.tsx
 
 import React from 'react';
@@ -452,7 +451,9 @@ const meta: Meta<typeof BaseImage> = {
       description: 'Fallback configuration for the image.',
       table: {
         type: { summary: 'ImageFallback' },
-        defaultValue: { summary: `{ fallbackSrc: 'https://dummyimage.com/500x300/ff0000/ffffff', fallbackNode: null }` },
+        defaultValue: {
+          summary: `{ fallbackSrc: 'https://dummyimage.com/500x300/ff0000/ffffff', fallbackNode: null }`,
+        },
       },
     },
     onLoaded: {
@@ -465,7 +466,8 @@ const meta: Meta<typeof BaseImage> = {
     },
     onErrorFallback: {
       action: 'errorFallback',
-      description: 'Callback when the image fails to load and fallback is used.',
+      description:
+        'Callback when the image fails to load and fallback is used.',
       table: {
         type: { summary: '() => void' },
         defaultValue: { summary: 'undefined' },

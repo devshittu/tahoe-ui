@@ -42,7 +42,9 @@ const meta: Meta<typeof ThumbnailImage> = {
       description: 'Source URL of the thumbnail image.',
       table: {
         type: { summary: 'string | StaticImageData' },
-        defaultValue: { summary: 'https://dummyimage.com/150x100/000/fff&text=Thumbnail' },
+        defaultValue: {
+          summary: 'https://dummyimage.com/150x100/000/fff&text=Thumbnail',
+        },
       },
     },
     alt: {

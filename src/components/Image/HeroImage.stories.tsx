@@ -34,7 +34,9 @@ const meta: Meta<typeof HeroImage> = {
       description: 'Source URL of the hero image.',
       table: {
         type: { summary: 'string | StaticImageData' },
-        defaultValue: { summary: 'https://dummyimage.com/1200x400/000/fff&text=Hero' },
+        defaultValue: {
+          summary: 'https://dummyimage.com/1200x400/000/fff&text=Hero',
+        },
       },
     },
     alt: {

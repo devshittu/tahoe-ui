@@ -37,7 +37,9 @@ const meta: Meta<typeof AvatarImage> = {
       description: 'Source URL of the avatar image.',
       table: {
         type: { summary: 'string | StaticImageData' },
-        defaultValue: { summary: 'https://dummyimage.com/200x200/000/fff&text=Avatar' },
+        defaultValue: {
+          summary: 'https://dummyimage.com/200x200/000/fff&text=Avatar',
+        },
       },
     },
     alt: {

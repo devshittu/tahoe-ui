@@ -40,7 +40,9 @@ const meta: Meta<typeof SkeletonImage> = {
       description: 'Source URL of the skeleton image.',
       table: {
         type: { summary: 'string | StaticImageData' },
-        defaultValue: { summary: 'https://dummyimage.com/300x200/000/fff&text=Skeleton' },
+        defaultValue: {
+          summary: 'https://dummyimage.com/300x200/000/fff&text=Skeleton',
+        },
       },
     },
     alt: {
@@ -81,7 +83,9 @@ const meta: Meta<typeof SkeletonImage> = {
       description: 'Fallback configuration for the skeleton image.',
       table: {
         type: { summary: 'ImageFallback' },
-        defaultValue: { summary: `{ fallbackSrc: 'https://dummyimage.com/300x200/ff0000/ffffff&text=Fallback', fallbackNode: null }` },
+        defaultValue: {
+          summary: `{ fallbackSrc: 'https://dummyimage.com/300x200/ff0000/ffffff&text=Fallback', fallbackNode: null }`,
+        },
       },
     },
     onLoaded: {
@@ -94,7 +98,8 @@ const meta: Meta<typeof SkeletonImage> = {
     },
     onErrorFallback: {
       action: 'errorFallback',
-      description: 'Callback when the skeleton image fails to load and fallback is used.',
+      description:
+        'Callback when the skeleton image fails to load and fallback is used.',
       table: {
         type: { summary: '() => void' },
         defaultValue: { summary: 'undefined' },
@@ -218,7 +223,8 @@ export const Showcase: Story = {
         src="https://dummyimage.com/300x200/000/fff&text=Skeleton" // Simulated as failing
         alt="Skeleton Image with Fallback Source"
         fallback={{
-          fallbackSrc: 'https://dummyimage.com/300x200/ff0000/ffffff&text=Fallback',
+          fallbackSrc:
+            'https://dummyimage.com/300x200/ff0000/ffffff&text=Fallback',
         }}
       />
 
@@ -241,7 +247,8 @@ export const Showcase: Story = {
         {...args}
         shape="rounded"
         fallback={{
-          fallbackSrc: 'https://dummyimage.com/300x200/ff0000/ffffff&text=Fallback',
+          fallbackSrc:
+            'https://dummyimage.com/300x200/ff0000/ffffff&text=Fallback',
         }}
         src="https://dummyimage.com/300x200/000/fff&text=Skeleton"
         alt="Combined Props Skeleton Image"

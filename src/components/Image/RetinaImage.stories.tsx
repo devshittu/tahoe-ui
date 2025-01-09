@@ -35,7 +35,9 @@ const meta: Meta<typeof RetinaImage> = {
       description: 'Source URL of the retina image.',
       table: {
         type: { summary: 'string | StaticImageData' },
-        defaultValue: { summary: 'https://dummyimage.com/300x200/000/fff&text=Retina' },
+        defaultValue: {
+          summary: 'https://dummyimage.com/300x200/000/fff&text=Retina',
+        },
       },
     },
     alt: {
