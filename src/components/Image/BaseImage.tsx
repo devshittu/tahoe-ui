@@ -6,9 +6,9 @@ import NextImage, { ImageProps as NextImageProps } from 'next/image';
 import clsx from 'clsx';
 import { useImageStatus } from './hooks/useImageStatus';
 
-type ImageShape = 'none' | 'rounded' | 'circle';
+export type ImageShape = 'none' | 'rounded' | 'circle';
 
-type ImageFallback = {
+export type ImageFallback = {
   fallbackSrc?: string;
   fallbackNode?: React.ReactNode;
 };
@@ -50,8 +50,8 @@ const BaseImage = forwardRef<HTMLDivElement, BaseImageProps>(
 
     const shapeClass = {
       none: '',
-      rounded: 'rounded-lg',
-      circle: 'rounded-full',
+      rounded: 'rounded-lg overflow-hidden',
+      circle: 'rounded-full overflow-hidden',
     }[shape];
 
     const containerClasses = clsx(
