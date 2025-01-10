@@ -39,7 +39,7 @@ export type A11yOptions = {
 };
 
 // Main props for PageMode
-type PageModeProps = {
+export type PageModeProps = {
   position?: PageModePosition;
   a11yOptions?: A11yOptions;
   useContainer?: boolean;

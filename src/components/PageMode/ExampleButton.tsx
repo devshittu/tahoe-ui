@@ -49,3 +49,5 @@ export function ExampleButton() {
     </>
   );
 }
+
+// src/components/PageMode/ExampleButton.tsx

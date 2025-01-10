@@ -1,4 +1,3 @@
-// src/components/UIManager/UIProvider.tsx
 'use client';
 
 import React, { useEffect } from 'react';
@@ -27,3 +26,4 @@ export const UIProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return <>{children}</>;
 };
+// src/components/UIManager/UIProvider.tsx
