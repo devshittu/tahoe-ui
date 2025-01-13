@@ -100,6 +100,10 @@ export default {
             transform: 'translate3d(-50%, -50%, -1px) scale(100)',
           }, // Adjusted for a more reasonable scale
         },
+        'loader-slide': {
+          '0%': { transform: 'translateY(50%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
 
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },
@@ -129,6 +133,7 @@ export default {
         // New grow/shrink animation
         'loader-grow':
           'loader-grow  2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
+        'loader-slide': 'loader-slide 0.8s ease-in-out forwards',
         rotation: 'rotation 3s linear infinite',
         shake: 'shake 0.5s ease-in-out',
         bounce: 'bounce 1s infinite',
@@ -221,3 +226,5 @@ export default {
     // Add more patterns as needed
   ],
 } satisfies Config;
+
+// tailwind.config.ts
