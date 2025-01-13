@@ -36,7 +36,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Backups
+# Ignore all .bkp files
+*.bkp
+*.BKP
 
+# Ignore all folders ending with .BKP
+*.BKP/
+*.bkp/
+/**.bkp/
 
 # icons sources
 src/components/illustrations/source/
