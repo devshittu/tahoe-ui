@@ -1,7 +1,6 @@
 'use client';
 import Icon from '../illustrations/Icon';
-import { FiCommand } from "react-icons/fi";
-
+import { FiCommand } from 'react-icons/fi';
 
 export const LoadingSplash: React.FC = () => {
   return (
@@ -22,11 +21,12 @@ export const IconBlockScale = () => (
       <Icon
         icon={
           <>
-          <FiCommand
+            <FiCommand
               className="w-12 h-12 overflow-visible animate-loader-dash stroke-current"
               style={{
                 strokeDasharray: '0 129',
-              }} />
+              }}
+            />
           </>
         }
       />

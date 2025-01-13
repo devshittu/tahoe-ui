@@ -34,20 +34,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const splashConfig: Partial<SplashConfig> = {
     themable: true,
     backgroundColor: 'bg-slate-50 dark:bg-slate-950',
     containerSize: 'w-32 h-32',
     containerShape: 'rounded-full',
-    frequency: 'once-per-session', 
-    // frequency: 'always', 
+    frequency: 'once-per-session',
+    // frequency: 'always',
     // icon: (
     //   <FaMoon className="text-4xl text-blue-500" />
     // ),
     // message: 'Loading, please wait...',
-    animation: 'grow', 
-    // animation: 'slide', 
+    animation: 'grow',
+    // animation: 'slide',
     displayDuration: 2000,
   };
   return (
@@ -56,26 +55,26 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SplashScreenWrapper config={splashConfig}>
-        <AppProvider>
-          <div className="bg-gray-800 flex items-center justify-start">
-            <FancyNav
-              menuItems={menuItems}
-              alignment="left" // Can be 'left' | 'center' | 'right'
-              magicLineColor="bg-gray-500"
-              magicLineHoverColor="bg-yellow-200"
-              containerWidth="w-full max-w-[370px]" // Makes it responsive
-            />
-          </div>
-          <Link href="/playground/box">Playground Box</Link>
-          {'  '}
-          &nbsp; &nbsp; &nbsp;
-          <Link href="/playground/pagemode">Playground Pagemode</Link>
-          &nbsp; &nbsp; &nbsp;
-          <Link href="/playground/typo">Playground Typography</Link>
-          &nbsp; &nbsp; &nbsp;
-          <Link href="/demo">Demo</Link>
-          {children}
-        </AppProvider>
+          <AppProvider>
+            <div className="bg-gray-800 flex items-center justify-start">
+              <FancyNav
+                menuItems={menuItems}
+                alignment="left" // Can be 'left' | 'center' | 'right'
+                magicLineColor="bg-gray-500"
+                magicLineHoverColor="bg-yellow-200"
+                containerWidth="w-full max-w-[370px]" // Makes it responsive
+              />
+            </div>
+            <Link href="/playground/box">Playground Box</Link>
+            {'  '}
+            &nbsp; &nbsp; &nbsp;
+            <Link href="/playground/pagemode">Playground Pagemode</Link>
+            &nbsp; &nbsp; &nbsp;
+            <Link href="/playground/typo">Playground Typography</Link>
+            &nbsp; &nbsp; &nbsp;
+            <Link href="/demo">Demo</Link>
+            {children}
+          </AppProvider>
         </SplashScreenWrapper>
       </body>
     </html>

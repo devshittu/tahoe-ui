@@ -52,7 +52,7 @@ export type SplashConfig = {
   message?: React.ReactNode;
 
   /**
-   * Animation style of the container. 
+   * Animation style of the container.
    * "grow" "fade" "slide" "spin" or your own expansions
    */
   animation?: SplashAnimation;

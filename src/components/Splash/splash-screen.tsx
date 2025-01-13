@@ -78,7 +78,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ id }) => {
           </div>
         ) : (
           // fallback
-          
+
           <>
             <IconBlockScale />
             <IconGrow />
