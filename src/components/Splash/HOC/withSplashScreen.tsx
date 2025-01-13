@@ -45,6 +45,7 @@ export function withSplashScreen<P extends WithSplashScreenProps>(
       }
 
       setLocalMount(true);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // no dependencies => only run once
 
     if (!localMount) {
