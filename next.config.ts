@@ -27,14 +27,16 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/storybook/:path*',
-        destination: '/storybook-static/:path*',
+        destination: '/storybook/:path*',
       },
       {
         source: '/storybook',
-        destination: '/storybook-static/index.html',
+        destination: '/storybook/index.html',
       },
     ];
   },
 };
 
 export default nextConfig;
+
+// next.config.ts
