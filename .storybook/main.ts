@@ -13,6 +13,14 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ['../public'],
+  managerHead: (head) => `
+    <base href="/storybook/">
+    ${head}
+  `,
+  previewHead: (head) => `
+    <base href="/storybook/">
+    ${head}
+  `,
 };
 export default config;
 // .storybook/main.ts
