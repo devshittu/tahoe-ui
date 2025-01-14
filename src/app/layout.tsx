@@ -45,7 +45,7 @@ export default function RootLayout({
     message: 'Loading, please wait...',
     animation: 'grow',
     // animation: 'slide',
-    displayDuration: 2000,
+    displayDuration: 20000,
   };
   return (
     <html lang="en">

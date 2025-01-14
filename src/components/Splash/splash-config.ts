@@ -63,3 +63,5 @@ export type SplashConfig = {
    */
   displayDuration?: number;
 };
+
+// src/components/Splash/splash-config.ts

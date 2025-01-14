@@ -8,3 +8,5 @@ export type {
   SplashFrequency,
   SplashAnimation,
 } from './splash-config';
+
+// src/components/Splash/index.ts

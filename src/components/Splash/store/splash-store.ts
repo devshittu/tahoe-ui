@@ -62,3 +62,5 @@ export const useSplashBaseStore = createStore(
 );
 
 export const useSplashStore = () => useStore(useSplashBaseStore);
+
+// src/components/Splash/store/splash-store.ts
