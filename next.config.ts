@@ -23,6 +23,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/storybook/:path*',
+        destination: '/storybook-static/:path*',
+      },
+      {
+        source: '/storybook',
+        destination: '/storybook-static/index.html',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
