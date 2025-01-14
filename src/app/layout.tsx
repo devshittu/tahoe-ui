@@ -5,7 +5,7 @@ import './globals.css';
 import { AppProvider } from '@/providers/app';
 import FancyNav from '@/components/FancyNav/FancyNav';
 import { SplashConfig, SplashScreenWrapper } from '@/components/Splash';
-import { FaMoon } from 'react-icons/fa';
+import { FiCommand } from 'react-icons/fi';
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -41,10 +41,8 @@ export default function RootLayout({
     containerShape: 'rounded-full',
     frequency: 'once-per-session',
     // frequency: 'always',
-    // icon: (
-    //   <FaMoon className="text-4xl text-blue-500" />
-    // ),
-    // message: 'Loading, please wait...',
+    icon: <FiCommand className="text-4xl text-blue-500" />,
+    message: 'Loading, please wait...',
     animation: 'grow',
     // animation: 'slide',
     displayDuration: 2000,
