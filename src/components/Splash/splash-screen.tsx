@@ -26,7 +26,8 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ id }) => {
 
   // Build container classes
   const overlayClasses = twMerge(
-    'fixed inset-0 z-[9999] overflow-hidden flex items-center justify-center transition-colors duration-300',
+    // 'fixed inset-0 z-[9999] overflow-hidden flex items-center justify-center transition-colors duration-300',
+    'fixed inset-0 z-[9999] overflow-hidden w-full h-screen overflow-y-hidden flexx items-center justify-center transition-colors duration-300',
     themable ? '' : '', // If you prefer a "dark:" approach, do so
     backgroundColor, // e.g. "bg-slate-50 dark:bg-slate-950"
   );
@@ -61,7 +62,8 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ id }) => {
     >
       <div
         className={twMerge(
-          'relative transition-transform duration-300',
+          // 'relative transition-transform duration-300',
+          'block relative left-[50%] top-[50%]  -mt-[50px] -ml-[50px] transition-transform duration-300',
           containerSize ?? 'w-[100px] h-[100px]',
           containerShape ?? 'rounded-[20px]',
           animationClass,
