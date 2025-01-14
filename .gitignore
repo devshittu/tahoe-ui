@@ -51,6 +51,9 @@ src/components/illustrations/source/
 
 src/stories
 
+# Storybook build output
+public/storybook
+/storybook-static
 
 # local env files
 .env
