@@ -11,8 +11,8 @@
   ],
   "redirects": [
     {
-      "source": "/storybook/*",
-      "destination": "/storybook/:splat",
+      "source": "/storybook/:path*",
+      "destination": "/storybook/:path*",
       "statusCode": 200
     }
   ]
