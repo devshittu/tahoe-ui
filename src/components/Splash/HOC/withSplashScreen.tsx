@@ -1,63 +1,53 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
-import { useSplashStore, useSplashBaseStore } from '../store/splash-store';
+import { useSplashStore } from '../store/SplashScreenStore';
 import SplashScreen from '../splash-screen';
+import { SplashScreenConfig } from '../types';
 
-type WithSplashScreenProps = {
+interface WithSplashScreenProps {
   children?: React.ReactNode;
-};
+  /** Optional configuration for splash screen customizations */
+  splashConfig?: SplashScreenConfig;
+}
 
-export function withSplashScreen<P extends WithSplashScreenProps>(
+const withSplashScreen = <P extends WithSplashScreenProps>(
   WrappedComponent: React.ComponentType<P>,
-): React.FC<P> {
+): React.FC<P> => {
   const EnhancedComponent: React.FC<P> = (props: P) => {
-    // We only read from the store once to avoid repeated triggers
-    const store = useSplashBaseStore.getState();
-    const [localMount, setLocalMount] = useState<boolean>(false);
-    const [localLoading, setLocalLoading] = useState<boolean>(false);
-    const [localDisplay, setLocalDisplay] = useState<'none' | 'block'>('block');
+    const { splashConfig } = props;
+    const [hasMounted, setHasMounted] = useState(false);
+    const { hasShownSplash, setHasShownSplash } = useSplashStore();
 
-    // Single effect that runs once on mount
+    const [loading, setLoading] = useState(false);
+    const [displayStyle, setDisplayStyle] = useState('block');
+
     useEffect(() => {
-      // Mark store hasMounted if not already
-      if (!store.hasMounted) {
-        store.setHasMounted(true);
-      }
+      setHasMounted(true);
 
-      // If frequency is "always", always show
-      if (store.config.frequency === 'always') {
-        setLocalLoading(true);
-        setLocalDisplay('none');
+      if (!hasShownSplash) {
+        setLoading(true);
+        setDisplayStyle('none');
+
         setTimeout(() => {
-          setLocalLoading(false);
-          setLocalDisplay('block');
-        }, store.config.displayDuration);
-      } else if (!store.hasShown) {
-        // "once-per-session" or "once-per-window" logic
-        setLocalLoading(true);
-        setLocalDisplay('none');
-        setTimeout(() => {
-          store.setHasShown(true);
-          setLocalLoading(false);
-          setLocalDisplay('block');
-        }, store.config.displayDuration);
+          setHasShownSplash(true);
+          setLoading(false);
+          setDisplayStyle('block');
+        }, 2000);
       }
+    }, [hasShownSplash, setHasShownSplash]);
 
-      setLocalMount(true);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // no dependencies => only run once
-
-    if (!localMount) {
-      // Not fully loaded the HOC logic => skip rendering
+    if (!hasMounted) {
       return null;
     }
 
     return (
       <>
-        {localLoading && <SplashScreen />}
-        <div style={{ display: localDisplay }}>
-          <WrappedComponent {...props} />
+        {loading && <SplashScreen config={splashConfig} />}
+        <div style={{ display: displayStyle }}>
+          {React.createElement<React.ComponentProps<typeof WrappedComponent>>(
+            WrappedComponent,
+            props,
+          )}
         </div>
       </>
     );
@@ -67,9 +57,12 @@ export function withSplashScreen<P extends WithSplashScreenProps>(
     WrappedComponent,
   )})`;
   return EnhancedComponent;
-}
+};
 
 function getDisplayName<P>(WrappedComponent: React.ComponentType<P>) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
-// src/components/Splash/HOC/withSplashScreen.tsx
+
+export default withSplashScreen;
+
+// Path: src/components/SplashScreen/HOC/withSplashScreen.tsx
