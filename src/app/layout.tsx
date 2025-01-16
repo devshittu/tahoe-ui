@@ -4,7 +4,7 @@ import Link from 'next/link';
 import './globals.css';
 import { AppProvider } from '@/providers/app';
 import FancyNav from '@/components/FancyNav/FancyNav';
-import { SplashConfig, SplashScreenWrapper } from '@/components/Splash';
+import { SplashScreenConfig, SplashScreenWrapper } from '@/components/Splash';
 import { FiCommand } from 'react-icons/fi';
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -34,25 +34,34 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const splashConfig: Partial<SplashConfig> = {
-    themable: true,
-    backgroundColor: 'bg-slate-50 dark:bg-slate-950',
-    containerSize: 'w-32 h-32',
-    containerShape: 'rounded-full',
-    frequency: 'once-per-session',
-    // frequency: 'always',
-    icon: <FiCommand className="text-4xl text-blue-500" />,
-    message: 'Loading, please wait...',
-    animation: 'grow',
-    // animation: 'slide',
-    displayDuration: 20000,
+  // const splashConfig: Partial<SplashConfig> = {
+  //   themable: true,
+  //   backgroundColor: 'bg-slate-50 dark:bg-slate-950',
+  //   containerSize: 'w-32 h-32',
+  //   containerShape: 'rounded-full',
+  //   frequency: 'once-per-session',
+  //   // frequency: 'always',
+  //   icon: <FiCommand className="text-4xl text-blue-500" />,
+  //   message: 'Loading, please wait...',
+  //   animation: 'grow',
+  //   // animation: 'slide',
+  //   displayDuration: 20000,
+  // };
+
+  const splashConfig: Partial<SplashScreenConfig> = {
+    logoImage: '/custom-logo.png',
+    logoColor: 'text-blue-500',
+    enableGrowingAnimation: true,
+    animationDuration: '3s',
+    animationEasing: 'ease-in-out',
+    backgroundColor: 'bg-white dark:bg-gray-700',
   };
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SplashScreenWrapper config={splashConfig}>
+        <SplashScreenWrapper splashConfig={splashConfig}>
           <AppProvider>
             <div className="bg-gray-800 flex items-center justify-start">
               <FancyNav
