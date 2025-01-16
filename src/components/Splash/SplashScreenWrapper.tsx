@@ -1,34 +1,51 @@
+// 'use client';
+// import React, { ReactNode } from 'react';
+// import withSplashScreen from './HOC/withSplashScreen';
+
+// type SplashScreenWrapperProps = {
+//   children: ReactNode;
+// };
+
+// export const SplashScreenWrapper: React.FC<SplashScreenWrapperProps> = ({
+//   children,
+// }) => {
+//   const ChildrenComponent: React.FC<SplashScreenWrapperProps> = ({
+//     children,
+//   }) => <>{children}</>;
+
+//   const ChildrenWithSplash = withSplashScreen(ChildrenComponent);
+
+//   return <ChildrenWithSplash>{children}</ChildrenWithSplash>;
+// };
+
+// export default SplashScreenWrapper;
+// src/components/SplashScreen/SplashScreenWrapper.tsx
 'use client';
+import React, { ReactNode } from 'react';
+import withSplashScreen from './HOC/withSplashScreen';
+import type { SplashScreenConfig } from './types';
 
-import React, { useEffect } from 'react';
-import { withSplashScreen } from './HOC/withSplashScreen';
-import type { SplashConfig } from './splash-config';
-import { useSplashStore } from './store/splash-store';
-
-type SplashScreenWrapperProps = {
-  children: React.ReactNode;
-  config?: Partial<SplashConfig>;
+export type SplashScreenWrapperProps = {
+  children: ReactNode;
+  /** Optional configuration for the splash screen */
+  splashConfig?: SplashScreenConfig;
 };
 
 export const SplashScreenWrapper: React.FC<SplashScreenWrapperProps> = ({
   children,
-  config = {},
+  splashConfig,
 }) => {
-  const { setConfig } = useSplashStore();
-
-  useEffect(() => {
-    setConfig(config);
-  }, [config, setConfig]);
-
-  const ChildrenComponent: React.FC<{ children: React.ReactNode }> = ({
+  const ChildrenComponent: React.FC<SplashScreenWrapperProps> = ({
     children,
+    splashConfig,
   }) => <>{children}</>;
 
   const ChildrenWithSplash = withSplashScreen(ChildrenComponent);
 
-  return <ChildrenWithSplash>{children}</ChildrenWithSplash>;
+  return (
+    <ChildrenWithSplash splashConfig={splashConfig}>
+      {children}
+    </ChildrenWithSplash>
+  );
 };
-
-export default SplashScreenWrapper;
-
-// src/components/Splash/SplashScreenWrapper.tsx
+// Path: src/components/SplashScreen/SplashScreenWrapper.tsx
