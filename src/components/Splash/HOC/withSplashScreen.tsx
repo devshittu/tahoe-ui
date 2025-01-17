@@ -21,6 +21,11 @@ const withSplashScreen = <P extends WithSplashScreenProps>(
     const [loading, setLoading] = useState(false);
     const [displayStyle, setDisplayStyle] = useState('block');
 
+    // Extract animation duration from config or fallback to default
+    const animationDuration = splashConfig?.animationDuration
+      ? parseFloat(splashConfig.animationDuration) * 1000 // Convert "2.5s" to 2500ms
+      : 2000; // Default to 2 seconds if not provided
+
     useEffect(() => {
       setHasMounted(true);
 
@@ -32,9 +37,9 @@ const withSplashScreen = <P extends WithSplashScreenProps>(
           setHasShownSplash(true);
           setLoading(false);
           setDisplayStyle('block');
-        }, 2000);
+        }, animationDuration);
       }
-    }, [hasShownSplash, setHasShownSplash]);
+    }, [hasShownSplash, setHasShownSplash, animationDuration]);
 
     if (!hasMounted) {
       return null;
