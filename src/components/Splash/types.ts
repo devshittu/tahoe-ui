@@ -1,5 +1,24 @@
 export type SplashScreenProps = {
   id?: string;
+  config?: SplashScreenConfig;
+};
+
+export type TailwindColor =
+  | 'blue'
+  | 'red'
+  | 'green'
+  | 'yellow'
+  | 'purple'
+  | 'pink'
+  | 'cyan'
+  | 'indigo';
+
+/** Palette map type defining light and dark color classes */
+export type PaletteMap = {
+  [key: string]: {
+    light: string; // Tailwind class for the light mode background
+    dark: string; // Tailwind class for the dark mode background
+  };
 };
 
 export type SplashScreenConfig = {
@@ -26,7 +45,11 @@ export type SplashScreenConfig = {
   /** Tailwind background color class for the splash screen container.
    *  Defaults to "bg-slate-50 dark:bg-slate-950".
    */
-  backgroundColor?: string;
+  backgroundColor?: TailwindColor | string;
+
+  // colorPalette?: string; // Tailwind color class for the growing box
+
+  colorPreset?: keyof PaletteMap | string; // Color preset or custom classes
 };
 
 // src/components/SplashScreen/types.ts
