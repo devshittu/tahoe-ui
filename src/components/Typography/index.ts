@@ -27,8 +27,9 @@ export { default as ThemedText } from './ThemedText';
 export { default as ColorText } from './ColorText';
 export { default as AccessibleText } from './AccessibleText';
 export { default as ReadableText } from './ReadableText';
-
-// src/components/Typography/index.ts
 export { default as Hr } from './Hr';
 export { default as Link } from './Link';
+export { default as TypingText } from './TypingText';
 export { UnorderedList, OrderedList, ListItem } from './Lists';
+
+// src/components/Typography/index.ts
