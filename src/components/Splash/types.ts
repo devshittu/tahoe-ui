@@ -1,3 +1,5 @@
+import { IconBlockScaleProps } from './loading-splash';
+
 export type SplashScreenProps = {
   id?: string;
   config?: SplashScreenConfig;
@@ -22,14 +24,6 @@ export type PaletteMap = {
 };
 
 export type SplashScreenConfig = {
-  /** URL of a custom logo image.
-   *  If not provided, the default Icon is used.
-   */
-  logoImage?: string;
-  /** Tailwind text color class for the logo (e.g. "text-cyan-500").
-   *  Defaults to existing color.
-   */
-  logoColor?: string;
   /** Flag to enable/disable the animated growing background box.
    *  Defaults to true.
    */
@@ -47,9 +41,10 @@ export type SplashScreenConfig = {
    */
   backgroundColor?: TailwindColor | string;
 
-  // colorPalette?: string; // Tailwind color class for the growing box
+  text?: string; // Optional text to display in the splash screen
+  textColor?: 'primary' | 'secondary' | 'accent' | string; // Optional text color
 
   colorPreset?: keyof PaletteMap | string; // Color preset or custom classes
-};
+} & IconBlockScaleProps; // Includes logoImage, svgIcon, logoColor, and colorPreset.;
 
 // src/components/SplashScreen/types.ts
