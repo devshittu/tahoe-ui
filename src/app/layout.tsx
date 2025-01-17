@@ -3,7 +3,6 @@ import localFont from 'next/font/local';
 import Link from 'next/link';
 import './globals.css';
 import { AppProvider } from '@/providers/app';
-import FancyNav from '@/components/FancyNav/FancyNav';
 import { SplashScreenConfig, SplashScreenWrapper } from '@/components/Splash';
 import { FiCommand } from 'react-icons/fi';
 const geistSans = localFont({
@@ -54,7 +53,8 @@ export default function RootLayout({
     enableGrowingAnimation: true,
     animationDuration: '3s',
     animationEasing: 'ease-in-out',
-    backgroundColor: 'bg-white dark:bg-gray-700',
+    colorPreset: 'cyan',
+    backgroundColor: 'bg-white dark:bg-gray-900',
   };
   return (
     <html lang="en">
@@ -63,15 +63,6 @@ export default function RootLayout({
       >
         <SplashScreenWrapper splashConfig={splashConfig}>
           <AppProvider>
-            <div className="bg-gray-800 flex items-center justify-start">
-              <FancyNav
-                menuItems={menuItems}
-                alignment="left" // Can be 'left' | 'center' | 'right'
-                magicLineColor="bg-gray-500"
-                magicLineHoverColor="bg-yellow-200"
-                containerWidth="w-full max-w-[370px]" // Makes it responsive
-              />
-            </div>
             <Link href="/playground/box">Playground Box</Link>
             {'  '}
             &nbsp; &nbsp; &nbsp;
