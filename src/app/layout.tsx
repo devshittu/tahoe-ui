@@ -48,7 +48,7 @@ export default function RootLayout({
     enableGrowingAnimation: true,
     animationDuration: '3s',
     animationEasing: 'ease-in-out',
-    colorPreset: 'green',
+    colorPreset: 'purple',
     backgroundColor: 'bg-white dark:bg-gray-900',
     text: 'Loading the magic...',
     textColor: 'accent',
