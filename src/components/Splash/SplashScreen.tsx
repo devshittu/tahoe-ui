@@ -1,7 +1,6 @@
-// src/components/SplashScreen/splash-screen.tsx
 'use client';
 import React from 'react';
-import { IconBlockScale, IconGrow } from './loading-splash';
+import { IconBlockScale, IconGrow } from './LoadingSplash';
 import { SplashScreenProps } from './types';
 import { TypingText, Heading } from '../Typography';
 
@@ -83,4 +82,4 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 
 export default SplashScreen;
 
-// Path: src/components/SplashScreen/splash-screen.tsx
+// Path: src/components/SplashScreen/SplashScreen.tsx

@@ -263,4 +263,4 @@ export const LoadingSplash: React.FC = () => {
     </>
   );
 };
-// src/components/SplashScreen/loading-splash.tsx
+// src/components/SplashScreen/LoadingSplash.tsx

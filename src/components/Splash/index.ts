@@ -1,4 +1,4 @@
-export * from './splash-screen';
+export * from './SplashScreen';
 export * from './SplashScreenWrapper';
 export * from './types';
 
