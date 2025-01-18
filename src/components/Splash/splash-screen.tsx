@@ -5,7 +5,7 @@ import { IconBlockScale, IconGrow } from './loading-splash';
 import { SplashScreenProps } from './types';
 import { TypingText, Heading } from '../Typography';
 
-const responsiveClasses =
+const responsiveWxHClasses =
   'w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-48 lg:h-48 xl:w-56 xl:h-56 2xl:w-64 2xl:h-64';
 
 export const SplashScreen: React.FC<SplashScreenProps> = ({
@@ -27,14 +27,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] ${backgroundColor} w-full h-screen overflow-y-hidden`}
+      className={`fixed inset-0 z-[9999] ${backgroundColor} w-full h-screen overflow-hidden`}
       id={`${id}-splash-loader`}
       aria-labelledby={`${id}-label`}
       aria-hidden="true"
       data-splash-state="open"
     >
       <div
-        className={`relative left-1/2 top-1/2 w-[100px]x h-[100px]x ${responsiveClasses}  -translate-x-1/2 -translate-y-1/2`}
+        className={`relative left-1/2 top-1/2 ${responsiveWxHClasses}  -translate-x-1/2 -translate-y-1/2`}
       >
         {logoImage ? (
           <IconBlockScale
