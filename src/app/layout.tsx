@@ -75,3 +75,4 @@ export default function RootLayout({
     </html>
   );
 }
+// Path: src/app/layout.tsx
