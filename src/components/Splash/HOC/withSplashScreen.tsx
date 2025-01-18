@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useSplashStore } from '../store/SplashScreenStore';
-import SplashScreen from '../splash-screen';
+import SplashScreen from '../SplashScreen';
 import { SplashScreenConfig } from '../types';
 
 interface WithSplashScreenProps {
