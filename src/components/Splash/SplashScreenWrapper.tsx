@@ -1,25 +1,3 @@
-// 'use client';
-// import React, { ReactNode } from 'react';
-// import withSplashScreen from './HOC/withSplashScreen';
-
-// type SplashScreenWrapperProps = {
-//   children: ReactNode;
-// };
-
-// export const SplashScreenWrapper: React.FC<SplashScreenWrapperProps> = ({
-//   children,
-// }) => {
-//   const ChildrenComponent: React.FC<SplashScreenWrapperProps> = ({
-//     children,
-//   }) => <>{children}</>;
-
-//   const ChildrenWithSplash = withSplashScreen(ChildrenComponent);
-
-//   return <ChildrenWithSplash>{children}</ChildrenWithSplash>;
-// };
-
-// export default SplashScreenWrapper;
-// src/components/SplashScreen/SplashScreenWrapper.tsx
 'use client';
 import React, { ReactNode } from 'react';
 import withSplashScreen from './HOC/withSplashScreen';
