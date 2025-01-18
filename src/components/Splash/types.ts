@@ -1,4 +1,4 @@
-import { IconBlockScaleProps } from './loading-splash';
+import { IconBlockScaleProps } from './LoadingSplash';
 
 export type SplashScreenProps = {
   id?: string;
