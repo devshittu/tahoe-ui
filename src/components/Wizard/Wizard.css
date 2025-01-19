@@ -1,0 +1,51 @@
+/* src/components/Wizard/Wizard.css */
+:root {
+  --wizard-bg: #f9fafb;
+  --wizard-dark-bg: #1f2937;
+  --wizard-border: #3b82f6;
+  --wizard-error: #ef4444;
+  --wizard-button-bg: #3b82f6;
+  --wizard-button-hover-bg: #2563eb;
+  --wizard-button-disabled: #9ca3af;
+}
+
+.wizard-container {
+  background-color: var(--wizard-bg);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.wizard-step {
+  background-color: white;
+  border-radius: 0.25rem;
+}
+
+.wizard-step.active {
+  border: 2px solid var(--wizard-border);
+}
+
+.wizard-error {
+  color: var(--wizard-error);
+}
+
+.wizard-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.wizard-button {
+  background-color: var(--wizard-button-bg);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.wizard-button:hover {
+  background-color: var(--wizard-button-hover-bg);
+}
+
+.wizard-button:disabled {
+  background-color: var(--wizard-button-disabled);
+  cursor: not-allowed;
+}
