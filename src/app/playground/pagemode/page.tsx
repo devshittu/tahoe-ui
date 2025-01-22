@@ -9,7 +9,7 @@ const DemoPage = () => (
   <>
     <ExampleButton />
 
-<WizardExample />
+    <WizardExample />
   </>
 );
 
