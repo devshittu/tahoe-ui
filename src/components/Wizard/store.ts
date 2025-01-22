@@ -14,6 +14,8 @@ import eventBus, {
 export const createWizardStore = <TSteps extends WizardStep[]>(
   steps: TSteps,
   hooks?: WizardHooks,
+  lazyRendering: boolean = true, // Optional parameter to toggle lazy rendering
+  renderAdjacent: boolean = false, // Optional parameter to toggle adjacent steps rendering
 ) => {
   return create<WizardState<TSteps>>((set, get) => ({
     steps,
@@ -22,13 +24,7 @@ export const createWizardStore = <TSteps extends WizardStep[]>(
     error: null,
     validationStatus: {}, // New field to track validation state for each step
 
-    // // Compute visible steps based on the condition, if provided.
-    // get visibleSteps() {
-    //   const { stepData } = get();
-    //   return steps.filter(
-    //     (step) => !step.condition || step.condition(stepData),
-    //   );
-    // },
+    // Compute visible steps based on the condition, if provided.
 
     get visibleSteps() {
       const { stepData } = get();
@@ -38,17 +34,26 @@ export const createWizardStore = <TSteps extends WizardStep[]>(
       console.log('Visible Steps:', visible); // Debug log
       return visible;
     },
-    // // For lazy rendering: only render the current step (or optionally adjacent steps).
-    // get renderedSteps() {
-    //   const { currentStepIndex, visibleSteps } = get();
-    //   return [visibleSteps[currentStepIndex]];
-    // },
 
-    // Debug-enhanced renderedSteps
+    // For lazy rendering: only render the current step (or optionally adjacent steps).
     get renderedSteps() {
-      const { visibleSteps } = get();
-      console.log('Visible Steps:', visibleSteps); // Debug log
-      return visibleSteps; // Render all visible steps for debugging
+      const { currentStepIndex, visibleSteps } = get();
+      if (!lazyRendering) {
+        // Render all visible steps
+        return visibleSteps;
+      }
+      if (renderAdjacent) {
+        // Render current step and adjacent steps
+        return visibleSteps.filter((_, index) =>
+          [
+            currentStepIndex - 1,
+            currentStepIndex,
+            currentStepIndex + 1,
+          ].includes(index),
+        );
+      }
+      // Default: Render only the current step
+      return [visibleSteps[currentStepIndex]];
     },
 
     nextStep: async () => {
