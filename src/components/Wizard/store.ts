@@ -1,7 +1,14 @@
 // src/components/Wizard/store.ts
-
 import { create } from 'zustand';
 import { WizardState, WizardStep, StepDataMap, WizardHooks } from './types';
+import eventBus, {
+  EVENT_STEP_VALIDATE,
+  EVENT_STEP_DATA_UPDATE,
+  EVENT_STEP_VALIDATION_STATUS,
+  EVENT_WIZARD_NAVIGATE,
+  EVENT_WIZARD_ERROR,
+  EVENT_WIZARD_COMPLETE,
+} from '@/utils/eventBus';
 
 /** Create a wizard store with all the desired functionality. */
 export const createWizardStore = <TSteps extends WizardStep[]>(
@@ -13,48 +20,73 @@ export const createWizardStore = <TSteps extends WizardStep[]>(
     currentStepIndex: 0,
     stepData: {} as StepDataMap<TSteps>,
     error: null,
+    validationStatus: {}, // New field to track validation state for each step
 
-    // Compute visible steps based on the condition, if provided.
+    // // Compute visible steps based on the condition, if provided.
+    // get visibleSteps() {
+    //   const { stepData } = get();
+    //   return steps.filter(
+    //     (step) => !step.condition || step.condition(stepData),
+    //   );
+    // },
+
     get visibleSteps() {
       const { stepData } = get();
-      return steps.filter(
+      const visible = steps.filter(
         (step) => !step.condition || step.condition(stepData),
       );
+      console.log('Visible Steps:', visible); // Debug log
+      return visible;
     },
+    // // For lazy rendering: only render the current step (or optionally adjacent steps).
+    // get renderedSteps() {
+    //   const { currentStepIndex, visibleSteps } = get();
+    //   return [visibleSteps[currentStepIndex]];
+    // },
 
-    // For lazy rendering: only render the current step (or optionally adjacent steps).
+    // Debug-enhanced renderedSteps
     get renderedSteps() {
-      const { currentStepIndex, visibleSteps } = get();
-      // For simplicity, only render the current step.
-      return [visibleSteps[currentStepIndex]];
+      const { visibleSteps } = get();
+      console.log('Visible Steps:', visibleSteps); // Debug log
+      return visibleSteps; // Render all visible steps for debugging
     },
 
     nextStep: async () => {
       const { currentStepIndex, visibleSteps, stepData, setError } = get();
       const currentStep = visibleSteps[currentStepIndex];
-      // Validate current step if a validation function is provided.
-      if (currentStep.validate) {
-        const isValid = await currentStep.validate(
-          stepData[currentStep.id as keyof StepDataMap<TSteps>],
-        );
-        if (!isValid) {
-          setError({
-            userMessage: `Please complete "${currentStep.title}" correctly.`,
-            devMessage: `Validation failed for step "${currentStep.id}".`,
-          });
-          return;
-        }
-      }
-      const nextStep = visibleSteps[currentStepIndex + 1];
 
+      // Emit validation request and wait for validation result
+      const isValid = await new Promise<boolean>((resolve) => {
+        eventBus.emit(EVENT_STEP_VALIDATE, {
+          stepId: currentStep.id,
+          data: stepData[currentStep.id as keyof StepDataMap<TSteps>],
+          resolve, // Include resolve callback
+        });
+      });
+
+      if (!isValid) {
+        setError({
+          userMessage: `Please complete "${currentStep.title}" correctly.`,
+          devMessage: `Validation failed for step "${currentStep.id}".`,
+        });
+        return;
+      }
+
+      // Move to next step
+      const nextStep = visibleSteps[currentStepIndex + 1];
       if (currentStepIndex < visibleSteps.length - 1) {
         setError(null);
         hooks?.onStepLeave?.(currentStep.id, nextStep.id);
         set({ currentStepIndex: currentStepIndex + 1 });
         hooks?.onStepEnter?.(nextStep.id, currentStep.id);
+        eventBus.emit(EVENT_WIZARD_NAVIGATE, {
+          fromStep: currentStep.id,
+          toStep: nextStep.id,
+        });
       } else {
-        // When at the final step, consider wizard complete.
+        // Complete wizard
         hooks?.onWizardComplete?.(stepData);
+        eventBus.emit(EVENT_WIZARD_COMPLETE, { stepData });
       }
     },
 
@@ -66,17 +98,46 @@ export const createWizardStore = <TSteps extends WizardStep[]>(
         hooks?.onStepLeave?.(currentStep.id, prevStep.id);
         set({ currentStepIndex: currentStepIndex - 1 });
         hooks?.onStepEnter?.(prevStep.id, currentStep.id);
+        eventBus.emit(EVENT_WIZARD_NAVIGATE, {
+          fromStep: currentStep.id,
+          toStep: prevStep.id,
+        });
       }
     },
 
     setStepData: (stepId, data) => {
-      set((state) => ({
-        stepData: { ...state.stepData, [stepId]: data },
-      }));
-    },
+      set((state) => {
+        const updatedData = { ...state.stepData, [stepId]: data };
 
+        // Emit data update event
+        eventBus.emit(EVENT_STEP_DATA_UPDATE, { stepId, data });
+
+        // Trigger validation whenever data is updated
+        const step = state.steps.find((s) => s.id === stepId);
+        if (step?.validate) {
+          // Normalize validate to always return a Promise
+          Promise.resolve(step.validate(data)).then((isValid: boolean) => {
+            set((currentState) => ({
+              ...currentState,
+              validationStatus: {
+                ...currentState.validationStatus,
+                [stepId]: isValid,
+              },
+            }));
+            eventBus.emit(EVENT_STEP_VALIDATION_STATUS, { stepId, isValid });
+          });
+        }
+
+        return { ...state, stepData: updatedData };
+      });
+    },
     setError: (error) => {
       set({ error });
+      if (error) {
+        eventBus.emit(EVENT_WIZARD_ERROR, { message: error.userMessage });
+      }
     },
   }));
 };
+
+// src/components/Wizard/store.ts
