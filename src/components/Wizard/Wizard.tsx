@@ -1,14 +1,22 @@
-// src/components/Wizard/Wizard.tsx
-
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWizard } from './hooks/useWizardStep';
 import './Wizard.css'; // Import custom CSS if desired
+import eventBus, { EVENT_STEP_VALIDATION_STATUS } from '@/utils/eventBus';
 
 const Wizard: React.FC = () => {
-  const { renderedSteps, currentStepIndex, nextStep, prevStep, error, theme } =
-    useWizard();
+  const {
+    renderedSteps,
+    currentStepIndex,
+    nextStep,
+    prevStep,
+    error,
+    validationStatus,
+    theme,
+  } = useWizard();
+
   const stepRef = useRef<HTMLDivElement>(null);
+  const [isNextEnabled, setIsNextEnabled] = useState(false);
 
   // Focus management: focus the current step when it changes.
   useEffect(() => {
@@ -20,7 +28,7 @@ const Wizard: React.FC = () => {
   // Keyboard navigation: use ArrowRight/ArrowLeft to navigate.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') {
+      if (e.key === 'ArrowRight' && isNextEnabled) {
         nextStep();
       } else if (e.key === 'ArrowLeft') {
         prevStep();
@@ -28,7 +36,34 @@ const Wizard: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextStep, prevStep]);
+  }, [nextStep, prevStep, isNextEnabled]);
+
+  // Listen for validation status updates for the current step
+  useEffect(() => {
+    const currentStepId = renderedSteps[currentStepIndex]?.id;
+
+    const handleValidationStatus = ({
+      stepId,
+      isValid,
+    }: {
+      stepId: string;
+      isValid: boolean;
+    }) => {
+      if (stepId === currentStepId) {
+        setIsNextEnabled(isValid); // Update the button's enabled state
+        console.log(`Validation status for step ${stepId}:`, isValid);
+      }
+    };
+
+    eventBus.on(EVENT_STEP_VALIDATION_STATUS, handleValidationStatus);
+
+    // Initialize validation status for the current step
+    setIsNextEnabled(validationStatus[currentStepId] || false);
+
+    return () => {
+      eventBus.off(EVENT_STEP_VALIDATION_STATUS, handleValidationStatus);
+    };
+  }, [currentStepIndex, renderedSteps, validationStatus]);
 
   return (
     <div
@@ -91,9 +126,9 @@ const Wizard: React.FC = () => {
         </button>
         <button
           onClick={nextStep}
-          disabled={!!error}
+          disabled={!isNextEnabled} // Enable/disable based on validation status
           className={`${theme?.button || 'default-button-class'} ${
-            !!error ? theme?.buttonDisabled || '' : ''
+            !isNextEnabled ? theme?.buttonDisabled || '' : ''
           }`}
           aria-label="Go to the next step"
         >
@@ -105,3 +140,4 @@ const Wizard: React.FC = () => {
 };
 
 export default Wizard;
+// src/components/Wizard/Wizard.tsx
