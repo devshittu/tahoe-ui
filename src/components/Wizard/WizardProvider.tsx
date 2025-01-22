@@ -1,6 +1,6 @@
 // src/components/Wizard/WizardProvider.tsx
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { WizardContext } from './hooks/useWizardStep';
 import { WizardStep, WizardHooks } from './types';
 import { createWizardStore } from './store';
@@ -25,7 +25,12 @@ export const WizardProvider = <TSteps extends WizardStep[]>({
   );
   const wizardState = useWizardStore();
 
-  const mergedTheme: WizardTheme = { ...defaultTheme, ...theme };
+  // const mergedTheme: WizardTheme = { ...defaultTheme, ...theme };
+  // Merge the custom theme with default theme, memoizing the result for performance.
+  const mergedTheme: WizardTheme = useMemo(
+    () => ({ ...defaultTheme, ...theme }),
+    [theme],
+  );
 
   return (
     <WizardContext.Provider value={{ ...wizardState, theme: mergedTheme }}>
@@ -34,3 +39,4 @@ export const WizardProvider = <TSteps extends WizardStep[]>({
   );
 };
 export default WizardProvider;
+// src/components/Wizard/WizardProvider.tsx
