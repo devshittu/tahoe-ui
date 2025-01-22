@@ -11,7 +11,7 @@ export type {
   WizardState,
   WizardHooks,
   StepDataMap,
-//   WizardError,
+  //   WizardError,
 } from './types';
 
 // Export theme
