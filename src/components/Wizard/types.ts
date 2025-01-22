@@ -9,6 +9,11 @@ type MetaType = {
   [key: string]: any;
 };
 
+export interface WizardConfig {
+  lazyRendering?: boolean; // Whether to render steps lazily
+  renderAdjacent?: boolean; // Whether to render adjacent steps
+}
+
 /** Represents a single step in the wizard with generic data type support. */
 export interface WizardStep<DataType = any> {
   id: string; // Unique identifier
@@ -17,6 +22,7 @@ export interface WizardStep<DataType = any> {
   validate?: (data: DataType) => boolean | Promise<boolean>; // Step-level validation function
   condition?: (stepData: Record<string, any>) => boolean; // Optional visibility condition
   render?: () => React.ReactNode; // Custom render function for the step
+  lazy?: boolean; // Allow lazy rendering configuration per step
   meta?: MetaType; // Optional metadata for the step
 }
 
