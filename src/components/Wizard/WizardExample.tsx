@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { WizardProvider } from './WizardProvider';
 import Wizard from './Wizard';
 import { WizardStep } from './types';
-import { useWizardStep } from './hooks/useWizardStep';
+import { useWizard, useWizardStep } from './hooks/useWizardStep';
 import eventBus, {
+  EVENT_STEP_DATA_UPDATE,
   EVENT_STEP_VALIDATE,
   EVENT_STEP_VALIDATION_STATUS,
 } from '@/utils/eventBus';
@@ -119,19 +120,69 @@ const Step2: React.FC = () => {
 };
 
 // Step 3: Review
+// const Step3: React.FC = () => {
+//   const { data } = useWizardStep<WizardStep<StepData>[], 'step-3'>('step-3');
+//   const [liveData, setLiveData] = React.useState(data || {});
+
+//   console.log('Step3');
+//   useEffect(() => {
+//     const updateListener = ({ stepId, data }: { stepId: string; data: StepData }) => {
+//       setLiveData((prev) => ({ ...prev, [stepId]: data }));
+//     };
+
+//     eventBus.on(EVENT_STEP_DATA_UPDATE, updateListener);
+
+//     return () => {
+//       eventBus.off(EVENT_STEP_DATA_UPDATE, updateListener);
+//     };
+//   }, []);
+
+//   return (
+//     <div>
+//       <h2>Review</h2>
+//       <p>
+//         <strong>Name:</strong> {liveData?.name || 'Not provided'}
+//       </p>
+//       <p>
+//         <strong>Email:</strong> {liveData?.email || 'Not provided'}
+//       </p>
+//     </div>
+//   );
+// };
 const Step3: React.FC = () => {
-  const { data } = useWizardStep<WizardStep<StepData>[], 'step-3'>('step-3');
+  const { stepData } = useWizard(); // Access aggregated step data from the store
+  const [aggregatedData, setAggregatedData] =
+    React.useState<Record<string, any>>(stepData);
+
+  useEffect(() => {
+    const updateListener = ({
+      stepId,
+      data,
+    }: {
+      stepId: string;
+      data: any;
+    }) => {
+      setAggregatedData((prev: Record<string, any>) => ({
+        ...prev,
+        [stepId]: data, // Merge new data for the specific step
+      }));
+    };
+
+    // Listen for data updates from the event bus
+    eventBus.on(EVENT_STEP_DATA_UPDATE, updateListener);
+
+    return () => {
+      // Clean up listener to prevent memory leaks
+      eventBus.off(EVENT_STEP_DATA_UPDATE, updateListener);
+    };
+  }, []);
 
   return (
     <div>
-      <h2>Review</h2>
-      <p>data: {JSON.stringify(data)}</p>
-      <p>
-        <strong>Name:</strong> {data?.name || 'Not provided'}
-      </p>
-      <p>
-        <strong>Email:</strong> {data?.email || 'Not provided'}
-      </p>
+      <h2>Review All Data</h2>
+      <pre className="p-4 bg-gray-100 rounded">
+        {JSON.stringify(aggregatedData, null, 2) || 'No data available'}
+      </pre>
     </div>
   );
 };
@@ -155,6 +206,8 @@ const WizardExample: React.FC = () => {
         onWizardComplete: (data) =>
           console.log('Wizard completed with data:', data),
       }}
+      lazyRendering={false}
+      renderAdjacent
     >
       <Wizard />
     </WizardProvider>
@@ -163,3 +216,4 @@ const WizardExample: React.FC = () => {
 
 export default WizardExample;
 // TODO: add dynamic step rendering
+// src/components/Wizard/WizardExample.tsx
