@@ -119,36 +119,6 @@ const Step2: React.FC = () => {
   );
 };
 
-// Step 3: Review
-// const Step3: React.FC = () => {
-//   const { data } = useWizardStep<WizardStep<StepData>[], 'step-3'>('step-3');
-//   const [liveData, setLiveData] = React.useState(data || {});
-
-//   console.log('Step3');
-//   useEffect(() => {
-//     const updateListener = ({ stepId, data }: { stepId: string; data: StepData }) => {
-//       setLiveData((prev) => ({ ...prev, [stepId]: data }));
-//     };
-
-//     eventBus.on(EVENT_STEP_DATA_UPDATE, updateListener);
-
-//     return () => {
-//       eventBus.off(EVENT_STEP_DATA_UPDATE, updateListener);
-//     };
-//   }, []);
-
-//   return (
-//     <div>
-//       <h2>Review</h2>
-//       <p>
-//         <strong>Name:</strong> {liveData?.name || 'Not provided'}
-//       </p>
-//       <p>
-//         <strong>Email:</strong> {liveData?.email || 'Not provided'}
-//       </p>
-//     </div>
-//   );
-// };
 const Step3: React.FC = () => {
   const { stepData } = useWizard(); // Access aggregated step data from the store
   const [aggregatedData, setAggregatedData] =
@@ -189,9 +159,9 @@ const Step3: React.FC = () => {
 
 // Define the wizard steps
 const steps: WizardStep<StepData>[] = [
-  { id: 'step-1', title: 'Step 1', render: () => <Step1 /> },
-  { id: 'step-2', title: 'Step 2', render: () => <Step2 /> },
-  { id: 'step-3', title: 'Review', render: () => <Step3 /> },
+  { id: 'step-1', title: 'Step 1', render: () => <Step1 />, lazy: true },
+  { id: 'step-2', title: 'Step 2', render: () => <Step2 />, lazy: false },
+  { id: 'step-3', title: 'Review', render: () => <Step3 />, lazy: true },
 ];
 
 const WizardExample: React.FC = () => {
@@ -206,8 +176,10 @@ const WizardExample: React.FC = () => {
         onWizardComplete: (data) =>
           console.log('Wizard completed with data:', data),
       }}
-      lazyRendering={false}
-      renderAdjacent
+      config={{
+        lazyRendering: false,
+        renderAdjacent: true,
+      }}
     >
       <Wizard />
     </WizardProvider>
