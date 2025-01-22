@@ -12,16 +12,20 @@ export const WizardProvider = <TSteps extends WizardStep[]>({
   steps,
   hooks,
   theme = defaultTheme,
+  lazyRendering = true,
+  renderAdjacent = false,
 }: {
   children: React.ReactNode;
   steps: TSteps;
   hooks?: WizardHooks;
   theme?: Partial<WizardTheme>;
+  lazyRendering?: boolean;
+  renderAdjacent?: boolean;
 }) => {
   // Initialize the store and merge the provided theme with default values.
   const useWizardStore = React.useMemo(
-    () => createWizardStore(steps, hooks),
-    [steps, hooks],
+    () => createWizardStore(steps, hooks, lazyRendering, renderAdjacent),
+    [steps, hooks, lazyRendering, renderAdjacent],
   );
   const wizardState = useWizardStore();
 
