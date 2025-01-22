@@ -157,11 +157,38 @@ const Step3: React.FC = () => {
   );
 };
 
-// Define the wizard steps
+// Define the wizard steps with meta as shown earlier
 const steps: WizardStep<StepData>[] = [
-  { id: 'step-1', title: 'Step 1', render: () => <Step1 />, lazy: true },
-  { id: 'step-2', title: 'Step 2', render: () => <Step2 />, lazy: false },
-  { id: 'step-3', title: 'Review', render: () => <Step3 />, lazy: true },
+  {
+    id: 'step-1',
+    title: 'Step 1',
+    render: () => <Step1 />,
+    lazy: true,
+    meta: {
+      description: 'Please enter your full name.',
+      analytics: { event: 'step1_viewed' },
+    },
+  },
+  {
+    id: 'step-2',
+    title: 'Step 2',
+    render: () => <Step2 />,
+    lazy: false,
+    meta: {
+      description: 'Please provide a valid email address.',
+      analytics: { event: 'step2_viewed' },
+    },
+  },
+  {
+    id: 'step-3',
+    title: 'Review',
+    render: () => <Step3 />,
+    lazy: true,
+    meta: {
+      description: 'Review your entered information before submission.',
+      analytics: { event: 'step3_viewed' },
+    },
+  },
 ];
 
 const WizardExample: React.FC = () => {
