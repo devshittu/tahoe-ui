@@ -40,8 +40,6 @@ export interface WizardState<TSteps extends WizardStep[]> extends WizardHooks {
   currentStepIndex: number;
   stepData: StepDataMap<TSteps>;
   error: { userMessage: string; devMessage?: string } | null;
-//   isStepValid: (stepId: TSteps[number]['id']) => boolean; // Check if a step is valid
-//   setStepValid: (stepId: TSteps[number]['id'], isValid: boolean) => void; // Update step validity
   nextStep: () => Promise<void>;
   prevStep: () => void;
   setStepData: <TStepId extends TSteps[number]['id']>(
@@ -52,6 +50,7 @@ export interface WizardState<TSteps extends WizardStep[]> extends WizardHooks {
     error: { userMessage: string; devMessage?: string } | null,
   ) => void;
 
+  validationStatus: { [key: string]: boolean }; // Add this line
   // For lazy rendering – returns a subset of the visible steps.
   readonly visibleSteps: WizardStep[];
   readonly renderedSteps: WizardStep[];
