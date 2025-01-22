@@ -65,6 +65,15 @@ const Wizard: React.FC = () => {
     };
   }, [currentStepIndex, renderedSteps, validationStatus]);
 
+  // Handle meta analytics on step enter
+  useEffect(() => {
+    const currentStep = renderedSteps[currentStepIndex];
+    if (currentStep?.meta?.analytics?.event) {
+      console.log(`Analytics Event: ${currentStep.meta.analytics.event}`);
+      // Integrate with your analytics service here
+    }
+  }, [currentStepIndex, renderedSteps]);
+
   return (
     <div
       className={theme?.container}
@@ -94,7 +103,30 @@ const Wizard: React.FC = () => {
                 theme?.activeStep || ''
               }`}
             >
-              {step.render ? step.render() : <h2>{step.title}</h2>}
+              {/* Render the step title */}
+              <h2 className={`${theme?.title || 'default-title-class'}`}>
+                {step.title}
+              </h2>
+
+              {/* Render the step description */}
+              {step.meta?.description && (
+                <p
+                  className={`${theme?.description || 'default-description-class'}`}
+                >
+                  {step.meta.description}
+                </p>
+              )}
+
+              {/* Render the step's custom content */}
+              {step.render ? step.render() : <p>Step content goes here.</p>}
+              {/* Display step description from meta */}
+              {step.meta?.description && (
+                <p
+                  className={theme?.description || 'default-description-class'}
+                >
+                  {step.meta.description}
+                </p>
+              )}
             </motion.div>
           ) : null,
         )}
