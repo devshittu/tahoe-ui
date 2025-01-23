@@ -19,11 +19,11 @@
     "types:check": "tsc --noEmit --pretty",
     "lint": "eslint --ext .ts,.tsx ./src ",
     "lint:fix": "eslint --ext .ts,.tsx ./src --fix",
-    "storybook": "NODE_ENV=development storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006",
     "postbuild-storybook": "mv storybook-static public/storybook",
-    "build-storybook": "NODE_ENV=production storybook build -o storybook-static",
+    "build-storybook": "storybook build -o storybook-static",
     "build-storybook-docs": "storybook build --docs",
-    "build:vercel": "NODE_ENV=production next build && NODE_ENV=production storybook build -o storybook-static",
+    "build:vercel": "next build && storybook build -o storybook-static",
     "prepare": "husky"
   },
   "dependencies": {
