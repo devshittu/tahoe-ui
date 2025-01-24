@@ -112,8 +112,10 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Move Built Storybook to Public
-        run: mv storybook-static public/storybook
+      # - name: Move Built Storybook to Public
+      #   run: mv storybook-static public/storybook
+      - name: Verify Storybook Build
+        run: ls public/storybook
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -123,7 +125,8 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           scope: ${{ secrets.VERCEL_ORG_ID }}
           working-directory: ./
-          vercel-args: '--prod' # Deploy as production
+          vercel-args: ${{ fromJSON('["--prod", ""]')
+            [github.ref != 'refs/heads/master'] }}
 
       - name: Update Deployment Status
         uses: bobheadxi/deployments@v1
