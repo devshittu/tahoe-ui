@@ -2,11 +2,11 @@ name: CI/CD
 on:
   - push
 jobs:
-# add jobs here
+  # add jobs here
   code-checks:
     name: Code Checks
     runs-on: ubuntu-latest
-    environment: staging  # Associate this job with the staging environment
+    environment: staging # Associate this job with the staging environment
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -22,13 +22,13 @@ jobs:
       - run: npm run build
       - run: npm run build-storybook
 
-# jobs:
+  # jobs:
   # previous jobs
   #start of a new job
   deploy:
     name: Deploy To Vercel
     runs-on: ubuntu-latest
-    environment: staging  # Associate this job with the staging environment
+    environment: staging # Associate this job with the staging environment
     needs: [code-checks] #[code-checks, e2e]
     if: github.repository_owner == 'devshittu'
     permissions:
@@ -64,77 +64,4 @@ jobs:
           env: ${{ steps.deployment.outputs.env }}
           deployment_id: ${{ steps.deployment.outputs.
             deployment_id }}
-
-# name: CI/CD
-# on:
-#   push:
-#     branches:
-#       - main
-#       - master
-#       - 'feature/**'
-#       - 'bugfix/**'
-# jobs:
-#   code-checks:
-#     name: Code Checks
-#     runs-on: ubuntu-latest
-#     environment: staging
-#     steps:
-#       - uses: actions/checkout@v3
-#       - uses: actions/setup-node@v3
-#         with:
-#           node-version: 18
-#       - run: mv .env.example .env
-#       - run: npm install --legacy-peer-deps
-#       - run: npm run lint
-#       - run: npm run format:check
-#       - run: npm run types:check
-#       - run: npm run build
-#       - run: npm run build-storybook
-
-#   deploy:
-#     name: Deploy To Vercel
-#     runs-on: ubuntu-latest
-#     environment: staging
-#     needs: [code-checks]
-#     if: github.repository_owner == 'devshittu'
-#     permissions:
-#       contents: read
-#       deployments: write
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v3
-
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: 18
-
-#       - name: Install Dependencies
-#         run: npm install --legacy-peer-deps
-
-#       # - name: Move Built Storybook to Public
-#       #   run: mv storybook-static public/storybook
-#       - name: Verify Storybook Build
-#         run: ls public/storybook
-
-#       - name: Deploy to Vercel
-#         uses: amondnet/vercel-action@v25
-#         with:
-#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-#           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-#           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-#           scope: ${{ secrets.VERCEL_ORG_ID }}
-#           working-directory: ./
-#           vercel-args: ${{ fromJSON('["--prod", ""]')
-#             [github.ref != 'refs/heads/master'] }}
-
-#       - name: Update Deployment Status
-#         uses: bobheadxi/deployments@v1
-#         if: always()
-#         with:
-#           step: finish
-#           token: ${{ secrets.GITHUB_TOKEN }}
-#           status: ${{ job.status }}
-#           env: 'Production'
-#           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 # .github/workflows/main-vercel.yml
