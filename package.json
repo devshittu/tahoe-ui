@@ -9,6 +9,9 @@
     "Muhammed Shittu <devshittu@gmail.com>"
   ],
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -71,7 +74,7 @@
     "postcss": "^8.5.1",
     "prettier": "^3.3.3",
     "storybook": "^8.5.1",
-    "typescript": "^5"
+    "typescript": "^5.6.4"
   },
   "keywords": [
     "react",
