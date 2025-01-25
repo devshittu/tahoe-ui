@@ -15,10 +15,5 @@
       "destination": "/storybook/:path*",
       "statusCode": 200
     }
-  ],
-  "buildCommand": "npm run build:vercel",
-
-  "outputDirectory": ".vercel/output",
-
-  "framework": "nextjs"
+  ]
 }
