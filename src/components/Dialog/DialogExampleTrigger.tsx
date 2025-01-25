@@ -1,4 +1,4 @@
-// src/components/DialogExampleTrigger.tsx
+// src/components/Dialog/DialogExampleTrigger.tsx
 'use client';
 
 import React, { useState } from 'react';
