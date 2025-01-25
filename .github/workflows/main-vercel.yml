@@ -66,168 +66,67 @@
 #             deployment_id }}
 # # .github/workflows/main-vercel.yml
 
-# name: CI/CD
-
-# on:
-#   push:
-#     branches:
-#       - main  # Adjust branches to deploy only on `main` or your preferred branches
-
-# jobs:
-#   # Build job
-#   code-checks:
-#     name: Code Checks
-#     runs-on: ubuntu-latest
-#     environment: staging
-#     steps:
-#       # Step 1: Check out the code
-#       - uses: actions/checkout@v3
-
-#       # Step 2: Set up Node.js environment
-#       - uses: actions/setup-node@v3
-#         with:
-#           node-version: 22.x  # Ensures compatibility with Vercel Node.js settings
-
-#       # Step 3: Install dependencies (includes devDependencies)
-
-#       - run: npm install --legacy-peer-deps
-#       # - run: npm run test
-#       # - run: npm run lint
-#       # - run: npm run format:check
-#       # - run: npm run types:check
-
-#       # - run: npm run build
-#       # - run: npm run build-storybook
-#       # Step 4: Set up environment variables
-#       - run: mv .env.example .env  # Copy environment variables
-
-#       # Step 5: Build the application (Next.js + Storybook)
-#       - run: npm run build:vercel  # This runs `next build && storybook build`
-
-#       # Step 6: Upload `.next` as prebuilt artifact
-#       - name: Upload Prebuilt Artifacts
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: next-output
-#           path: .next  # Upload the `.next` directory
-#           retention-days: 1  # Optional: Retain artifacts for 1 day
-
-#       - run: npm install --global vercel
-#       - run: vercel build
-
-#       # Step 6: Upload prebuilt artifacts for later deployment
-#       - name: Upload Prebuilt Artifacts
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: vercel-output
-#           path: .vercel/output  # Ensure the prebuilt output is uploaded
-
-#   # Deploy job
-#   deploy:
-#     name: Deploy to Vercel
-#     runs-on: ubuntu-latest
-#     environment: staging
-#     needs: [code-checks]  # Ensures the build step is completed before deploying
-#     if: github.repository_owner == 'devshittu'  # Restrict deployment to your repo
-#     steps:
-#       # Step 1: Check out the code again
-#       - uses: actions/checkout@v3
-
-#       # Step 2: Download prebuilt artifacts from the build job
-#       - name: Download Prebuilt Artifacts
-#         uses: actions/download-artifact@v3
-#         with:
-#           name: vercel-output
-
-#       # # Step 2: Download prebuilt artifacts from the build job
-#       # - name: Download Prebuilt Artifacts
-#       #   uses: actions/download-artifact@v3
-#       #   with:
-#       #     name: next-output  # Match the uploaded artifact name
-
-#       # - name: List Prebuilt Artifacts
-#       #   run: ls -R .vercel/output
-
-#       # Step 3: Deploy to Vercel using prebuilt artifacts
-#       - uses: amondnet/vercel-action@v25
-#         with:
-#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-#           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-#           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-#           vercel-args: "--prebuilt --prod"  # Deploy using the prebuilt artifacts
-
-
-
 name: CI/CD
-
 on:
-  push:
-    branches:
-      - main
-
+  - push
 jobs:
-  build:
-    name: Build Project
+# add jobs here
+  code-checks:
+    name: Code Checks
     runs-on: ubuntu-latest
-    environment: staging
     steps:
-      # Step 1: Check out the code
       - uses: actions/checkout@v3
-
-      # Step 2: Set up Node.js environment
       - uses: actions/setup-node@v3
         with:
-          node-version: 22.x  # Use the same Node.js version as Vercel's environment
+          node-version: 16
+      - run: mv .env.example .env
+      - run: npm install
+      # - run: npm run test
+      - run: npm run lint
+      - run: npm run format:check
+      # - run: npm run types:check
 
-      # Step 3: Install Vercel CLI globally
-      - run: npm install --global vercel@latest
-
-      # Step 4: Install dependencies
-      - run: npm install --legacy-peer-deps
-
-      # Step 5: Pull Vercel project settings with authentication
-      - run: vercel pull --yes --environment=preview --token ${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      # Step 6: Build the project and generate `.vercel/output`
-      - run: vercel build
-
-      # Step 7: Verify `.vercel/output` exists
-      - name: Verify Prebuilt Artifacts
-        run: ls -R .vercel/output
-
-      # Step 8: Upload `.vercel/output` for deployment
-      - name: Upload Prebuilt Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: vercel-output
-          path: .vercel/output  # Ensure the `.vercel/output`
-
+# jobs:
+  # previous jobs
+  #start of a new job
   deploy:
-    name: Deploy to Vercel
+    name: Deploy To Vercel
     runs-on: ubuntu-latest
-    environment: staging
-    needs: [build]  # Ensure the build job is complete
+    needs: [code-checks] #[code-checks, e2e]
+    if: github.repository_owner == 'devshittu'
+    permissions:
+      contents: read
+      deployments: write
     steps:
-      # Step 1: Check out the code for metadata
-      - uses: actions/checkout@v3
-
-      # Step 2: Download prebuilt artifacts from the build job
-      - name: Download Prebuilt Artifacts
-        uses: actions/download-artifact@v3
+      - name: start deployment
+        uses: bobheadxi/deployments@v1
+        id: deployment
         with:
-          name: vercel-output
-
-      # Step 3: Verify downloaded `.vercel/output`
-      - name: Verify Downloaded Artifacts
-        run: ls -R .vercel/output
-
-      # Step 4: Deploy to Vercel using `--prebuilt`
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ fromJSON('["Production", "Preview"]')
+            [github.ref != 'refs/heads/master'] }}
+      - uses: actions/checkout@v3
+      - run: mv .env.example .env
       - uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prebuilt --prod"
+          vercel-args: ${{ fromJSON('["--prod", ""]')
+            [github.ref != 'refs/heads/master'] }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.
+            VERCEL_PROJECT_ID}}
+          scope: ${{ secrets.VERCEL_ORG_ID}}
+          working-directory: ./
+      - name: update deployment status
+        uses: bobheadxi/deployments@v1
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          env: ${{ steps.deployment.outputs.env }}
+          deployment_id: ${{ steps.deployment.outputs.
+            deployment_id }}
+
+# .github/workflows/main.yml
