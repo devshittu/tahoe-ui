@@ -104,6 +104,13 @@ jobs:
       # Step 5: Build the application (Next.js + Storybook)
       - run: npm run build:vercel  # This runs `next build && storybook build`
 
+      # Step 6: Upload prebuilt artifacts for later deployment
+      - name: Upload Prebuilt Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: vercel-output
+          path: .vercel/output  # Ensure the prebuilt output is uploaded
+
   # Deploy job
   deploy:
     name: Deploy to Vercel
@@ -115,7 +122,16 @@ jobs:
       # Step 1: Check out the code again
       - uses: actions/checkout@v3
 
-      # Step 2: Deploy to Vercel using prebuilt artifacts
+      # Step 2: Download prebuilt artifacts from the build job
+      - name: Download Prebuilt Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: vercel-output
+
+      # - name: List Prebuilt Artifacts
+      #   run: ls -R .vercel/output
+
+      # Step 3: Deploy to Vercel using prebuilt artifacts
       - uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
