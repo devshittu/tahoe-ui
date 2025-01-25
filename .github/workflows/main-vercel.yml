@@ -89,8 +89,15 @@ jobs:
           node-version: 22.x  # Ensures compatibility with Vercel Node.js settings
 
       # Step 3: Install dependencies (includes devDependencies)
-      - run: npm ci  # Use `npm ci` to ensure clean installs based on lockfile
 
+      - run: npm install --legacy-peer-deps
+      # - run: npm run test
+      # - run: npm run lint
+      # - run: npm run format:check
+      # - run: npm run types:check
+
+      # - run: npm run build
+      # - run: npm run build-storybook
       # Step 4: Set up environment variables
       - run: mv .env.example .env  # Copy environment variables
 
