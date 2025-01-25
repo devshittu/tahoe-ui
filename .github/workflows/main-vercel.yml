@@ -104,13 +104,20 @@ jobs:
       # Step 5: Build the application (Next.js + Storybook)
       - run: npm run build:vercel  # This runs `next build && storybook build`
 
-      # Step 6: Upload prebuilt artifacts for later deployment
+      # # Step 6: Upload prebuilt artifacts for later deployment
+      # - name: Upload Prebuilt Artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: vercel-output
+      #     path: .vercel/output  # Ensure the prebuilt output is uploaded
+
+      # Step 6: Upload `.next` as prebuilt artifact
       - name: Upload Prebuilt Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: vercel-output
-          path: .vercel/output  # Ensure the prebuilt output is uploaded
-
+          name: next-output
+          path: .next  # Upload the `.next` directory
+          retention-days: 1  # Optional: Retain artifacts for 1 day
   # Deploy job
   deploy:
     name: Deploy to Vercel
@@ -122,11 +129,17 @@ jobs:
       # Step 1: Check out the code again
       - uses: actions/checkout@v3
 
+      # # Step 2: Download prebuilt artifacts from the build job
+      # - name: Download Prebuilt Artifacts
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: vercel-output
+
       # Step 2: Download prebuilt artifacts from the build job
       - name: Download Prebuilt Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: vercel-output
+          name: next-output  # Match the uploaded artifact name
 
       # - name: List Prebuilt Artifacts
       #   run: ls -R .vercel/output
