@@ -194,12 +194,16 @@ jobs:
       # Step 6: Build the project and generate `.vercel/output`
       - run: vercel build
 
-      # Step 7: Upload `.vercel/output` for deployment
+      # Step 7: Verify `.vercel/output` exists
+      - name: Verify Prebuilt Artifacts
+        run: ls -R .vercel/output
+
+      # Step 8: Upload `.vercel/output` for deployment
       - name: Upload Prebuilt Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: vercel-output
-          path: .vercel/output
+          path: .vercel/output  # Ensure the `.vercel/output`
 
   deploy:
     name: Deploy to Vercel
@@ -216,7 +220,11 @@ jobs:
         with:
           name: vercel-output
 
-      # Step 3: Deploy to Vercel using `--prebuilt`
+      # Step 3: Verify downloaded `.vercel/output`
+      - name: Verify Downloaded Artifacts
+        run: ls -R .vercel/output
+
+      # Step 4: Deploy to Vercel using `--prebuilt`
       - uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
