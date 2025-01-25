@@ -74,6 +74,7 @@ jobs:
   code-checks:
     name: Code Checks
     runs-on: ubuntu-latest
+    environment: staging
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -93,6 +94,7 @@ jobs:
     name: Deploy To Vercel
     runs-on: ubuntu-latest
     needs: [code-checks] #[code-checks, e2e]
+    environment: staging
     if: github.repository_owner == 'devshittu'
     permissions:
       contents: read
