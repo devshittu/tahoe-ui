@@ -66,19 +66,108 @@
 #             deployment_id }}
 # # .github/workflows/main-vercel.yml
 
+# name: CI/CD
+
+# on:
+#   push:
+#     branches:
+#       - main  # Adjust branches to deploy only on `main` or your preferred branches
+
+# jobs:
+#   # Build job
+#   code-checks:
+#     name: Code Checks
+#     runs-on: ubuntu-latest
+#     environment: staging
+#     steps:
+#       # Step 1: Check out the code
+#       - uses: actions/checkout@v3
+
+#       # Step 2: Set up Node.js environment
+#       - uses: actions/setup-node@v3
+#         with:
+#           node-version: 22.x  # Ensures compatibility with Vercel Node.js settings
+
+#       # Step 3: Install dependencies (includes devDependencies)
+
+#       - run: npm install --legacy-peer-deps
+#       # - run: npm run test
+#       # - run: npm run lint
+#       # - run: npm run format:check
+#       # - run: npm run types:check
+
+#       # - run: npm run build
+#       # - run: npm run build-storybook
+#       # Step 4: Set up environment variables
+#       - run: mv .env.example .env  # Copy environment variables
+
+#       # Step 5: Build the application (Next.js + Storybook)
+#       - run: npm run build:vercel  # This runs `next build && storybook build`
+
+#       # Step 6: Upload `.next` as prebuilt artifact
+#       - name: Upload Prebuilt Artifacts
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: next-output
+#           path: .next  # Upload the `.next` directory
+#           retention-days: 1  # Optional: Retain artifacts for 1 day
+
+#       - run: npm install --global vercel
+#       - run: vercel build
+
+#       # Step 6: Upload prebuilt artifacts for later deployment
+#       - name: Upload Prebuilt Artifacts
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: vercel-output
+#           path: .vercel/output  # Ensure the prebuilt output is uploaded
+
+#   # Deploy job
+#   deploy:
+#     name: Deploy to Vercel
+#     runs-on: ubuntu-latest
+#     environment: staging
+#     needs: [code-checks]  # Ensures the build step is completed before deploying
+#     if: github.repository_owner == 'devshittu'  # Restrict deployment to your repo
+#     steps:
+#       # Step 1: Check out the code again
+#       - uses: actions/checkout@v3
+
+#       # Step 2: Download prebuilt artifacts from the build job
+#       - name: Download Prebuilt Artifacts
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: vercel-output
+
+#       # # Step 2: Download prebuilt artifacts from the build job
+#       # - name: Download Prebuilt Artifacts
+#       #   uses: actions/download-artifact@v3
+#       #   with:
+#       #     name: next-output  # Match the uploaded artifact name
+
+#       # - name: List Prebuilt Artifacts
+#       #   run: ls -R .vercel/output
+
+#       # Step 3: Deploy to Vercel using prebuilt artifacts
+#       - uses: amondnet/vercel-action@v25
+#         with:
+#           vercel-token: ${{ secrets.VERCEL_TOKEN }}
+#           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+#           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+#           vercel-args: "--prebuilt --prod"  # Deploy using the prebuilt artifacts
+
+
 name: CI/CD
 
 on:
   push:
     branches:
-      - main  # Adjust branches to deploy only on `main` or your preferred branches
+      - main
 
 jobs:
-  # Build job
-  code-checks:
-    name: Code Checks
+  build:
+    name: Build Project
     runs-on: ubuntu-latest
-    environment: staging
     steps:
       # Step 1: Check out the code
       - uses: actions/checkout@v3
@@ -86,51 +175,37 @@ jobs:
       # Step 2: Set up Node.js environment
       - uses: actions/setup-node@v3
         with:
-          node-version: 22.x  # Ensures compatibility with Vercel Node.js settings
+          node-version: 22.x  # Use the same version as Vercel's environment
 
-      # Step 3: Install dependencies (includes devDependencies)
+      # Step 3: Install Vercel CLI globally
+      - run: npm install --global vercel@latest
 
+      # Step 4: Install dependencies
       - run: npm install --legacy-peer-deps
-      # - run: npm run test
-      # - run: npm run lint
-      # - run: npm run format:check
-      # - run: npm run types:check
 
-      # - run: npm run build
-      # - run: npm run build-storybook
-      # Step 4: Set up environment variables
-      - run: mv .env.example .env  # Copy environment variables
+      # Step 5: Set up environment variables and pull Vercel project settings
+      - run: vercel pull --yes --environment=preview
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      # Step 5: Build the application (Next.js + Storybook)
-      - run: npm run build:vercel  # This runs `next build && storybook build`
-
-      # Step 6: Upload `.next` as prebuilt artifact
-      - name: Upload Prebuilt Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: next-output
-          path: .next  # Upload the `.next` directory
-          retention-days: 1  # Optional: Retain artifacts for 1 day
-
-      - run: npm install --global vercel
+      # Step 6: Build the project and generate `.vercel/output`
       - run: vercel build
 
-      # Step 6: Upload prebuilt artifacts for later deployment
+      # Step 7: Upload `.vercel/output` for deployment
       - name: Upload Prebuilt Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: vercel-output
-          path: .vercel/output  # Ensure the prebuilt output is uploaded
+          path: .vercel/output
 
-  # Deploy job
   deploy:
     name: Deploy to Vercel
     runs-on: ubuntu-latest
-    environment: staging
-    needs: [code-checks]  # Ensures the build step is completed before deploying
-    if: github.repository_owner == 'devshittu'  # Restrict deployment to your repo
+    needs: [build]  # Ensure the build job is complete
     steps:
-      # Step 1: Check out the code again
+      # Step 1: Check out the code for metadata
       - uses: actions/checkout@v3
 
       # Step 2: Download prebuilt artifacts from the build job
@@ -139,19 +214,10 @@ jobs:
         with:
           name: vercel-output
 
-      # # Step 2: Download prebuilt artifacts from the build job
-      # - name: Download Prebuilt Artifacts
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: next-output  # Match the uploaded artifact name
-
-      # - name: List Prebuilt Artifacts
-      #   run: ls -R .vercel/output
-
-      # Step 3: Deploy to Vercel using prebuilt artifacts
+      # Step 3: Deploy to Vercel using `--prebuilt`
       - uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prebuilt --prod"  # Deploy using the prebuilt artifacts
+          vercel-args: "--prebuilt --prod"
