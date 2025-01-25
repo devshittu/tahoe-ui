@@ -157,6 +157,7 @@
 #           vercel-args: "--prebuilt --prod"  # Deploy using the prebuilt artifacts
 
 
+
 name: CI/CD
 
 on:
@@ -176,7 +177,7 @@ jobs:
       # Step 2: Set up Node.js environment
       - uses: actions/setup-node@v3
         with:
-          node-version: 22.x  # Use the same version as Vercel's environment
+          node-version: 22.x  # Use the same Node.js version as Vercel's environment
 
       # Step 3: Install Vercel CLI globally
       - run: npm install --global vercel@latest
@@ -184,10 +185,9 @@ jobs:
       # Step 4: Install dependencies
       - run: npm install --legacy-peer-deps
 
-      # Step 5: Set up environment variables and pull Vercel project settings
-      - run: vercel pull --yes --environment=preview
+      # Step 5: Pull Vercel project settings with authentication
+      - run: vercel pull --yes --environment=preview --token ${{ secrets.VERCEL_TOKEN }}
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
