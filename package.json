@@ -23,7 +23,7 @@
     "postbuild-storybook": "mv storybook-static public/storybook",
     "build-storybook": "storybook build -o storybook-static",
     "build-storybook-docs": "storybook build --docs",
-    "build:vercel": "next build && storybook build -o storybook-static",
+    "build:vercel": "next build && storybook build -o storybook-static && mv storybook-static public/storybook",
     "prepare": "husky"
   },
   "dependencies": {
