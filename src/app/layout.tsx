@@ -68,6 +68,8 @@ export default function RootLayout({
             <Link href="/playground/typo">Playground Typography</Link>
             &nbsp; &nbsp; &nbsp;
             <Link href="/demo">Demo</Link>
+            &nbsp; &nbsp; &nbsp;
+            <Link href="/storybook">Storybook</Link>
             {children}
           </AppProvider>
         </SplashScreenWrapper>
