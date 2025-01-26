@@ -6,7 +6,7 @@ export default {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './manual-safelist.html',
+    // './manual-safelist.html',
   ],
   theme: {
     extend: {
@@ -151,6 +151,81 @@ export default {
       },
     },
   },
+
+  safelist: [
+    {
+      pattern: /^bg-/,
+    },
+    {
+      pattern: /^text-/,
+    },
+    {
+      pattern: /^border-/,
+    },
+    {
+      pattern: /^shadow-/,
+    },
+    {
+      pattern: /^rounded-/,
+    },
+    {
+      pattern: /^flex-/,
+    },
+    {
+      pattern: /^grid-/,
+    },
+    {
+      pattern: /^gap-/,
+    },
+    {
+      pattern: /^p-/,
+    },
+    {
+      pattern: /^m-/,
+    },
+    {
+      pattern: /^justify-/,
+    },
+    {
+      pattern: /^items-/,
+    },
+    {
+      pattern: /^flex-wrap-/,
+    },
+
+    {
+      pattern: /^language-/,
+    },
+    {
+      pattern: /^line-numbers/,
+    },
+    {
+      pattern: /^prism-/,
+    },
+
+    {
+      pattern: /^text-(blue|red|green|yellow|purple|pink|cyan|indigo)-500$/,
+    },
+    {
+      pattern: /^bg-gradient-to-r$/,
+    },
+    {
+      pattern: /^from-(blue|red|green|yellow|purple|pink|cyan|indigo)-400$/,
+    },
+    {
+      pattern: /^to-(blue|red|green|yellow|purple|pink|cyan|indigo)-600$/,
+    },
+    {
+      pattern: /^text-transparent$/,
+    },
+    {
+      pattern: /^bg-clip-text$/,
+    },
+    {
+      pattern: /^opacity-(10|20|30|40|50|60|70|80|90|100)$/,
+    },
+    // Add more patterns as needed
+  ],
 } satisfies Config;
 
 // tailwind.config.ts
