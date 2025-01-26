@@ -66,6 +66,10 @@ jobs:
             deployment_id }}
 # .github/workflows/main-vercel.yml
 
+  # "engines": {
+  #   "node": ">=18.x"
+  # },
+  # in package.json file
 # name: CI/CD
 # on:
 #   - push
