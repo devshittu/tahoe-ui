@@ -1,17 +1,13 @@
-// src/components/Wizard/Wizard.stories.tsx
-
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import WizardProvider from './WizardProvider';
 import Wizard from './Wizard';
 import { WizardStep, WizardHooks, WizardConfig } from './types';
-import { useWizardStep } from './hooks/useWizardStep';
+import { useWizard } from './hooks/useWizardStep';
 import eventBus, {
   EVENT_STEP_VALIDATE,
   EVENT_STEP_VALIDATION_STATUS,
   EVENT_STEP_DATA_UPDATE,
-  EVENT_WIZARD_NAVIGATE,
-  EVENT_WIZARD_ERROR,
   EVENT_WIZARD_COMPLETE,
 } from '@/utils/eventBus';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
@@ -24,10 +20,25 @@ const meta: Meta<typeof Wizard> = {
   component: Wizard,
   decorators: [
     (Story) => (
-      // Removed WizardProvider from the decorator to avoid nesting
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-        <Story />
-      </div>
+      <WizardProvider
+        steps={[]} // Placeholder; steps will be defined in individual stories
+        hooks={{
+          onStepEnter: (current, prev) =>
+            console.log(`Entering step ${current} from ${prev}`),
+          onStepLeave: (current, next) =>
+            console.log(`Leaving step ${current} to ${next}`),
+          onWizardComplete: (data) =>
+            console.log('Wizard completed with data:', data),
+        }}
+        config={{
+          lazyRendering: false,
+          renderAdjacent: true,
+        }}
+      >
+        <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
+          <Story />
+        </div>
+      </WizardProvider>
     ),
   ],
   args: {
@@ -63,16 +74,16 @@ type Story = StoryObj<typeof Wizard>;
  * Step 1: Name Input Component
  */
 const Step1: React.FC = () => {
-  const { data, setData } = useWizardStep<WizardStep<any>[], 'step-1'>(
-    'step-1',
-  );
+  const { setStepData } = useWizard();
+
+  const [name, setName] = useState('');
 
   useEffect(() => {
     console.log('Step 1 Mounted');
   }, []);
 
   useEffect(() => {
-    const validateStep1 = (data: any) => !!data?.name && data.name.length >= 3;
+    const validateStep1 = (name: string) => name.length >= 3;
 
     const listener = ({
       stepId,
@@ -82,7 +93,7 @@ const Step1: React.FC = () => {
       resolve: (isValid: boolean) => void;
     }) => {
       if (stepId === 'step-1') {
-        const isValid = validateStep1(data || {});
+        const isValid = validateStep1(name);
         resolve(isValid);
         eventBus.emit(EVENT_STEP_VALIDATION_STATUS, { stepId, isValid });
       }
@@ -96,15 +107,20 @@ const Step1: React.FC = () => {
     return () => {
       eventBus.off(EVENT_STEP_VALIDATE, listener);
     };
-  }, [data]);
+  }, [name]);
+
+  useEffect(() => {
+    setStepData('step-1', { name });
+    eventBus.emit(EVENT_STEP_DATA_UPDATE, { stepId: 'step-1', data: { name } });
+  }, [name, setStepData]);
 
   return (
     <div>
       <h2>Step 1: Enter Your Name</h2>
       <input
         type="text"
-        value={data?.name || ''}
-        onChange={(e) => setData({ name: e.target.value })}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         placeholder="Your Name"
         className="p-2 border rounded w-full mt-2"
       />
@@ -116,17 +132,17 @@ const Step1: React.FC = () => {
  * Step 2: Email Input Component
  */
 const Step2: React.FC = () => {
-  const { data, setData } = useWizardStep<WizardStep<any>[], 'step-2'>(
-    'step-2',
-  );
+  const { setStepData } = useWizard();
+
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     console.log('Step 2 Mounted');
   }, []);
 
   useEffect(() => {
-    const validateStep2 = (data: any) =>
-      !!data?.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || '');
+    const validateStep2 = (email: string) =>
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     const listener = ({
       stepId,
@@ -136,7 +152,7 @@ const Step2: React.FC = () => {
       resolve: (isValid: boolean) => void;
     }) => {
       if (stepId === 'step-2') {
-        const isValid = validateStep2(data || {});
+        const isValid = validateStep2(email);
         resolve(isValid);
         eventBus.emit(EVENT_STEP_VALIDATION_STATUS, { stepId, isValid });
       }
@@ -150,15 +166,23 @@ const Step2: React.FC = () => {
     return () => {
       eventBus.off(EVENT_STEP_VALIDATE, listener);
     };
-  }, [data]);
+  }, [email]);
+
+  useEffect(() => {
+    setStepData('step-2', { email });
+    eventBus.emit(EVENT_STEP_DATA_UPDATE, {
+      stepId: 'step-2',
+      data: { email },
+    });
+  }, [email, setStepData]);
 
   return (
     <div>
       <h2>Step 2: Enter Your Email</h2>
       <input
         type="email"
-        value={data?.email || ''}
-        onChange={(e) => setData({ email: e.target.value })}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         placeholder="Your Email"
         className="p-2 border rounded w-full mt-2"
       />
@@ -170,11 +194,15 @@ const Step2: React.FC = () => {
  * Step 3: Review Data Component
  */
 const Step3: React.FC = () => {
-  const { data } = useWizardStep<WizardStep<any>[], 'step-3'>('step-3');
+  const { stepData } = useWizard();
 
-  const [aggregatedData, setAggregatedData] = useState<Record<string, any>>({});
+  const [aggregatedData, setAggregatedData] =
+    useState<Record<string, any>>(stepData);
 
   useEffect(() => {
+    // Initialize aggregatedData with existing stepData
+    setAggregatedData(stepData);
+
     const updateListener = ({
       stepId,
       data,
@@ -193,7 +221,7 @@ const Step3: React.FC = () => {
     return () => {
       eventBus.off(EVENT_STEP_DATA_UPDATE, updateListener);
     };
-  }, []);
+  }, [stepData]);
 
   return (
     <div>
@@ -527,5 +555,4 @@ export const AdvancedWizard: Story = {
     );
   },
 };
-
 // src/components/Wizard/Wizard.stories.tsx
