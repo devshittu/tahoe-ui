@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
         hostname: 'i.scdn.co',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'loremflickr.com',
+        pathname: '**',
+      },
     ],
   },
   async rewrites() {
