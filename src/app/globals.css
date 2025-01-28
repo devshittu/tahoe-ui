@@ -19,3 +19,17 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer components {
+  .project-boxes.jsListView .project-box {
+    @apply rounded-[10px];
+  }
+
+  .project-box-footer:after {
+    @apply content-[''] absolute bg-white/60 w-[calc(100%+32px)] -left-4 h-px;
+  }
+
+  .jsListView .project-box > * {
+    @apply mr-6;
+  }
+}
