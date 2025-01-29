@@ -9,7 +9,7 @@ import ViewToggle from '@/components/ProjectBoxes/oa/ViewToggle';
 import WizardExample from '@/components/Wizard/WizardExample';
 import React, { useState } from 'react';
 
-export const projects: Project[] = [
+const projects: Project[] = [
   {
     id: '1',
     date: 'December 10, 2020',
