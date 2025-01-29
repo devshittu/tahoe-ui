@@ -13,6 +13,7 @@ const Wizard: React.FC = () => {
     error,
     validationStatus,
     theme,
+    config,
   } = useWizard();
 
   const stepRef = useRef<HTMLDivElement>(null);
@@ -64,6 +65,38 @@ const Wizard: React.FC = () => {
       eventBus.off(EVENT_STEP_VALIDATION_STATUS, handleValidationStatus);
     };
   }, [currentStepIndex, renderedSteps, validationStatus]);
+
+  // // Replace existing validation listener with:
+  // useEffect(() => {
+  //   if (!config?.requireStepValidation) return;
+
+  //   const currentStepId = renderedSteps[currentStepIndex]?.id;
+
+  //   const handleValidationStatus = ({
+  //     stepId,
+  //     isValid,
+  //   }: {
+  //     stepId: string;
+  //     isValid: boolean;
+  //   }) => {
+  //     if (stepId === currentStepId) {
+  //       setIsNextEnabled(isValid);
+  //     }
+  //   };
+
+  //   eventBus.on(EVENT_STEP_VALIDATION_STATUS, handleValidationStatus);
+  //   return () =>
+  //     eventBus.off(EVENT_STEP_VALIDATION_STATUS, handleValidationStatus);
+  // }, [currentStepIndex, renderedSteps, config?.requireStepValidation]);
+
+  // // Determine if validation is required for current step
+  // const currentStepRequiresValidation =
+  //   config?.requireStepValidation && renderedSteps[currentStepIndex]?.validate;
+
+  // // Set initial enabled state
+  // useEffect(() => {
+  //   setIsNextEnabled(!currentStepRequiresValidation);
+  // }, [currentStepIndex, currentStepRequiresValidation]);
 
   // Handle meta analytics on step enter
   useEffect(() => {
@@ -166,6 +199,22 @@ const Wizard: React.FC = () => {
         >
           Next
         </button>
+        {/* <button
+          onClick={nextStep}
+          disabled={!isNextEnabled} // Enable/disable based on validation status
+          className={`${theme?.button || 'default-button-class'} ${
+            !isNextEnabled ? theme?.buttonDisabled || '' : ''
+          }`}
+          // disabled={currentStepRequiresValidation ? !isNextEnabled : false}
+          // className={`${theme?.button || 'default-button-class'} ${
+          //   currentStepRequiresValidation && !isNextEnabled
+          //     ? theme?.buttonDisabled
+          //     : ''
+          // }`}
+          aria-label="Go to the next step"
+        >
+          Next
+        </button> */}
       </div>
     </div>
   );
