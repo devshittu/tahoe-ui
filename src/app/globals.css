@@ -26,7 +26,7 @@ body {
   }
 
   .project-box-footer:after {
-    @apply content-[''] absolute bg-white/60 w-[calc(100%+32px)] -left-4 h-px;
+    @apply content-[''] absolute bg-white/60 w-[calc(100%+32px)] -left-4 h-px top-0;
   }
 
   .jsListView .project-box > * {
