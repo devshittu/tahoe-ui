@@ -21,9 +21,14 @@ import eventBus, {
 export const createWizardStore = <TSteps extends WizardStep[]>(
   steps: TSteps,
   hooks?: WizardHooks,
-  config: WizardConfig = { lazyRendering: true, renderAdjacent: false }, // Default config
+  config: WizardConfig = {
+    lazyRendering: true,
+    renderAdjacent: false,
+    requireStepValidation: true, // Default to true for backward compatibility
+  }, // Default config
 ) => {
   return create<WizardState<TSteps>>((set, get) => ({
+    config, // Include config in the store state
     steps,
     currentStepIndex: 0,
     stepData: {} as StepDataMap<TSteps>,
@@ -80,6 +85,25 @@ export const createWizardStore = <TSteps extends WizardStep[]>(
         });
         return;
       }
+
+      // // Add validation check only if required
+      // if (config.requireStepValidation) {
+      //   const isValid = await new Promise<boolean>((resolve) => {
+      //     eventBus.emit(EVENT_STEP_VALIDATE, {
+      //       stepId: currentStep.id,
+      //       data: stepData[currentStep.id as keyof StepDataMap<TSteps>],
+      //       resolve,
+      //     });
+      //   });
+
+      //   if (!isValid) {
+      //     setError({
+      //       userMessage: `Please complete "${currentStep.title}" correctly.`,
+      //       devMessage: `Validation failed for step "${currentStep.id}".`,
+      //     });
+      //     return;
+      //   }
+      // }
 
       const nextStep = visibleSteps[currentStepIndex + 1];
       if (nextStep) {
