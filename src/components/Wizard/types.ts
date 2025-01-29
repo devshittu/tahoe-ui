@@ -12,6 +12,7 @@ type MetaType = {
 export interface WizardConfig {
   lazyRendering?: boolean; // Whether to render steps lazily
   renderAdjacent?: boolean; // Whether to render adjacent steps
+  requireStepValidation?: boolean;
 }
 
 /** Represents a single step in the wizard with generic data type support. */
@@ -60,6 +61,8 @@ export interface WizardState<TSteps extends WizardStep[]> extends WizardHooks {
   // For lazy rendering – returns a subset of the visible steps.
   readonly visibleSteps: WizardStep[];
   readonly renderedSteps: WizardStep[];
+
+  config: WizardConfig; // Add config to the state type
 }
 
 // src/components/Wizard/types.ts
