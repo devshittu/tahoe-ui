@@ -18,7 +18,12 @@ export const WizardProvider = <TSteps extends WizardStep[]>({
   steps,
   hooks,
   theme = defaultTheme,
-  config = { lazyRendering: true, renderAdjacent: false }, // Default config
+  config = {
+    // Default config values
+    lazyRendering: true,
+    renderAdjacent: false,
+    requireStepValidation: true,
+  },
 }: WizardProviderProps<TSteps>) => {
   // Initialize the store and merge the provided theme with default values.
   const useWizardStore = React.useMemo(
