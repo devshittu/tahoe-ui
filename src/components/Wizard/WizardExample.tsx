@@ -168,6 +168,7 @@ const steps: WizardStep<StepData>[] = [
       description: 'Please enter your full name.',
       analytics: { event: 'step1_viewed' },
     },
+    // validate: (data) => !!data,
   },
   {
     id: 'step-2',
@@ -178,6 +179,7 @@ const steps: WizardStep<StepData>[] = [
       description: 'Please provide a valid email address.',
       analytics: { event: 'step2_viewed' },
     },
+    // validate: (data) => !!data,
   },
   {
     id: 'step-3',
@@ -206,6 +208,7 @@ const WizardExample: React.FC = () => {
       config={{
         lazyRendering: false,
         renderAdjacent: true,
+        requireStepValidation: true,
       }}
     >
       <Wizard />
