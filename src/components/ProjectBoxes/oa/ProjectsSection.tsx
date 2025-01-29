@@ -41,9 +41,9 @@ const ProjectsSection: FC<ProjectsSectionProps> = ({
   });
 
   return (
-    <div className="projects-section bg-projects-section dark:bg-dark-projects-section rounded-[32px] p-8 md:p-8 sm:p-6 flex flex-col h-full">
+    <div className="projects-section bg-slate-50 dark:bg-slate-950 rounded-[32px] p-8 md:p-8 sm:p-6 flex flex-col h-full">
       {/* Projects Header */}
-      <div className="projects-section-header sticky top-0 bg-projects-section dark:bg-dark-projects-section z-10 py-4x">
+      <div className="projects-section-header bg-slate-50 dark:bg-slate-950 sticky top-0 z-10 py-4x">
         {/* Section Header */}
         <div className="projects-section-header flex justify-between items-center mb-6 sm:mb-4">
           <Heading level={2} color="accent">
