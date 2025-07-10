@@ -1,7 +1,7 @@
 services:
   new-next:
-    image: new-next-image:0.0.1
-    container_name: new-next
+    image: tahoe-ui-image:0.0.1
+    container_name: tahoe-ui
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -19,7 +19,7 @@ services:
       - ./public:/app/public
     restart: always
     ports:
-      - 3000:3000
+      - 3001:3000
     # networks:
     #   - my_media_network
   # Add more containers below (nginx, postgres, etc.)
