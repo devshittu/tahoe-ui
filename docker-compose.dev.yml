@@ -1,5 +1,5 @@
 services:
-  new-next:
+  tahoe-ui: # updated service name
     image: tahoe-ui-image:0.0.1
     container_name: tahoe-ui
     build:
@@ -17,9 +17,10 @@ services:
     volumes:
       - ./src:/app/src
       - ./public:/app/public
+      - /home/mshittu/certs:/app/certs
     restart: always
     ports:
-      - 3001:3000
+      - 3000:3000
     # networks:
     #   - my_media_network
   # Add more containers below (nginx, postgres, etc.)
