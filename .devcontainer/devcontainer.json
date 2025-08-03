@@ -1,0 +1,45 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "Tahoe UI Dev Container",
+  "dockerComposeFile": [
+    "../docker-compose.dev.yml" // Path to your docker-compose file relative to .devcontainer
+  ],
+  "service": "tahoe-ui", // The name of your service in docker-compose.dev.yml
+  "workspaceFolder": "/app", // The working directory inside the container
+
+  // Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
+  // "remoteUser": "node", // If your Dockerfile switches to a non-root user (like 'node' in your case)
+
+  // Add extensions you want installed in the container
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-vscode.typescript-javascript-grammar",
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss"
+    // Add any other extensions you use for Next.js/React/TS development
+  ],
+
+  // Use 'postCreateCommand' to run commands after the container is created and VS Code connects.
+  // This is a good place to ensure node_modules are present if the volume mount
+  // somehow causes issues, or for other setup.
+  "postCreateCommand": "npm install --prefix /app || yarn install --cwd /app || pnpm install --dir /app", // Ensures dependencies are installed in /app
+  // Or if you want to ensure the certs have proper permissions, though the volume mount should handle this:
+  // "postCreateCommand": "chmod 644 /app/certs/* && npm install"
+
+  // Forward ports from the container to your local machine
+  "forwardPorts": [3000, 6006], // Next.js and Storybook ports
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Your VS Code settings that apply to this dev container
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  }
+}
