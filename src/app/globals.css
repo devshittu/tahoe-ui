@@ -33,3 +33,66 @@ body {
     @apply mr-6;
   }
 }
+
+/* Custom scrollbar styles (as defined in layout.tsx previously) */
+/* These are now moved here to be part of the global CSS */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #2d3748; /* dark-gray-800 */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #4a5568; /* dark-gray-700 */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* dark-gray-600 */
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #4a5568 #2d3748;
+}
+
+/* Basic fade-in-out animation for copy success message */
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.animate-fade-in-out {
+  animation: fade-in-out 2s forwards;
+}
+
+/* Ensure Inter font is available if not using next/font directly in components */
+/* If you are using next/font/local for Geist, you might not need this for Inter */
+/* If Inter is used in iframes, it needs to be loaded there */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); */
+
+/* Apply base dark mode styles to html/body if not handled by next-themes */
+/* next-themes handles adding/removing 'dark' class, so these are generally not needed here */
+/* html.dark {
+  color-scheme: dark;
+} */
+/* body {
+  @apply bg-gray-100 text-gray-900;
+}
+html.dark body {
+  @apply bg-gray-900 text-white;
+} */

@@ -1,6 +1,6 @@
+// File: src/providers/app.tsx
 'use client';
-import React, { ReactNode, useEffect, Suspense, useState } from 'react';
-// import { ThemeProvider } from 'next-themes';
+import React, { ReactNode, Suspense, useState } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -8,23 +8,36 @@ import { IS_DEVELOPMENT } from '@/config/constants';
 import { Loading } from '@/components/loading';
 import { PageMode } from '@/components/PageMode/PageMode';
 import { Dialog } from '@/components/Dialog/Dialog';
+import FloatingNav from '@/components/FloatingNav/FloatingNav'; // Adjust path as needed
 import { UIProvider } from '@/components/UIManager/UIProvider';
+// Removed: import { ThemeProvider } from 'next-themes'; // No longer needed here
 
 type AppProviderProps = {
   children: ReactNode;
-  theme?: string;
+  theme?: string; // This prop might become redundant if theme is fully managed by next-themes at root
 };
 
-export const AppProvider = ({ children, theme }: AppProviderProps) => {
+export const AppProvider = ({ children }: AppProviderProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   return (
     <>
       <QueryClientProvider client={queryClient}>
         {IS_DEVELOPMENT && <ReactQueryDevtools initialIsOpen={false} />}
+
+        {/* Removed: ThemeProvider. It is now handled in app/layout.tsx */}
         <UIProvider>
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </UIProvider>
 
+        <FloatingNav
+          initialExpanded={false} // Example: start collapsed
+          initialActiveItem="WeatherForecastButton" // Example: set initial active item
+          onExpandChange={(expanded) => console.log('Nav expanded:', expanded)}
+          onItemClick={(id) => console.log('Nav item clicked:', id)}
+          // You can also pass custom 'items' array here if needed
+        />
+        
         <PageMode
           enableContentScroll={true} // default
           position="top"
@@ -96,4 +109,3 @@ export const AppProvider = ({ children, theme }: AppProviderProps) => {
     </>
   );
 };
-// Path: src/providers/app.tsx

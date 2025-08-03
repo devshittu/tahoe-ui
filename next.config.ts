@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
         hostname: 'loremflickr.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos', // Add this
+        pathname: '**',
+      },
     ],
   },
   async rewrites() {

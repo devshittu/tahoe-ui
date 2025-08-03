@@ -1,7 +1,7 @@
 services:
-  new-next:
-    image: new-next-image:0.0.1
-    container_name: new-next
+  tahoe-ui: # updated service name
+    image: tahoe-ui-image:0.0.1
+    container_name: tahoe-ui
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -17,6 +17,7 @@ services:
     volumes:
       - ./src:/app/src
       - ./public:/app/public
+      - /home/mshittu/certs:/app/certs
     restart: always
     ports:
       - 3000:3000
