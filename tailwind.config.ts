@@ -1,13 +1,16 @@
+// tailwind.config.ts
 import type { Config } from 'tailwindcss';
 const { fontFamily } = require('tailwindcss/defaultTheme');
+
 export default {
   content: [
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    // './manual-safelist.html',
+    './src/**/*.{js,ts,jsx,tsx,mdx}', // Scans all files in src
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}', // Explicitly include pages
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}', // Explicitly include components
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}', // Explicitly include app directory
+    // './manual-safelist.html', // Keep if still needed for other purposes
   ],
+  darkMode: 'class', // Enable dark mode based on the 'dark' class on the HTML tag
   theme: {
     extend: {
       colors: {
@@ -28,6 +31,7 @@ export default {
         yellow: {
           100: '#FEF3C7',
           200: '#FDE68A',
+          400: '#FACC15', // Added for theme-toggle sun icon
         },
         green: {
           500: '#10B981',
@@ -35,16 +39,29 @@ export default {
         purple: {
           500: '#8B5CF6',
         },
+
+        'apple-gray': {
+          50: '#F5F5F5',
+          100: '#E5E7EB',
+          // More shades if needed
+        },
+        'apple-green': {
+          100: '#E6FFFA',
+          500: '#34D399',
+        },
+      },
+      dropShadow: {
+        md: '0 4px 6px rgba(0, 0, 0, 0.05)',
       },
       fontFamily: {
-        // 'work-sans': ['"Work Sans"', 'sans-serif'],
         inter: ['Inter', ...fontFamily.sans],
         'roboto-mono': ['Roboto Mono', ...fontFamily.mono],
         'source-serif-pro': ['Source Serif Pro', ...fontFamily.serif],
 
-        sans: ['"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
-        serif: ['Georgia', 'serif'],
-        mono: ['"Courier New"', 'monospace'],
+        // Ensure these custom fonts are correctly loaded or fallback to system fonts
+        sans: ['var(--font-geist-sans)', ...fontFamily.sans], // Using Geist Sans variable
+        mono: ['var(--font-geist-mono)', ...fontFamily.mono], // Using Geist Mono variable
+        serif: [...fontFamily.serif], // Default serif
       },
       keyframes: {
         rotation: {
@@ -72,40 +89,35 @@ export default {
           '50%': { transform: 'translateY(50px)', opacity: '1' },
           '100%': { transform: 'translateY(100px)', opacity: '0.3' },
         },
-
-        // New dash animation
         'loader-dash': {
           '0%': {
-            strokeDasharray: '-129', //-700
+            strokeDasharray: '-129',
             strokeWidth: '2.5',
             fill: 'transparent',
           },
           '33%': {
-            strokeDasharray: '129', //700
+            strokeDasharray: '129',
             strokeWidth: '2.5',
             fill: 'transparent',
           },
           '66%': {
-            strokeDasharray: '129', //700
+            strokeDasharray: '129',
             strokeWidth: '0',
             fill: '#000000',
           },
         },
-        // New grow/shrink animation
-
         'loader-grow': {
           '0%, 50%': {
             transform: 'translate3d(-50%, -50%, -1px) scale(1)',
           },
           '85%, 100%': {
             transform: 'translate3d(-50%, -50%, -1px) scale(100)',
-          }, // Adjusted for a more reasonable scale
+          },
         },
         'loader-slide': {
           '0%': { transform: 'translateY(50%)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
-
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },
           '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
@@ -128,10 +140,8 @@ export default {
         flake6: 'drop 2.2s infinite linear forwards 1.2s',
         flake7: 'drop 2.7s infinite linear forwards 1.2s',
         flake8: 'drop 3s infinite linear forwards 1.4s',
-        // New dash animation
         'loader-dash':
           'loader-dash 2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
-        // New grow/shrink animation
         'loader-grow':
           'loader-grow  2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
         'loader-slide': 'loader-slide 0.8s ease-in-out forwards',
@@ -139,8 +149,6 @@ export default {
         shake: 'shake 0.5s ease-in-out',
         bounce: 'bounce 1s infinite',
       },
-
-      // Ensure zIndex includes necessary values (Tailwind has z-0 to z-50 by default)
       zIndex: {
         '10': '10',
         '20': '20',
@@ -151,7 +159,6 @@ export default {
       },
     },
   },
-
   safelist: [
     {
       pattern: /^bg-/,
@@ -192,17 +199,6 @@ export default {
     {
       pattern: /^flex-wrap-/,
     },
-
-    {
-      pattern: /^language-/,
-    },
-    {
-      pattern: /^line-numbers/,
-    },
-    {
-      pattern: /^prism-/,
-    },
-
     {
       pattern: /^text-(blue|red|green|yellow|purple|pink|cyan|indigo)-500$/,
     },
@@ -224,7 +220,6 @@ export default {
     {
       pattern: /^opacity-(10|20|30|40|50|60|70|80|90|100)$/,
     },
-    // Add more patterns as needed
   ],
 } satisfies Config;
 
