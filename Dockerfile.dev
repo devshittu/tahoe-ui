@@ -1,66 +1,46 @@
-FROM node:20.9.0-alpine
-# FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-# # Install dependencies based on the preferred package manager
+# Install dependencies
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-
-
 RUN \
-    if [ -f yarn.lock ]; then \
-    yarn --frozen-lockfile && yarn cache clean; \
-    elif [ -f package-lock.json ]; then \
-    npm ci && npm cache clean --force; \
-    elif [ -f pnpm-lock.yaml ]; then \
-    yarn global add pnpm && pnpm i; \
-    else \
-    echo "Warning: Lockfile not found. It is recommended to commit lockfiles to version control." && \
+    if [ -f yarn.lock ]; then yarn install --frozen-lockfile && yarn cache clean; \
+    elif [ -f package-lock.json ]; then npm ci && npm cache clean --force; \
+    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+    else echo "Warning: Lockfile not found. It is recommended to commit lockfiles to version control." && \
     yarn install && yarn cache clean; \
     fi
 
+# Disable ESLint in dev for faster startup
+ENV NEXT_LINT_WARNONLY=true
 
-COPY src ./src
-COPY public ./public
-COPY next.config.ts .
-COPY tsconfig.json .
-COPY .eslintignore .
-COPY .eslintrc.js .
-# COPY .gitignore .
-COPY .hintrc .
-# COPY .husky .
-COPY .prettierignore .
-COPY .prettierrc .
-COPY .storybook .
-# COPY jest.config.js .
-# COPY lint-staged.config.js .
-COPY next-env.d.ts .
-COPY next.config.ts .
-COPY postcss.config.mjs .
-COPY tailwind.config.ts .
+# Copy source code
+COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage. Learn more here: https://nextjs.org/telemetry
+# Expose dev server port
+EXPOSE 3000
+
+# Default environment variables (can be overridden by docker-compose)
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+# Next.js collects completely anonymous telemetry data about general usage.
 # Uncomment the following line to disable telemetry at run time
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Note: Don't expose ports here, Compose will handle that for us
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start Next.js in development mode based on the preferred package manager
-# CMD \
-#     if [ -f yarn.lock ]; then yarn dev; \
-#     elif [ -f package-lock.json ]; then npm run dev; \
-#     elif [ -f pnpm-lock.yaml ]; then pnpm dev; \
-#     else yarn dev; \
-#     fi
-
-
-# Start Next.js in development mode based on the preferred package manager
+# Start Next.js in development mode with HTTPS
 CMD \
     if [ -f yarn.lock ]; then yarn dev:https; \
     elif [ -f package-lock.json ]; then npm run dev:https; \
     elif [ -f pnpm-lock.yaml ]; then pnpm dev:https; \
     else yarn dev:https; \
     fi
+
 
 # Path: tahoe-ui/Dockerfile.dev
 # /Users/mshittu/programming-projects/javascript/react/tahoe-ui/Dockerfile.dev
