@@ -1,13 +1,22 @@
 'use client';
 import { createStore, useStore } from 'zustand';
 import React from 'react';
+import { Position } from '@/app/playground/modal/components/shared';
 
 export type UIComponentState = {
   isOpen: boolean;
   isClosing: boolean;
   closeDelay: number;
   content: React.ReactNode | null;
-  open: (content: React.ReactNode) => void;
+  position: Position;
+  size: 'small' | 'medium' | 'large' | 'full';
+  open: (
+    content: React.ReactNode,
+    options?: {
+      position?: Position;
+      size?: 'small' | 'medium' | 'large' | 'full';
+    },
+  ) => void;
   close: () => void;
 };
 
@@ -16,7 +25,15 @@ export const useUIComponentStore = createStore<UIComponentState>((set) => ({
   isClosing: false,
   closeDelay: 300,
   content: null,
-  open: (content) => set({ isOpen: true, content }),
+  position: 'bottom',
+  size: 'large',
+  open: (content, options = {}) =>
+    set({
+      isOpen: true,
+      content,
+      position: options.position || 'bottom',
+      size: options.size || 'large',
+    }),
   close: () =>
     set((state) => {
       setTimeout(
