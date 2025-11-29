@@ -24,3 +24,4 @@ export function Portal({ children, id = 'page-mode-portal' }: PortalProps) {
   if (!mountNode) return null;
   return createPortal(children, mountNode);
 }
+// src/HOC/Portal.tsx
