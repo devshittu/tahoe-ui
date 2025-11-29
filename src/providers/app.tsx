@@ -37,7 +37,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
           onItemClick={(id) => console.log('Nav item clicked:', id)}
           // You can also pass custom 'items' array here if needed
         />
-        
+
         <PageMode
           enableContentScroll={true} // default
           position="top"
