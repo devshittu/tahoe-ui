@@ -827,6 +827,8 @@ export const staticNavLinks: StaticNavLink[] = [
   { path: '/storybook', label: 'Storybook' },
   { path: '/playground/navigation', label: 'Playground Navigation' },
   { path: '/playground/frame', label: 'Playground Frame' },
+  { path: '/playground/floating-panel', label: 'Floating Control panel' },
+  { path: '/playground/modal', label: 'Modern Modal' },
 ];
 
 // lib/data.ts
