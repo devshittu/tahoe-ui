@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Position } from './types';
+import { Position, LoadingStateConfig } from './types';
 
 type HandlebarZoneProps = {
   position: Position;
@@ -11,14 +11,16 @@ type HandlebarZoneProps = {
   onClick: () => void;
   isBeyondLimit: boolean; // Resistance state
   resistanceIntensity?: number; // 0-1 for visual feedback
+  loadingState?: LoadingStateConfig; // Loading state configuration
 };
 
 /**
- * Unified HandlebarZone with advanced resistance feedback
+ * Unified HandlebarZone with advanced resistance feedback and loading shimmer
  *
  * Features:
  * - Position-aware layout
  * - Smooth scale/color transitions for resistance
+ * - Loading shimmer animation
  * - Keyboard accessibility
  * - Touch-optimized hit targets
  */
@@ -29,7 +31,12 @@ export function HandlebarZone({
   onClick,
   isBeyondLimit,
   resistanceIntensity = 0,
+  loadingState,
 }: HandlebarZoneProps) {
+  const isLoading = loadingState?.isLoading ?? false;
+  const lockInteraction = loadingState?.lockInteraction ?? true;
+  const shimmerSpeed = loadingState?.shimmerSpeed ?? 'fast';
+
   // Calculate visual feedback based on resistance
   const scale = isBeyondLimit ? 1 + resistanceIntensity * 0.15 : 1;
   const bgOpacity = 0.4 + resistanceIntensity * 0.4; // Darker when resisting
@@ -37,23 +44,44 @@ export function HandlebarZone({
   // Position-specific classes
   const { zoneClasses, lineClasses } = getPositionClasses(position);
 
+  // Determine shimmer animation duration
+  const shimmerDuration = shimmerSpeed === 'fast' ? 1.5 : 3;
+
+  // Handle pointer and click events (disabled during loading if locked)
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (isLoading && lockInteraction) return;
+    onPointerDown(e);
+  };
+
+  const handleClick = () => {
+    if (isLoading && lockInteraction) return;
+    onClick();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (isLoading && lockInteraction) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
     <div
       className={zoneClasses}
-      onPointerDown={onPointerDown}
-      onClick={onClick}
+      onPointerDown={handlePointerDown}
+      onClick={handleClick}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onClick();
-        }
-      }}
+      onKeyDown={handleKeyDown}
       aria-label={ariaLabel ?? 'Drag to close or press Enter'}
+      aria-busy={isLoading}
+      style={{
+        cursor: isLoading && lockInteraction ? 'not-allowed' : undefined,
+      }}
     >
       <motion.div
-        className={lineClasses}
+        className={`${lineClasses} relative overflow-hidden`}
         animate={{
           scale,
           backgroundColor: isBeyondLimit
@@ -66,7 +94,21 @@ export function HandlebarZone({
           stiffness: 400,
           mass: 0.5,
         }}
-      />
+      >
+        {/* Loading shimmer overlay */}
+        {isLoading && (
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-white/20 to-transparent"
+            initial={{ x: '-100%' }}
+            animate={{ x: '200%' }}
+            transition={{
+              duration: shimmerDuration,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          />
+        )}
+      </motion.div>
     </div>
   );
 }
