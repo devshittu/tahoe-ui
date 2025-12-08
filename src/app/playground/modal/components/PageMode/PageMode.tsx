@@ -1,27 +1,46 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
-import { motion, useDragControls } from 'framer-motion';
+import React, { useEffect, useRef, useMemo } from 'react';
+import {
+  Dialog as HeadlessDialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from '@headlessui/react';
+import { useDragControls } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
 import { Portal } from '@/HOC/Portal';
 import SafeMotionDiv from '@/components/Motion/SafeMotionDiv';
-import { CardStack } from '@/components/background/CardStack';
 import { trackPageModeEvent } from '@/components/analytics/analytics';
 import { t } from '@/app/i18n';
-import { useUIComponent } from '@/stores/useUIComponent';
+import { usePageMode, useModals } from '../stores/useModalStore';
 import { HandlebarZone } from '../shared/HandlebarZone';
 import { useDragResistance } from '../shared/useDragResistance';
+import { useSquashStretch } from '../shared/useSquashStretch';
+import {
+  generateUniqueId,
+  useFocusTrap,
+  useScreenReaderAnnouncement,
+} from '../shared/a11yUtils';
 import {
   createSlideVariants,
   getDragAxis,
   getDragConstraints,
   getRoundedClasses,
 } from '../shared/animations';
+import {
+  DEFAULT_A11Y_OPTIONS,
+  DEFAULT_BACKDROP_EFFECTS,
+  DEFAULT_SQUASH_STRETCH,
+  DEFAULT_LOADING_STATE,
+} from '../shared/types';
 import type {
   Position,
   A11yOptions,
   DragResistanceConfig,
+  BackdropEffectsConfig,
+  SquashStretchConfig,
+  LoadingStateConfig,
 } from '../shared/types';
 
 export type PageModeProps = {
@@ -33,19 +52,26 @@ export type PageModeProps = {
   closeThreshold?: number;
   enhancedCloseBox?: boolean;
   enableContentScroll?: boolean;
+  zIndex?: number; // For stacking control
   resistance?: DragResistanceConfig;
-  size?: 'small' | 'medium' | 'large' | 'full'; // New: size variants
+  backdropEffects?: BackdropEffectsConfig;
+  squashStretch?: SquashStretchConfig;
+  loadingState?: LoadingStateConfig;
+  size?: 'small' | 'medium' | 'large' | 'full';
 };
 
 /**
- * PageMode Component - Refactored with HeadlessUI
+ * PageMode Component - Enhanced with accessibility and motion features
  *
  * Features:
  * - HeadlessUI foundation for accessibility
  * - Global state integration via useUIComponent
  * - Enhanced drag physics with resistance
- * - Size variants for flexible layouts
- * - Smooth, natural animations
+ * - Squash-and-stretch animation
+ * - Backdrop blur and scale effects
+ * - Loading state with shimmer
+ * - Focus trapping and screen reader support
+ * - Auto-generated unique IDs
  */
 export function PageMode({
   position: defaultPosition = 'bottom',
@@ -56,9 +82,15 @@ export function PageMode({
   closeThreshold = 0.5,
   enhancedCloseBox = true,
   enableContentScroll = true,
+  zIndex: propZIndex, // Accept from props but use store value if available
   resistance,
+  backdropEffects,
+  squashStretch,
+  loadingState,
   size: defaultSize = 'large',
 }: PageModeProps) {
+  // Merge with default accessibility options
+  const a11y = { ...DEFAULT_A11Y_OPTIONS, ...a11yOptions };
   const {
     escapeClose = true,
     role = 'dialog',
@@ -68,9 +100,16 @@ export function PageMode({
     handlebarAriaLabel,
     lockScroll = false,
     closeOnOutsideClick = true,
-  } = a11yOptions;
+    generateUniqueIds = true,
+    enableFocusTrap = true,
+    announceToScreenReader = true,
+  } = a11y;
 
-  // Global state with position and size from store
+  // Merge with default configs
+  const backdropConfig = { ...DEFAULT_BACKDROP_EFFECTS, ...backdropEffects };
+  const squashConfig = { ...DEFAULT_SQUASH_STRETCH, ...squashStretch };
+
+  // Global state from Zustand store
   const {
     isOpen,
     isClosing,
@@ -78,27 +117,106 @@ export function PageMode({
     close,
     position: storePosition,
     size: storeSize,
-  } = useUIComponent();
+    isLoading: storeIsLoading,
+    loadingMessage: storeLoadingMessage,
+  } = usePageMode();
+
+  // Get modal instance from store for z-index
+  const { getPageMode } = useModals();
+  const modalInstance = getPageMode();
+  const zIndex = modalInstance?.zIndex || propZIndex || 9999;
 
   // Use store values if available, otherwise use defaults
   const position = storePosition || defaultPosition;
   const size = storeSize || defaultSize;
 
-  // Drag controls
+  // Merge loading state from store and props
+  const mergedLoadingConfig = {
+    ...DEFAULT_LOADING_STATE,
+    ...loadingState,
+    isLoading: storeIsLoading || loadingState?.isLoading || false,
+    message: storeLoadingMessage || loadingState?.message,
+  };
+
+  const loadingConfig = mergedLoadingConfig;
+
+  // Generate unique IDs
+  const pageModeId = useMemo(
+    () => (generateUniqueIds ? generateUniqueId('pagemode') : undefined),
+    [generateUniqueIds],
+  );
+  const titleId = useMemo(
+    () => (generateUniqueIds ? `${pageModeId}-title` : ariaLabelledby),
+    [generateUniqueIds, pageModeId, ariaLabelledby],
+  );
+  const descId = useMemo(
+    () => (generateUniqueIds ? `${pageModeId}-desc` : ariaDescribedby),
+    [generateUniqueIds, pageModeId, ariaDescribedby],
+  );
+
+  // Refs
+  const containerRef = useRef<HTMLDivElement>(null);
   const dragControls = useDragControls();
+
+  // Hooks
+  const announce = useScreenReaderAnnouncement();
+  useFocusTrap(isOpen, enableFocusTrap, containerRef);
+
   const dragAxis = getDragAxis(position);
   const dragConstraints = getDragConstraints(position);
 
   // Enhanced drag resistance
-  const { dragState, handleDrag, handleDragEnd } = useDragResistance({
+  const {
+    dragState,
+    handleDrag: handleDragResistance,
+    handleDragEnd: handleDragResistanceEnd,
+  } = useDragResistance({
     position,
     closeThreshold,
     resistance,
     onClose: close,
   });
 
-  // Animation variants
-  const variants = createSlideVariants(position);
+  // Squash-and-stretch effect
+  const {
+    squashState,
+    handleDragStart: handleSquashStart,
+    handleDrag: handleSquashDrag,
+    handleDragEnd: handleSquashEnd,
+    squashTransition,
+  } = useSquashStretch({
+    position,
+    config: squashConfig,
+  });
+
+  // Combined drag handlers
+  const handleDragStart = () => {
+    if (loadingConfig.isLoading && loadingConfig.lockInteraction) return;
+    handleSquashStart();
+  };
+
+  const handleDrag = (
+    event: PointerEvent | MouseEvent | TouchEvent,
+    info: any,
+  ) => {
+    if (loadingConfig.isLoading && loadingConfig.lockInteraction) return;
+    handleDragResistance(event, info);
+    handleSquashDrag(event, info);
+  };
+
+  const handleDragEnd = (
+    event: PointerEvent | MouseEvent | TouchEvent,
+    info: any,
+  ) => {
+    if (loadingConfig.isLoading && loadingConfig.lockInteraction) return;
+    handleDragResistanceEnd(event, info);
+    handleSquashEnd();
+  };
+
+  const handleClose = () => {
+    if (loadingConfig.isLoading && loadingConfig.lockInteraction) return;
+    close();
+  };
 
   // Analytics tracking
   const hasTrackedOpen = useRef(false);
@@ -118,6 +236,32 @@ export function PageMode({
     }
   }, [isClosing]);
 
+  // Screen reader announcements
+  useEffect(() => {
+    if (!announceToScreenReader) return;
+
+    if (isOpen) {
+      announce('Page mode opened');
+    } else if (!isOpen && containerRef.current) {
+      announce('Page mode closed');
+    }
+  }, [isOpen, announce, announceToScreenReader]);
+
+  useEffect(() => {
+    if (!announceToScreenReader || !loadingConfig.isLoading) return;
+
+    const message = loadingConfig.message || 'Loading';
+    announce(message);
+  }, [
+    loadingConfig.isLoading,
+    loadingConfig.message,
+    announce,
+    announceToScreenReader,
+  ]);
+
+  // Animation variants
+  const variants = createSlideVariants(position);
+
   // Styling
   const roundClass = getRoundedClasses(position, roundedEdges);
   const themeClass = themeable
@@ -128,7 +272,7 @@ export function PageMode({
   const sizeStyles = getSizeStyles(position, size);
 
   const containerClasses = twMerge(
-    'fixed z-[9999] flex flex-col will-change-transform shadow-xl',
+    'fixed flex flex-col will-change-transform shadow-xl',
     roundClass,
     themeClass,
   );
@@ -140,42 +284,65 @@ export function PageMode({
       : 'overflow-hidden'
     : 'overflow-hidden';
 
-  // Margin to avoid handlebar overlap - on opposite side from where PageMode appears
+  // Margin to avoid handlebar overlap
   const getMarginClass = () => {
     switch (position) {
       case 'top':
-        return 'mb-[max(8vh,60px)]'; // Appears from top → handlebar at bottom
+        return 'mb-[max(8vh,60px)]';
       case 'bottom':
-        return 'mt-[max(8vh,60px)]'; // Appears from bottom → handlebar at top
+        return 'mt-[max(8vh,60px)]';
       case 'left':
-        return 'mr-[max(8vw,60px)]'; // Appears from left → handlebar at right
+        return 'mr-[max(8vw,60px)]';
       case 'right':
-        return 'ml-[max(8vw,60px)]'; // Appears from right → handlebar at left
+        return 'ml-[max(8vw,60px)]';
     }
+  };
+
+  // Backdrop styles
+  const backdropStyles: React.CSSProperties = {
+    backdropFilter: backdropConfig.blur
+      ? `blur(${backdropConfig.blurAmount})`
+      : undefined,
   };
 
   // Gesture handlers
   const onHandlebarPointerDown = (e: React.PointerEvent) => {
+    if (loadingConfig.isLoading && loadingConfig.lockInteraction) {
+      // Shake animation for locked state
+      if (containerRef.current) {
+        containerRef.current.classList.add('animate-shake');
+        setTimeout(() => {
+          containerRef.current?.classList.remove('animate-shake');
+        }, 500);
+      }
+      return;
+    }
     e.preventDefault();
     dragControls.start(e);
   };
 
-  const handleHandlebarClick = () => close();
+  const handleHandlebarClick = () => handleClose();
 
-  // PageMode handlebar is on OPPOSITE side from where it appears
-  // (top pagemode has handlebar at bottom, right pagemode has handlebar at left)
+  // PageMode handlebar is on OPPOSITE side
   const getHandlebarPosition = (pageModePosition: Position): Position => {
     switch (pageModePosition) {
       case 'top':
-        return 'bottom'; // PageMode from top → handlebar at bottom
+        return 'bottom';
       case 'bottom':
-        return 'top'; // PageMode from bottom → handlebar at top
+        return 'top';
       case 'left':
-        return 'right'; // PageMode from left → handlebar at right
+        return 'right';
       case 'right':
-        return 'left'; // PageMode from right → handlebar at left
+        return 'left';
     }
   };
+
+  // Determine if escape/outside click should work during loading
+  const canCloseWhileLoading = !(
+    loadingConfig.isLoading && loadingConfig.lockInteraction
+  );
+  const shouldAllowClose =
+    canCloseWhileLoading && closeOnOutsideClick && escapeClose;
 
   // Content wrapper
   const renderedContent = useContainer ? (
@@ -188,11 +355,15 @@ export function PageMode({
     <Portal>
       <HeadlessDialog
         open={isOpen}
-        onClose={closeOnOutsideClick && escapeClose ? close : () => {}}
-        className="relative z-[9999]"
+        onClose={shouldAllowClose ? handleClose : () => {}}
+        className="relative"
+        style={{ zIndex }}
+        id={pageModeId}
+        aria-labelledby={titleId}
+        aria-describedby={descId}
       >
-        {/* Backdrop with CardStack */}
-        <Transition.Child
+        {/* Backdrop with blur */}
+        <TransitionChild
           enter="ease-out duration-200"
           enterFrom="opacity-0"
           enterTo="opacity-100"
@@ -201,39 +372,52 @@ export function PageMode({
           leaveTo="opacity-0"
         >
           <div
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm"
+            className="fixed inset-0"
+            style={{
+              backgroundColor: `rgba(0, 0, 0, ${backdropConfig.backgroundOpacity})`,
+              ...backdropStyles,
+            }}
             aria-hidden="true"
-            {...(closeOnOutsideClick ? { onClick: close } : {})}
-          >
-            <CardStack />
-          </div>
-        </Transition.Child>
+            {...(canCloseWhileLoading && closeOnOutsideClick
+              ? { onClick: handleClose }
+              : {})}
+          />
+        </TransitionChild>
 
         {/* Enhanced close indicator */}
-        {enhancedCloseBox && dragState.shouldClose && (
-          <motion.div
-            className="fixed inset-0 flex items-center justify-center z-[10000] pointer-events-none"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{
-              type: 'spring',
-              damping: 25,
-              stiffness: 300,
-            }}
-            aria-live="assertive"
-          >
-            <div className="border-4 border-dashed border-blue-400 p-6 text-blue-600 dark:text-blue-400 bg-white/90 dark:bg-gray-700/90 rounded-lg shadow-lg">
-              {t('releaseToClose')}
-            </div>
-          </motion.div>
-        )}
+        {enhancedCloseBox &&
+          dragState.shouldClose &&
+          !loadingConfig.isLoading && (
+            <SafeMotionDiv
+              className="fixed inset-0 flex items-center justify-center pointer-events-none"
+              style={{ zIndex: zIndex + 1 }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{
+                type: 'spring',
+                damping: 25,
+                stiffness: 300,
+              }}
+              aria-live="assertive"
+            >
+              <div className="border-4 border-dashed border-blue-400 p-6 text-blue-600 dark:text-blue-400 bg-white/90 dark:bg-gray-700/90 rounded-lg shadow-lg">
+                {t('releaseToClose')}
+              </div>
+            </SafeMotionDiv>
+          )}
 
         {/* PageMode Panel */}
-        <HeadlessDialog.Panel
+        <DialogPanel
           as={SafeMotionDiv}
+          ref={containerRef}
           className={containerClasses}
-          style={sizeStyles}
+          style={{
+            ...sizeStyles,
+            scaleX: squashState.scaleX,
+            scaleY: squashState.scaleY,
+            zIndex,
+          }}
           custom={position}
           variants={variants}
           initial="hidden"
@@ -244,10 +428,11 @@ export function PageMode({
           dragListener={false}
           dragElastic={0.08}
           dragConstraints={dragConstraints}
+          onDragStart={handleDragStart}
           onDrag={handleDrag}
           onDragEnd={handleDragEnd}
         >
-          {/* Handlebar - on opposite side from where PageMode appears */}
+          {/* Handlebar - on opposite side */}
           <HandlebarZone
             position={getHandlebarPosition(position)}
             onPointerDown={onHandlebarPointerDown}
@@ -255,6 +440,7 @@ export function PageMode({
             isBeyondLimit={dragState.isBeyondLimit}
             resistanceIntensity={dragState.resistanceIntensity}
             ariaLabel={handlebarAriaLabel}
+            loadingState={loadingConfig}
           />
 
           {/* Content */}
@@ -263,7 +449,7 @@ export function PageMode({
           >
             {renderedContent}
           </div>
-        </HeadlessDialog.Panel>
+        </DialogPanel>
       </HeadlessDialog>
     </Portal>
   );
@@ -326,3 +512,5 @@ function getSizeStyles(
       };
   }
 }
+
+// src/app/playground/modal/components/PageMode/PageMode.tsx

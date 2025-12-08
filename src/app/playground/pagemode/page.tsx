@@ -1,7 +1,6 @@
 // src/app/playground/box/page.tsx
 'use client';
 
-import { ExampleButton } from '@/components/PageMode/ExampleButton';
 import ProjectBoxes from '@/components/ProjectBoxes/oa/ProjectBoxes';
 import ProjectsSection from '@/components/ProjectBoxes/oa/ProjectsSection';
 import { Project } from '@/components/ProjectBoxes/oa/types';
@@ -148,8 +147,6 @@ const DemoPage = () => {
   // const viewMode = 'list';
   return (
     <>
-      <ExampleButton />
-
       <WizardExample />
 
       <div className="container mx-auto p-4 bg-slate-200">

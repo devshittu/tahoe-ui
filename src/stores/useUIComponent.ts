@@ -1,7 +1,7 @@
 'use client';
 import { createStore, useStore } from 'zustand';
 import React from 'react';
-import { Position } from '@/app/playground/modal/components/shared';
+import { Position } from '@/app/playground/modal/components/shared/types';
 
 export type UIComponentState = {
   isOpen: boolean;
