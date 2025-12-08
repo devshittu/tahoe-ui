@@ -10,7 +10,6 @@ import { Loading } from '@/components/loading';
 import FloatingNav from '@/components/FloatingNav/FloatingNav'; // Adjust path as needed
 import { UIProvider } from '@/components/UIManager/UIProvider';
 
-
 type AppProviderProps = {
   children: ReactNode;
   theme?: string; // This prop might become redundant if theme is fully managed by next-themes at root

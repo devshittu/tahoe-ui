@@ -147,7 +147,6 @@ const DemoPage = () => {
   // const viewMode = 'list';
   return (
     <>
-
       <WizardExample />
 
       <div className="container mx-auto p-4 bg-slate-200">
