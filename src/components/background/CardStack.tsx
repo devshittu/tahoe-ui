@@ -21,3 +21,4 @@ export function CardStack() {
     </div>
   );
 }
+// src/components/background/CardStack.tsx

@@ -43,6 +43,13 @@ export const staticNavLinks: NavLink[] = [
           { label: 'Storybook', href: '/storybook' },
           { label: 'Navigation', href: '/playground/navigation' },
           { label: 'Frame', href: '/playground/frame' },
+
+          {
+            href: '/playground/floating-panel',
+            label: 'Floating Control panel',
+          },
+
+          { href: '/playground/modal', label: 'Modern Modal' },
         ],
       },
       {
