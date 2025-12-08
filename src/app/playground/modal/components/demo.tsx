@@ -3,35 +3,183 @@
 import React, { useState } from 'react';
 import { Dialog } from './Dialog';
 import { PageMode } from './PageMode';
-import { useUIComponent } from '@/stores/useUIComponent';
+import { usePageMode, useModals, useDialog } from './stores/useModalStore';
 
 /**
- * Comprehensive Demo Page for Dialog & PageMode
+ * Comprehensive Demo Page for Dialog & PageMode with Enhanced Features
  *
- * Showcases:
- * - All positions (top/bottom/left/right)
- * - Resistance physics
- * - Size variants
- * - Keyboard accessibility
- * - Theme support
+ * Now using Zustand-based unified modal store for:
+ * - Modal stacking support
+ * - Per-instance loading control
+ * - Cleaner state management
+ * - Can trigger Dialog from PageMode and vice versa
  */
+
+// Dialog wrapper that uses Zustand store for stacking
+function DialogFromStore() {
+  const store = useDialog();
+  const {
+    isOpen,
+    isClosing,
+    content,
+    close,
+    showFrom,
+    handlebarPosition,
+    isLoading,
+    loadingMessage,
+  } = store;
+
+  // Get the modal instance from the full store to access zIndex
+  const { getDialog } = useModals();
+  const modalInstance = getDialog();
+  const zIndex = modalInstance?.zIndex || 10000;
+
+  if (!isOpen) return null;
+
+  return (
+    <Dialog
+      isOpen={isOpen}
+      onClose={close}
+      showFrom={showFrom}
+      handlebarPosition={handlebarPosition}
+      zIndex={zIndex} // Pass dynamic z-index from store
+      roundedEdges={true}
+      themeable={true}
+      closeThreshold={0.5}
+      enhancedCloseBox={true}
+      resistance={{
+        enabled: true,
+        threshold: 50,
+        strength: 0.6,
+        visualFeedback: true,
+      }}
+      backdropEffects={{
+        blur: true,
+        blurAmount: '8px',
+        scale: true,
+        scaleAmount: 0.98,
+        backgroundOpacity: 0.3,
+      }}
+      squashStretch={{
+        enabled: true,
+        trigger: 'start',
+        intensity: 0.03,
+        duration: 150,
+      }}
+      loadingState={{
+        isLoading,
+        message: loadingMessage || 'Processing...',
+        lockInteraction: true,
+        shimmerSpeed: 'fast',
+      }}
+      a11yOptions={{
+        generateUniqueIds: true,
+        enableFocusTrap: true,
+        announceToScreenReader: true,
+        escapeClose: true,
+        closeOnOutsideClick: true,
+        scrollable: true,
+      }}
+    >
+      {content}
+    </Dialog>
+  );
+}
+
+// PageMode demo content with Zustand-based loading control
+function PageModeDemoContent({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  const { setLoading, isLoading } = usePageMode();
+  const { openDialog } = useModals();
+
+  const toggleLoading = () => {
+    setLoading(
+      !isLoading,
+      isLoading ? undefined : 'Processing PageMode request...',
+    );
+  };
+
+  // Example: Open Dialog from within PageMode
+  const openNestedDialog = () => {
+    openDialog(
+      <div className="p-6">
+        <h3 className="text-2xl font-bold mb-4">
+          Dialog opened from PageMode!
+        </h3>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
+          This demonstrates modal stacking. The Dialog appears on top of the
+          PageMode.
+        </p>
+        <p className="text-sm text-blue-600 dark:text-blue-400">
+          ✨ Try dragging, pressing ESC, or clicking outside to close this
+          Dialog. The PageMode beneath will remain open!
+        </p>
+      </div>,
+      { showFrom: 'top' },
+    );
+  };
+
+  return (
+    <DemoContent
+      title={title}
+      description={description}
+      showLoadingToggle={true}
+      isLoading={isLoading}
+      onToggleLoading={toggleLoading}
+      showNestedDialogButton={true}
+      onOpenNestedDialog={openNestedDialog}
+    />
+  );
+}
+
 export default function ComponentDemo() {
   const [dialogState, setDialogState] = useState<{
     isOpen: boolean;
     position: 'top' | 'bottom' | 'left' | 'right';
+    loading: boolean;
   }>({
     isOpen: false,
     position: 'top',
+    loading: false,
   });
 
-  const { open: openPageMode } = useUIComponent();
+  const { openPageMode, closeAll } = useModals();
 
-  const openDialog = (position: 'top' | 'bottom' | 'left' | 'right') => {
-    setDialogState({ isOpen: true, position });
+  const openDialogDemo = (position: 'top' | 'bottom' | 'left' | 'right') => {
+    setDialogState({ isOpen: true, position, loading: false });
   };
 
   const closeDialog = () => {
     setDialogState({ ...dialogState, isOpen: false });
+  };
+
+  const toggleDialogLoading = () => {
+    setDialogState({ ...dialogState, loading: !dialogState.loading });
+  };
+
+  // Open PageMode from Dialog
+  const openPageModeFromDialog = () => {
+    openPageMode(
+      <div className="p-6">
+        <h3 className="text-2xl font-bold mb-4">
+          PageMode opened from Dialog!
+        </h3>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
+          This demonstrates modal stacking in reverse. The PageMode appears on
+          top of the Dialog.
+        </p>
+        <p className="text-sm text-purple-600 dark:text-purple-400">
+          ✨ Try dragging, pressing ESC, or clicking outside to close this
+          PageMode. The Dialog beneath will remain open!
+        </p>
+      </div>,
+      { position: 'bottom', size: 'large' },
+    );
   };
 
   const openPageModeDemo = (
@@ -39,11 +187,11 @@ export default function ComponentDemo() {
     size: 'small' | 'medium' | 'large' | 'full' = 'large',
   ) => {
     openPageMode(
-      <DemoContent
+      <PageModeDemoContent
         title={`PageMode ${position} (${size})`}
-        description="Drag the handlebar to close or press Escape. Try dragging in both directions!"
+        description="Drag the handlebar to close or press Escape. Try the buttons below for advanced features!"
       />,
-      { position, size }, // Pass options
+      { position, size },
     );
   };
 
@@ -53,12 +201,47 @@ export default function ComponentDemo() {
         {/* Header */}
         <header className="text-center space-y-4">
           <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-            Dialog & PageMode Demo
+            Enhanced Dialog & PageMode Demo
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400">
-            HeadlessUI + Enhanced Physics + Smooth Animations
+            Zustand-Powered Modal System with Stacking Support
           </p>
         </header>
+
+        {/* New Features Highlight */}
+        <section className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl p-8 shadow-xl">
+          <h2 className="text-3xl font-bold mb-4">
+            🎉 New: Unified Modal System
+          </h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <h3 className="font-bold mb-2">🏗️ Modal Stacking</h3>
+              <p className="text-sm">
+                Open Dialog from PageMode or vice versa - automatic z-index
+                management
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <h3 className="font-bold mb-2">⚡ Zustand Store</h3>
+              <p className="text-sm">
+                Global state management with per-instance loading control
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <h3 className="font-bold mb-2">🔄 Cross-Modal Triggers</h3>
+              <p className="text-sm">
+                Trigger any modal from anywhere in your app or from within other
+                modals
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <h3 className="font-bold mb-2">🎯 No Context Needed</h3>
+              <p className="text-sm">
+                Clean API without provider wrappers or prop drilling
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Dialog Section */}
         <section className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl">
@@ -69,14 +252,14 @@ export default function ComponentDemo() {
 
           <div className="space-y-4 mb-6">
             <p className="text-gray-600 dark:text-gray-400">
-              Modal dialogs with gesture-based dismissal. Try dragging the
-              handlebar in different directions to feel the resistance physics!
+              Modal dialogs with gesture-based dismissal and enhanced motion
+              effects. Try dragging the handlebar in different directions!
             </p>
             <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
               <p className="text-sm text-blue-800 dark:text-blue-300">
                 ✨ <strong>Pro tip:</strong> Drag away from the close direction
-                to feel resistance. The handlebar will darken and scale as
-                feedback.
+                to feel resistance. Notice the squash-and-stretch anticipation
+                effect and backdrop blur!
               </p>
             </div>
           </div>
@@ -85,7 +268,7 @@ export default function ComponentDemo() {
             {(['top', 'bottom', 'left', 'right'] as const).map((pos) => (
               <button
                 key={pos}
-                onClick={() => openDialog(pos)}
+                onClick={() => openDialogDemo(pos)}
                 className="px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105 active:scale-95 shadow-lg"
               >
                 From {pos.charAt(0).toUpperCase() + pos.slice(1)}
@@ -103,13 +286,13 @@ export default function ComponentDemo() {
 
           <div className="space-y-4 mb-6">
             <p className="text-gray-600 dark:text-gray-400">
-              Full-screen overlays with global state management. Features size
-              variants and the same gesture physics as Dialog.
+              Full-screen overlays with Zustand-powered state management.
+              Features loading control and can trigger nested Dialogs!
             </p>
             <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
               <p className="text-sm text-purple-800 dark:text-purple-300">
-                ✨ <strong>New:</strong> Size variants (small, medium, large,
-                full) for flexible layouts!
+                ✨ <strong>New:</strong> Open a PageMode and click &quot;Open
+                Nested Dialog&quot; to see modal stacking in action!
               </p>
             </div>
           </div>
@@ -153,37 +336,54 @@ export default function ComponentDemo() {
           </div>
         </section>
 
+        {/* Advanced Features */}
+        <section className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl p-8 shadow-xl">
+          <h2 className="text-3xl font-bold mb-4">🚀 Advanced Features</h2>
+          <div className="space-y-4">
+            <button
+              onClick={closeAll}
+              className="px-6 py-3 bg-white/20 hover:bg-white/30 rounded-lg transition-colors backdrop-blur-sm"
+            >
+              🗑️ Close All Modals
+            </button>
+            <p className="text-sm opacity-90">
+              Useful when multiple modals are stacked. Closes all modals at
+              once.
+            </p>
+          </div>
+        </section>
+
         {/* Features Grid */}
         <section className="grid md:grid-cols-3 gap-6">
           <FeatureCard
+            icon="🏗️"
+            title="Modal Stacking"
+            description="Open multiple modals with automatic z-index management"
+          />
+          <FeatureCard
             icon="⚡"
-            title="Velocity Detection"
-            description="Fast swipe gestures automatically trigger close, just like native apps"
+            title="Zustand Powered"
+            description="Global state with no context providers or prop drilling"
+          />
+          <FeatureCard
+            icon="🔄"
+            title="Cross-Modal Triggers"
+            description="Trigger Dialog from PageMode or vice versa seamlessly"
+          />
+          <FeatureCard
+            icon="✨"
+            title="Per-Instance Loading"
+            description="Each modal has independent loading state control"
           />
           <FeatureCard
             icon="🎨"
-            title="Visual Feedback"
-            description="Handlebar scales and darkens based on resistance intensity"
+            title="All Previous Features"
+            description="Backdrop blur, squash-stretch, resistance, and more"
           />
           <FeatureCard
             icon="♿"
-            title="Accessible"
-            description="Full keyboard navigation, ARIA labels, and focus management"
-          />
-          <FeatureCard
-            icon="🌙"
-            title="Theme Support"
-            description="Dark mode ready with smooth transitions"
-          />
-          <FeatureCard
-            icon="📱"
-            title="Touch Optimized"
-            description="Works perfectly on mobile with native-feeling gestures"
-          />
-          <FeatureCard
-            icon="⚙️"
-            title="Configurable"
-            description="Fine-tune resistance, thresholds, and animation behavior"
+            title="Fully Accessible"
+            description="Focus trap, screen readers, keyboard navigation"
           />
         </section>
 
@@ -191,18 +391,31 @@ export default function ComponentDemo() {
         <section className="bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-2xl p-8 shadow-xl">
           <h3 className="text-2xl font-bold mb-4">⌨️ Keyboard Shortcuts</h3>
           <div className="grid md:grid-cols-2 gap-4">
-            <Shortcut keys="ESC" description="Close dialog/pagemode" />
-            <Shortcut keys="Tab" description="Navigate interactive elements" />
+            <Shortcut
+              keys="ESC"
+              description="Close top modal (unless locked)"
+            />
+            <Shortcut
+              keys="Tab"
+              description="Cycle through focusable elements"
+            />
+            <Shortcut
+              keys="Shift+Tab"
+              description="Reverse cycle (focus trap enabled)"
+            />
             <Shortcut
               keys="Enter / Space"
               description="Click handlebar to close"
             />
-            <Shortcut keys="Click outside" description="Close (if enabled)" />
+            <Shortcut
+              keys="Click outside"
+              description="Close top modal (unless locked)"
+            />
           </div>
         </section>
       </div>
 
-      {/* Dialog Instance */}
+      {/* Dialog Instance - still supports local state for this demo */}
       <Dialog
         isOpen={dialogState.isOpen}
         onClose={closeDialog}
@@ -218,14 +431,51 @@ export default function ComponentDemo() {
           strength: 0.6,
           visualFeedback: true,
         }}
+        backdropEffects={{
+          blur: true,
+          blurAmount: '8px',
+          scale: true,
+          scaleAmount: 0.98,
+          backgroundOpacity: 0.3,
+        }}
+        squashStretch={{
+          enabled: true,
+          trigger: 'start',
+          intensity: 0.03,
+          duration: 150,
+        }}
+        loadingState={{
+          isLoading: dialogState.loading,
+          message: 'Processing your request...',
+          lockInteraction: true,
+          shimmerSpeed: 'fast',
+        }}
+        a11yOptions={{
+          generateUniqueIds: true,
+          enableFocusTrap: true,
+          announceToScreenReader: true,
+          escapeClose: true,
+          closeOnOutsideClick: true,
+          scrollable: true,
+        }}
       >
         <DemoContent
           title={`Dialog from ${dialogState.position}`}
-          description="This is a fully functional dialog with enhanced physics"
+          description="This is a fully functional dialog with enhanced physics and accessibility"
+          showLoadingToggle={true}
+          isLoading={dialogState.loading}
+          onToggleLoading={toggleDialogLoading}
+          showNestedDialogButton={true}
+          onOpenNestedDialog={openPageModeFromDialog}
+          nestedButtonLabel="🎯 Open Nested PageMode"
+          nestedButtonColor="purple"
         />
       </Dialog>
 
-      {/* PageMode Instance (global state controlled - position/size from store) */}
+      {/* Dialog Instance from Zustand Store - for nested/stacked dialogs */}
+      <DialogFromStore />
+
+      {/* PageMode Instance - uses Zustand store */}
       <PageMode
         roundedEdges={true}
         themeable={true}
@@ -237,6 +487,26 @@ export default function ComponentDemo() {
           strength: 0.6,
           visualFeedback: true,
         }}
+        backdropEffects={{
+          blur: true,
+          blurAmount: '8px',
+          scale: true,
+          scaleAmount: 0.98,
+          backgroundOpacity: 0.3,
+        }}
+        squashStretch={{
+          enabled: true,
+          trigger: 'start',
+          intensity: 0.03,
+          duration: 150,
+        }}
+        a11yOptions={{
+          generateUniqueIds: true,
+          enableFocusTrap: true,
+          announceToScreenReader: true,
+          escapeClose: true,
+          closeOnOutsideClick: true,
+        }}
       />
     </div>
   );
@@ -246,10 +516,35 @@ export default function ComponentDemo() {
 function DemoContent({
   title,
   description,
+  showLoadingToggle = false,
+  isLoading = false,
+  onToggleLoading,
+  showNestedDialogButton = false,
+  onOpenNestedDialog,
+  nestedButtonLabel = '🎯 Open Nested Dialog',
+  nestedButtonColor = 'green',
 }: {
   title: string;
   description: string;
+  showLoadingToggle?: boolean;
+  isLoading?: boolean;
+  onToggleLoading?: () => void;
+  showNestedDialogButton?: boolean;
+  onOpenNestedDialog?: () => void;
+  nestedButtonLabel?: string;
+  nestedButtonColor?: 'green' | 'purple' | 'blue';
 }) {
+  const colorClasses = {
+    green:
+      'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-400 bg-green-500 hover:bg-green-600',
+    purple:
+      'bg-purple-50 dark:bg-purple-900/20 text-purple-800 dark:text-purple-400 bg-purple-500 hover:bg-purple-600',
+    blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400 bg-blue-500 hover:bg-blue-600',
+  };
+
+  const [bgColor, textColor, btnBg, btnHover] =
+    colorClasses[nestedButtonColor].split(' ');
+
   return (
     <div className="space-y-6">
       <div>
@@ -257,28 +552,63 @@ function DemoContent({
         <p className="text-gray-600 dark:text-gray-400">{description}</p>
       </div>
 
+      {showLoadingToggle && onToggleLoading && (
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+          <button
+            onClick={onToggleLoading}
+            className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors"
+          >
+            {isLoading ? '🔓 Unlock (Stop Loading)' : '🔒 Lock (Start Loading)'}
+          </button>
+          <p className="text-sm text-yellow-800 dark:text-yellow-400 mt-2">
+            {isLoading
+              ? "Try dragging the handlebar or clicking outside - it's locked!"
+              : 'Click to test loading state with shimmer effect'}
+          </p>
+        </div>
+      )}
+
+      {showNestedDialogButton && onOpenNestedDialog && (
+        <div className={`${bgColor} p-4 rounded-lg`}>
+          <button
+            onClick={onOpenNestedDialog}
+            className={`px-4 py-2 ${btnBg} ${btnHover} text-white rounded-lg transition-colors`}
+          >
+            {nestedButtonLabel}
+          </button>
+          <p className={`text-sm ${textColor} mt-2`}>
+            Demonstrates modal stacking - opens on top of this modal!
+          </p>
+        </div>
+      )}
+
       <div className="space-y-4">
         <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
           <h3 className="font-semibold mb-2 text-blue-900 dark:text-blue-300">
-            ✨ Gesture Interactions
+            ✨ Enhanced Interactions
           </h3>
           <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-400">
+            <li>• Backdrop blur and scale for visual depth</li>
+            <li>• Squash-and-stretch anticipation on drag start</li>
             <li>• Drag handlebar toward close direction</li>
             <li>• Drag away to feel resistance feedback</li>
             <li>• Fast swipe to close instantly</li>
             <li>• Click/tap handlebar to close</li>
+            <li>• Focus trap keeps Tab navigation within modal</li>
           </ul>
         </div>
 
         <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
           <h3 className="font-semibold mb-2 text-purple-900 dark:text-purple-300">
-            🎯 Physics Details
+            🎯 Zustand Store Features
           </h3>
           <ul className="space-y-2 text-sm text-purple-800 dark:text-purple-400">
-            <li>• Spring damping: 28 (smooth, minimal bounce)</li>
-            <li>• Resistance threshold: 50px</li>
-            <li>• Velocity trigger: 500px/ms</li>
-            <li>• Visual feedback: 0-100% intensity</li>
+            <li>• Global state without Context providers</li>
+            <li>• Modal stacking with auto z-index</li>
+            <li>• Per-instance loading control</li>
+            <li>• Trigger modals from anywhere</li>
+            <li>• Close all modals with one call</li>
+            <li>• Clean, performant API</li>
           </ul>
         </div>
 
@@ -286,7 +616,8 @@ function DemoContent({
         {Array.from({ length: 5 }).map((_, i) => (
           <p key={i} className="text-gray-700 dark:text-gray-300">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris.
           </p>
         ))}
       </div>
@@ -328,3 +659,5 @@ function Shortcut({
     </div>
   );
 }
+
+// src/app/playground/modal/components/demo.tsx
