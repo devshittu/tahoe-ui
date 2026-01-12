@@ -1,0 +1,40 @@
+name: tahoe-ui-dev
+
+services:
+  tahoe-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: tahoe-ui-dev
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_PUBLIC_BASE_PATH=/tahoe
+      - WATCHPACK_POLLING=true
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tahoe-ui.rule=PathPrefix(`/tahoe`)"
+      - "traefik.http.routers.tahoe-ui.entrypoints=websecure"
+      - "traefik.http.routers.tahoe-ui.tls=true"
+      - "traefik.http.routers.tahoe-ui.middlewares=chain-web@file"
+      - "traefik.http.routers.tahoe-ui.priority=100"
+      - "traefik.http.services.tahoe-ui.loadbalancer.server.port=3000"
+    command: yarn dev
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/tahoe', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+
+networks:
+  traefik-public:
+    external: true
