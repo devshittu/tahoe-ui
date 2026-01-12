@@ -3,10 +3,10 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { PreviewTheme, PreviewViewMode } from './preview-toolbar'; // Import types
+import { PreviewTheme, PreviewViewMode } from './preview-toolbar';
 
 interface PreviewFrameProps {
-  previewComponentCode: string; // Now accepts raw HTML/CSS/JS
+  previewComponentCode: string;
   viewMode: PreviewViewMode;
   theme: PreviewTheme;
   isRtl: boolean;
@@ -14,12 +14,7 @@ interface PreviewFrameProps {
 
 /**
  * Renders an HTML content string inside an isolated iframe.
- * This component is used to preview UI components in a sandboxed environment,
- * allowing for isolated theming, RTL, and device view simulations.
- * @param previewComponentCode The raw HTML/CSS/JS string to display.
- * @param viewMode The current device view mode ('desktop', 'tablet', 'mobile').
- * @param theme The current theme for the preview ('light', 'dark').
- * @param isRtl If true, the preview content will be rendered in RTL direction.
+ * Provides sandboxed environment with theming, RTL, and device view simulations.
  */
 const PreviewFrame: React.FC<PreviewFrameProps> = ({
   previewComponentCode,
@@ -29,10 +24,8 @@ const PreviewFrame: React.FC<PreviewFrameProps> = ({
 }) => {
   const [iframeLoaded, setIframeLoaded] = useState(false);
 
-  // Define fixed height for the iframe itself
   const fixedIframeHeight = '300px';
 
-  // Determine iframe dimensions based on viewMode
   const iframeWidths = {
     desktop: '100%',
     tablet: '768px',
@@ -41,8 +34,6 @@ const PreviewFrame: React.FC<PreviewFrameProps> = ({
 
   const currentIframeWidth = iframeWidths[viewMode];
 
-  // Base HTML structure for the iframe content.
-  // Dynamically sets 'data-theme' and 'dir' attributes on the body.
   const fullHtml = `
     <!DOCTYPE html>
     <html lang="${isRtl ? 'ar' : 'en'}" dir="${isRtl ? 'rtl' : 'ltr'}">
@@ -53,30 +44,24 @@ const PreviewFrame: React.FC<PreviewFrameProps> = ({
       <script src="https://cdn.tailwindcss.com"></script>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
       <style>
-        /* Base styles for the iframe body */
         body {
           font-family: 'Inter', sans-serif;
           margin: 0;
           padding: 0;
           box-sizing: border-box;
-          display: flex; /* Center content horizontally and vertically */
+          display: flex;
           align-items: center;
           justify-content: center;
-          height: 100%; /* Take full height of iframe */
-          width: 100%; /* Take full width of iframe */
-          overflow: auto; /* Allow scrolling within preview if content overflows */
-          transition: background-color 0.3s ease; /* Smooth theme transition */
-          background-color: white; /* Default background for component itself */
-          color: #1f2937; /* gray-900 */
+          height: 100%;
+          width: 100%;
+          overflow: auto;
+          transition: background-color 0.3s ease;
+          background-color: white;
+          color: #1f2937;
         }
-        /* Dark theme styles for iframe content */
         body.dark {
-          background-color: #111827; /* gray-900 */
-          color: #f9fafb; /* white */
-        }
-        /* RTL specific adjustments if needed by the component */
-        body[dir="rtl"] {
-          /* Add specific RTL overrides here if your component HTML needs them */
+          background-color: #111827;
+          color: #f9fafb;
         }
       </style>
     </head>
@@ -89,46 +74,61 @@ const PreviewFrame: React.FC<PreviewFrameProps> = ({
   return (
     <div
       className={cn(
-        'relative bg-white dark:bg-gray-900 rounded-xl shadow-inner overflow-hidden',
-        'flex items-center justify-center border border-gray-200 dark:border-gray-700',
-        'transition-all duration-300 ease-in-out', // Smooth transition for size changes
-        // Apply device frame styling only for tablet/mobile view modes
-        viewMode !== 'desktop' ? 'p-3' : 'p-0', // Padding for device frames
+        'relative overflow-hidden',
+        'flex items-center justify-center',
+        'border border-gray-200 dark:border-gray-700 rounded-xl',
+        'bg-white dark:bg-gray-900',
+        'transition-all duration-300 ease-in-out',
+        viewMode !== 'desktop' && 'p-3',
       )}
       style={{
-        width: viewMode === 'desktop' ? '100%' : currentIframeWidth, // Control outer container width
-        height: fixedIframeHeight, // Fixed height for the preview area
-        maxWidth: viewMode === 'desktop' ? 'none' : '90vw', // Max width for responsiveness
-        // Add device-like shadow and rounded corners for non-desktop previews
+        width: viewMode === 'desktop' ? '100%' : currentIframeWidth,
+        height: fixedIframeHeight,
+        maxWidth: viewMode === 'desktop' ? 'none' : '90vw',
         ...(viewMode !== 'desktop' && {
-          boxShadow:
-            '0 15px 40px rgba(0,0,0,0.25), 0 0 0 10px rgba(0,0,0,0.08)',
-          borderRadius: '2.5rem', // More rounded for device feel
+          boxShadow: '0 0 0 8px rgba(0,0,0,0.08)',
+          borderRadius: '2rem',
         }),
       }}
     >
+      {/* Loading state */}
       {!iframeLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 z-10 transition-opacity duration-300">
+        <div
+          className={cn(
+            'absolute inset-0 flex items-center justify-center z-10',
+            'bg-gray-100 dark:bg-gray-800',
+            'text-gray-600 dark:text-gray-300',
+            'transition-opacity duration-300',
+          )}
+        >
           Loading preview...
         </div>
       )}
+
+      {/* Iframe */}
       <iframe
-        key={`${viewMode}-${theme}-${isRtl}-${previewComponentCode.substring(0, 50)}`} // Key to force re-render on prop changes
+        key={`${viewMode}-${theme}-${isRtl}-${previewComponentCode.substring(0, 50)}`}
         title="Component Preview"
         srcDoc={fullHtml}
         className={cn(
-          'border-none w-full h-full', // Iframe takes full size of its container
-          'transition-all duration-300 ease-in-out', // Smooth transition for iframe size
-          viewMode === 'desktop' ? 'rounded-lg' : 'rounded-xl', // Adjust border radius for device frame
+          'border-none w-full h-full',
+          'transition-all duration-300 ease-in-out',
+          viewMode === 'desktop' ? 'rounded-lg' : 'rounded-xl',
         )}
         onLoad={() => setIframeLoaded(true)}
-        // Sandbox attributes to restrict iframe capabilities for security
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
       />
+
+      {/* Home button for device frames */}
       {viewMode !== 'desktop' && (
-        // Mock home button for non-desktop previews to enhance device simulation
-        <div className="absolute bottom-4 w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center cursor-pointer shadow-inner">
-          <div className="w-5 h-5 border-2 border-gray-500 dark:border-gray-400 rounded-sm"></div>
+        <div
+          className={cn(
+            'absolute bottom-3 w-10 h-10 rounded-full',
+            'flex items-center justify-center cursor-pointer',
+            'bg-gray-200 dark:bg-gray-700 shadow-inner',
+          )}
+        >
+          <div className="w-4 h-4 border-2 border-gray-400 dark:border-gray-500 rounded-sm" />
         </div>
       )}
     </div>
