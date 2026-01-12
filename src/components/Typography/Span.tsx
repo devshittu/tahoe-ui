@@ -1,56 +1,69 @@
 'use client';
 
-import React, { ReactNode } from 'react';
-import Text from './Text';
+import React, { forwardRef } from 'react';
+import { cn } from '@/lib/utils';
+import type { SpanProps, TextColor } from './typography.types';
+import {
+  fontFamilyClasses,
+  fontWeightClasses,
+  textColorClasses,
+  alignClasses,
+  lineHeightClasses,
+  letterSpacingClasses,
+  textTransformClasses,
+  textDecorationClasses,
+  isNamedColor,
+} from './typography.classes';
 
-export type SpanProps = {
-  children: ReactNode;
-  className?: string;
-  fontFamily?: 'primary' | 'secondary' | 'mono';
-  fontWeight?: 'light' | 'regular' | 'bold' | 'extrabold';
-  color?: 'primary' | 'secondary' | 'accent' | string;
-  align?: 'left' | 'center' | 'right' | 'justify';
-  lineHeight?: 'tight' | 'normal' | 'loose';
-  letterSpacing?: 'tight' | 'normal' | 'wide';
-  textTransform?: 'uppercase' | 'lowercase' | 'capitalize' | 'none';
-  textDecoration?: 'underline' | 'line-through' | 'none';
-  background?: string;
-  truncate?: boolean;
-};
+/**
+ * Span component for inline text styling.
+ * Uses the semantic <span> element with forwardRef support.
+ */
+const Span = forwardRef<HTMLSpanElement, SpanProps>(
+  (
+    {
+      children,
+      className,
+      fontFamily = 'primary',
+      fontWeight = 'regular',
+      color = 'primary',
+      align,
+      lineHeight = 'normal',
+      letterSpacing = 'normal',
+      textTransform = 'none',
+      textDecoration = 'none',
+      truncate = false,
+      ...props
+    },
+    ref,
+  ) => {
+    const colorClass = isNamedColor(color as string)
+      ? textColorClasses[color as TextColor]
+      : '';
 
-const Span = ({
-  children,
-  className = '',
-  fontFamily = 'primary',
-  fontWeight = 'regular',
-  color = 'primary',
-  align = 'left',
-  lineHeight = 'normal',
-  letterSpacing = 'normal',
-  textTransform = 'none',
-  textDecoration = 'none',
-  background = '',
-  truncate = false,
-}: SpanProps) => {
-  return (
-    <Text
-      className={className}
-      fontFamily={fontFamily}
-      fontWeight={fontWeight}
-      color={color}
-      align={align}
-      lineHeight={lineHeight}
-      letterSpacing={letterSpacing}
-      textTransform={textTransform === 'none' ? undefined : textTransform} // Avoid passing "none" as a class
-      textDecoration={textDecoration}
-      background={background}
-      truncate={truncate}
-    >
-      {children}
-    </Text>
-  );
-};
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          fontFamilyClasses[fontFamily],
+          fontWeightClasses[fontWeight],
+          colorClass,
+          align && alignClasses[align],
+          lineHeightClasses[lineHeight],
+          letterSpacingClasses[letterSpacing],
+          textTransformClasses[textTransform],
+          textDecorationClasses[textDecoration],
+          truncate && 'truncate',
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </span>
+    );
+  },
+);
 
+Span.displayName = 'Span';
 export default Span;
-
-// src/components/Typography/Span.tsx
+export type { SpanProps };
