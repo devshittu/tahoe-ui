@@ -2,7 +2,8 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  /* config options here */
+  // Base path for Traefik path-based routing (set via env or default to empty for local dev)
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   reactStrictMode: true,
   images: {
     remotePatterns: [
