@@ -1,46 +1,56 @@
-// src/components/Typography/Link.tsx
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { forwardRef } from 'react';
 import NextLink from 'next/link';
-import clsx from 'clsx';
-
-type LinkProps = {
-  href: string;
-  children: ReactNode;
-  className?: string;
-  external?: boolean; // If true, opens in new tab
-  underline?: boolean;
-  ariaLabel?: string;
-};
+import { cn } from '@/lib/utils';
+import type { LinkProps } from './typography.types';
+import {
+  linkVariantClasses,
+  textDecorationClasses,
+} from './typography.classes';
 
 /**
- * A Next.js link wrapper for consistent styling and accessibility.
+ * Link component for navigation with consistent styling and accessibility.
+ * Wraps Next.js Link with proper external link handling.
  */
-const Link = ({
-  href,
-  children,
-  className,
-  external = false,
-  underline = true,
-  ariaLabel,
-}: LinkProps) => {
-  return (
-    <NextLink
-      href={href}
-      aria-label={ariaLabel}
-      target={external ? '_blank' : undefined}
-      rel={external ? 'noopener noreferrer' : undefined}
-      className={clsx(
-        underline ? 'underline' : 'no-underline',
-        'text-blue-600 dark:text-blue-400',
-        'hover:opacity-80 transition-opacity',
-        className,
-      )}
-    >
-      {children}
-    </NextLink>
-  );
-};
+const Link = forwardRef<HTMLAnchorElement, LinkProps>(
+  (
+    {
+      href,
+      children,
+      className,
+      external = false,
+      underline = true,
+      variant = 'default',
+      ...props
+    },
+    ref,
+  ) => {
+    const externalProps = external
+      ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+      : {};
 
+    return (
+      <NextLink
+        ref={ref}
+        href={href}
+        className={cn(
+          linkVariantClasses[variant],
+          underline
+            ? textDecorationClasses.underline
+            : textDecorationClasses.none,
+          'transition-opacity',
+          className,
+        )}
+        {...externalProps}
+        {...props}
+      >
+        {children}
+      </NextLink>
+    );
+  },
+);
+
+Link.displayName = 'Link';
 export default Link;
+export type { LinkProps };
