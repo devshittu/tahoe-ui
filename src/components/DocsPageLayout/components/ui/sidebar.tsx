@@ -4,43 +4,42 @@
 import React, { useState, useEffect, KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { FiX } from 'react-icons/fi';
+import { FiX, FiLayers, FiExternalLink } from 'react-icons/fi';
 import { ComponentData, StaticNavLink } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { useRouter, usePathname } from 'next/navigation'; // Corrected import for usePathname
+import { useRouter, usePathname } from 'next/navigation';
 
 interface SidebarProps {
   onSelectComponent: (componentId: string) => void;
-  selectedComponentId: string | null; // This prop might become redundant if selection is purely route-driven
+  selectedComponentId: string | null;
   components: ComponentData[];
   staticLinks: StaticNavLink[];
-  isOpen: boolean; // Controls mobile sidebar visibility
-  onClose: () => void; // Callback to close mobile sidebar
+  isOpen: boolean;
+  onClose: () => void;
+  basePath?: string;
 }
 
 /**
  * The navigation sidebar for the UI component design system.
- * It is always visible on large screens and slides in/out on mobile.
- * @param onSelectComponent Callback when a component is selected.
- * @param selectedComponentId The ID of the currently selected component.
- * @param components Array of all available components.
- * @param staticLinks Array of static navigation links.
- * @param isOpen Controls the visibility of the sidebar (for mobile).
- * @param onClose Callback to close the sidebar (for mobile).
+ * Supports dynamic base paths for different documentation sections.
  */
 const Sidebar: React.FC<SidebarProps> = ({
-  onSelectComponent, // This prop might be less used if navigation drives selection
-  selectedComponentId, // This prop might be less used if navigation drives selection
+  onSelectComponent,
+  selectedComponentId,
   components,
   staticLinks,
   isOpen,
   onClose,
+  basePath,
 }) => {
   const [isDesktop, setIsDesktop] = useState(false);
-  const router = useRouter(); // For navigation
-  const pathname = usePathname(); // For current path, fixes the error
+  const router = useRouter();
+  const pathname = usePathname();
 
-  // Effect to detect screen size and update isDesktop state
+  // Derive base path from current pathname if not provided
+  const effectiveBasePath =
+    basePath || pathname?.split('/').slice(0, -1).join('/') || '/docs';
+
   useEffect(() => {
     const checkIsDesktop = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -51,27 +50,38 @@ const Sidebar: React.FC<SidebarProps> = ({
     return () => window.removeEventListener('resize', checkIsDesktop);
   }, []);
 
-  // Handler for keyboard events on interactive elements
   const handleKeyboardClick = (
     event: KeyboardEvent<HTMLButtonElement | HTMLAnchorElement>,
     action: () => void,
   ) => {
     if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault(); // Prevent default scroll behavior for space key
+      event.preventDefault();
       action();
     }
   };
 
+  const getComponentPath = (compId: string) => {
+    // Check if we're in typography playground
+    if (pathname?.includes('/playground/typography')) {
+      return `/playground/typography/${compId}`;
+    }
+    return `/docs/${compId}`;
+  };
+
+  const isActiveComponent = (compId: string) => {
+    return pathname?.endsWith(`/${compId}`);
+  };
+
   return (
     <>
-      {/* Overlay for mobile sidebar when open */}
+      {/* Overlay */}
       <AnimatePresence>
         {isOpen && !isDesktop && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
             onClick={onClose}
           />
         )}
@@ -82,103 +92,124 @@ const Sidebar: React.FC<SidebarProps> = ({
         animate={{ x: isDesktop || isOpen ? 0 : '-100%' }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className={cn(
-          'fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-950 p-6 z-50',
-          'lg:relative lg:translate-x-0 lg:flex-shrink-0 lg:w-64 lg:rounded-lg lg:shadow-xl',
-          'flex flex-col transform transition-transform duration-300 ease-in-out',
+          'fixed inset-y-0 left-0 w-72 z-50',
+          'bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800',
+          'lg:relative lg:translate-x-0 lg:flex-shrink-0',
+          'flex flex-col',
         )}
       >
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-blue-400">Tahoe UI</h2>
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
+              <FiLayers className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                Tahoe UI
+              </h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Component Library
+              </p>
+            </div>
+          </div>
           <button
             onClick={onClose}
-            className="lg:hidden text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md"
+            className="lg:hidden p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             aria-label="Close sidebar"
           >
-            <FiX size={24} />
+            <FiX size={20} />
           </button>
         </div>
-        <nav className="flex-grow overflow-y-auto custom-scrollbar">
-          {/* Component Links (using <button> as they trigger an action, not direct navigation) */}
-          <h3 className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-3">
-            Components
-          </h3>
-          <ul className="space-y-2 mb-6">
-            {components.map((comp) => (
-              <li key={comp.id}>
-                <button
-                  onClick={() => {
-                    // Navigate to the component's doc page
-                    router.push(`/docs/${comp.id}`);
-                    if (!isDesktop) {
-                      onClose();
-                    }
-                  }}
-                  onKeyDown={(e) =>
-                    handleKeyboardClick(e, () => {
-                      router.push(`/docs/${comp.id}`);
-                      if (!isDesktop) {
-                        onClose();
-                      }
-                    })
-                  }
-                  className={cn(
-                    'w-full text-left py-2 px-4 rounded-lg transition-colors duration-200',
-                    'hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md',
-                    // Highlight based on current pathname
-                    pathname === `/docs/${comp.id}`
-                      ? 'bg-blue-100 text-blue-700 font-semibold dark:bg-blue-900 dark:text-blue-300'
-                      : 'text-gray-700 dark:text-gray-300',
-                  )}
-                >
-                  {comp.name}
-                </button>
-              </li>
-            ))}
-          </ul>
 
-          {/* Static Navigation Links (using Next/Link directly) */}
-          <h3 className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-3">
-            Playgrounds & Demos
-          </h3>
-          <ul className="space-y-2">
-            {staticLinks.map((link) => (
-              <li key={link.path}>
-                {/* Apply styling and event handlers directly to Link */}
-                <Link
-                  href={link.path}
-                  onClick={() => {
-                    if (!isDesktop) {
-                      onClose();
-                    }
-                  }}
-                  onKeyDown={(e) =>
-                    handleKeyboardClick(e, () => {
-                      if (!isDesktop) {
-                        onClose();
+        {/* Navigation */}
+        <nav className="flex-grow overflow-y-auto p-4 custom-scrollbar">
+          {/* Components Section */}
+          <div className="mb-6">
+            <h3 className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+              Components
+            </h3>
+            <ul className="space-y-1">
+              {components.map((comp) => {
+                const isActive = isActiveComponent(comp.id);
+                return (
+                  <li key={comp.id}>
+                    <button
+                      onClick={() => {
+                        router.push(getComponentPath(comp.id));
+                        if (!isDesktop) onClose();
+                      }}
+                      onKeyDown={(e) =>
+                        handleKeyboardClick(e, () => {
+                          router.push(getComponentPath(comp.id));
+                          if (!isDesktop) onClose();
+                        })
                       }
-                    })
-                  }
-                  className={cn(
-                    'block w-full text-left py-2 px-4 rounded-lg transition-colors duration-200',
-                    'hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md',
-                    // Highlight based on current pathname
-                    pathname === link.path
-                      ? 'bg-blue-100 text-blue-700 font-semibold dark:bg-blue-900 dark:text-blue-300'
-                      : 'text-gray-700 dark:text-gray-300',
-                  )}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+                      className={cn(
+                        'w-full text-left px-3 py-2 rounded-lg text-sm',
+                        'transition-all duration-150',
+                        'focus:outline-none focus:ring-2 focus:ring-blue-500/40',
+                        isActive
+                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-medium'
+                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white',
+                      )}
+                    >
+                      {comp.name}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* Static Links Section */}
+          {staticLinks.length > 0 && (
+            <div>
+              <h3 className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                Navigation
+              </h3>
+              <ul className="space-y-1">
+                {staticLinks.map((link) => {
+                  const isActive = pathname === link.path;
+                  const isExternal = link.path.startsWith('http');
+                  return (
+                    <li key={link.path}>
+                      <Link
+                        href={link.path}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        onClick={() => {
+                          if (!isDesktop) onClose();
+                        }}
+                        className={cn(
+                          'flex items-center justify-between px-3 py-2 rounded-lg text-sm',
+                          'transition-all duration-150',
+                          'focus:outline-none focus:ring-2 focus:ring-blue-500/40',
+                          isActive
+                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-medium'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white',
+                        )}
+                      >
+                        <span>{link.label}</span>
+                        {isExternal && (
+                          <FiExternalLink size={14} className="opacity-50" />
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
         </nav>
-        {/* Footer section for copyright and attribution */}
-        <div className="mt-8 pt-6 border-t border-gray-700 dark:border-gray-800 text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Tahoe UI</p>
-          <p>
-            Designed with <span className="text-red-500">&hearts;</span> by
-            Muhammed Shittu
+
+        {/* Footer */}
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            &copy; {new Date().getFullYear()} Tahoe UI
+          </p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+            by Muhammed Shittu
           </p>
         </div>
       </motion.aside>
