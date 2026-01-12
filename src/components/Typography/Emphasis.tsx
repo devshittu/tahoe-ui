@@ -1,26 +1,28 @@
 'use client';
 
-import React, { ReactNode } from 'react';
-import Text from './Text';
+import React, { forwardRef } from 'react';
+import { cn } from '@/lib/utils';
+import type { EmphasisProps, TextColor } from './typography.types';
+import { textColorClasses, isNamedColor } from './typography.classes';
 
-export type EmphasisProps = {
-  children: ReactNode;
-  className?: string;
-  color?: 'primary' | 'secondary' | 'accent' | string;
-};
+/**
+ * Emphasis component for italic text with semantic HTML.
+ * Uses the <em> element for proper accessibility and SEO.
+ */
+const Emphasis = forwardRef<HTMLElement, EmphasisProps>(
+  ({ children, className, color = 'primary', ...props }, ref) => {
+    const colorClass = isNamedColor(color as string)
+      ? textColorClasses[color as TextColor]
+      : '';
 
-const Emphasis = ({
-  children,
-  className = '',
-  color = 'primary',
-}: EmphasisProps) => {
-  return (
-    <Text color={color} className={`italic ${className}`}>
-      {children}
-    </Text>
-  );
-};
+    return (
+      <em ref={ref} className={cn('italic', colorClass, className)} {...props}>
+        {children}
+      </em>
+    );
+  },
+);
 
+Emphasis.displayName = 'Emphasis';
 export default Emphasis;
-
-// src/components/Typography/Emphasis.tsx
+export type { EmphasisProps };
