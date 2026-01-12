@@ -22,7 +22,8 @@ type LinkVariant = 'primary' | 'secondary' | 'neutral';
  * all Next.js Link functionalities remain exposed.
  */
 export interface ExtendedLinkProps
-  extends Omit<NextLinkProps, 'href' | 'as' | 'passHref'>,
+  extends
+    Omit<NextLinkProps, 'href' | 'as' | 'passHref'>,
     Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   /** The link destination: can be an internal route or external URL */
   href: string;
