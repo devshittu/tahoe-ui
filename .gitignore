@@ -47,6 +47,7 @@ next-env.d.ts
 /**.bkp/
 
 /.temp/
+.claude/
 
 # icons sources
 src/components/illustrations/source/
