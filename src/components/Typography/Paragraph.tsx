@@ -1,59 +1,71 @@
 'use client';
 
-import React, { ReactNode } from 'react';
-import Text from './Text';
+import React, { forwardRef } from 'react';
+import { cn } from '@/lib/utils';
+import type { ParagraphProps, TextColor } from './typography.types';
+import {
+  fontFamilyClasses,
+  fontWeightClasses,
+  textColorClasses,
+  alignClasses,
+  lineHeightClasses,
+  letterSpacingClasses,
+  textTransformClasses,
+  textDecorationClasses,
+  isNamedColor,
+} from './typography.classes';
 
-export type ParagraphProps = {
-  children: ReactNode;
-  className?: string;
-  fontFamily?: 'primary' | 'secondary' | 'mono';
-  fontWeight?: 'light' | 'regular' | 'bold' | 'extrabold';
-  color?: 'primary' | 'secondary' | 'accent' | string;
-  align?: 'left' | 'center' | 'right' | 'justify';
-  lineHeight?: 'tight' | 'normal' | 'loose';
-  letterSpacing?: 'tight' | 'normal' | 'wide';
-  textTransform?: 'uppercase' | 'lowercase' | 'capitalize' | 'none';
-  textDecoration?: 'underline' | 'line-through' | 'none';
-  background?: string;
-  truncate?: boolean;
-  margin?: string;
-};
+/**
+ * Paragraph component for block-level text content.
+ * Uses the semantic <p> element.
+ */
+const Paragraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
+  (
+    {
+      children,
+      className,
+      fontFamily = 'primary',
+      fontWeight = 'regular',
+      color = 'primary',
+      align = 'left',
+      lineHeight = 'normal',
+      letterSpacing = 'normal',
+      textTransform = 'none',
+      textDecoration = 'none',
+      truncate = false,
+      margin = 'my-2',
+      ...props
+    },
+    ref,
+  ) => {
+    const colorClass = isNamedColor(color as string)
+      ? textColorClasses[color as TextColor]
+      : '';
 
-const Paragraph = ({
-  children,
-  className = '',
-  fontFamily = 'primary',
-  fontWeight = 'regular',
-  color = 'primary',
-  align = 'left',
-  lineHeight = 'normal',
-  letterSpacing = 'normal',
-  textTransform = 'none',
-  textDecoration = 'none',
-  background = '',
-  truncate = false,
-  margin = 'my-2',
-}: ParagraphProps) => {
-  return (
-    <p className={`${margin} ${className}`}>
-      <Text
-        fontFamily={fontFamily}
-        fontWeight={fontWeight}
-        color={color}
-        align={align}
-        lineHeight={lineHeight}
-        letterSpacing={letterSpacing}
-        textTransform={textTransform}
-        textDecoration={textDecoration}
-        background={background}
-        truncate={truncate}
+    return (
+      <p
+        ref={ref}
+        className={cn(
+          fontFamilyClasses[fontFamily],
+          fontWeightClasses[fontWeight],
+          colorClass,
+          alignClasses[align],
+          lineHeightClasses[lineHeight],
+          letterSpacingClasses[letterSpacing],
+          textTransformClasses[textTransform],
+          textDecorationClasses[textDecoration],
+          truncate && 'truncate',
+          margin,
+          className,
+        )}
+        {...props}
       >
         {children}
-      </Text>
-    </p>
-  );
-};
+      </p>
+    );
+  },
+);
 
+Paragraph.displayName = 'Paragraph';
 export default Paragraph;
-
-// src/components/Typography/Paragraph.tsx
+export type { ParagraphProps };

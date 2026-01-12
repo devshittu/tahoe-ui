@@ -29,7 +29,6 @@ const meta: Meta<typeof Paragraph> = {
     letterSpacing: 'normal',
     textTransform: 'none',
     textDecoration: 'none',
-    background: '',
     truncate: false,
     margin: 'my-2',
   },
@@ -121,15 +120,6 @@ const meta: Meta<typeof Paragraph> = {
       table: {
         type: { summary: `'underline' | 'line-through' | 'none'` },
         defaultValue: { summary: `'none'` },
-      },
-    },
-    background: {
-      control: 'text',
-      description:
-        'Background color. Provide a valid CSS color string. Leave empty for no background.',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: `''` },
       },
     },
     truncate: {
@@ -253,11 +243,11 @@ export const UnderlineText: Story = {
 };
 
 /**
- * Paragraph with Background Color.
+ * Paragraph with Background Color (via className).
  */
 export const BackgroundColor: Story = {
   args: {
-    background: '#F0E68C', // Khaki background
+    className: 'bg-yellow-200 px-2 rounded',
     children: 'This Paragraph has a khaki background.',
   },
 };
@@ -292,18 +282,17 @@ export const CombinedProps: Story = {
   args: {
     fontFamily: 'mono',
     fontWeight: 'extrabold',
-    color: '#2E86C1',
+    color: 'accent',
     align: 'justify',
     lineHeight: 'loose',
     letterSpacing: 'wide',
     textTransform: 'capitalize',
     textDecoration: 'underline',
-    background: '#FFFACD', // LemonChiffon
     truncate: false,
     margin: 'my-4',
     className: 'bg-yellow-100 p-3 rounded-lg',
     children:
-      'This Paragraph combines multiple properties: monospace font family, extra bold weight, indigo color, justified alignment, relaxed line height, wide letter spacing, capitalized text, underlined decoration, lemon chiffon background, and additional styling.',
+      'This Paragraph combines multiple properties: monospace font family, extra bold weight, accent color, justified alignment, relaxed line height, wide letter spacing, capitalized text, underlined decoration, and additional styling.',
   },
 };
 
@@ -356,8 +345,8 @@ export const Showcase: Story = {
         This Paragraph is underlined.
       </Paragraph>
 
-      {/* 10) Background Color */}
-      <Paragraph {...args} background="#F0E68C">
+      {/* 10) Background Color via className */}
+      <Paragraph {...args} className="bg-yellow-200 px-2 rounded">
         This Paragraph has a khaki background.
       </Paragraph>
 
@@ -377,13 +366,12 @@ export const Showcase: Story = {
         {...args}
         fontFamily="mono"
         fontWeight="extrabold"
-        color="#2E86C1"
+        color="accent"
         align="justify"
         lineHeight="loose"
         letterSpacing="wide"
         textTransform="capitalize"
         textDecoration="underline"
-        background="#FFFACD"
         truncate={false}
         margin="my-4"
         className="bg-yellow-100 p-3 rounded-lg"
