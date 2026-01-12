@@ -20,9 +20,8 @@ const meta: Meta<typeof Highlight> = {
   ],
   args: {
     children: 'Sample Highlight Text',
-    bgColor: 'yellow-200',
+    bgColor: 'yellow',
     textColor: 'primary',
-    padding: 'px-1',
     className: '',
   },
   argTypes: {
@@ -35,43 +34,29 @@ const meta: Meta<typeof Highlight> = {
       },
     },
     bgColor: {
-      control: 'text',
-      description:
-        'Background color class. Can be any valid Tailwind background color class or a custom CSS color string.',
+      control: 'select',
+      options: ['yellow', 'green', 'blue', 'pink', 'purple'],
+      description: 'Background color for the highlight.',
       table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '"yellow-200"' },
+        type: { summary: `'yellow' | 'green' | 'blue' | 'pink' | 'purple'` },
+        defaultValue: { summary: '"yellow"' },
       },
     },
     textColor: {
       control: 'select',
-      options: [
-        'primary',
-        'secondary',
-        'accent',
-        'green',
-        'red',
-        'yellow',
-        'purple',
-      ],
-      description:
-        'Text color. Can be one of the predefined options or any valid CSS color string.',
+      options: ['primary', 'secondary', 'accent', 'muted', 'inherit'],
+      description: 'Text color for the highlighted text.',
       table: {
-        type: { summary: `'primary' | 'secondary' | 'accent' | string` },
+        type: {
+          summary: `'primary' | 'secondary' | 'accent' | 'muted' | 'inherit'`,
+        },
         defaultValue: { summary: `'primary'` },
-      },
-    },
-    padding: {
-      control: 'text',
-      description: 'Padding classes for the highlight. Default is "px-1".',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: '"px-1"' },
       },
     },
     className: {
       control: 'text',
-      description: 'Additional CSS classes for custom styling.',
+      description:
+        'Additional CSS classes for custom styling (padding, borders, etc.).',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: '""' },
@@ -113,31 +98,31 @@ export const AccentTextColor: Story = {
 };
 
 /**
- * Highlight with Custom Background Color.
+ * Highlight with Green Background.
  */
-export const CustomBackgroundColor: Story = {
+export const GreenBackground: Story = {
   args: {
-    bgColor: '#FFD700', // Gold color
-    children: 'This Highlight has a custom gold background color.',
+    bgColor: 'green',
+    children: 'This Highlight has a green background color.',
   },
 };
 
 /**
- * Highlight with Custom Text Color.
+ * Highlight with Blue Background.
  */
-export const CustomTextColor: Story = {
+export const BlueBackground: Story = {
   args: {
-    textColor: '#FF5733', // Custom red color
-    children: 'This Highlight has a custom red text color.',
+    bgColor: 'blue',
+    children: 'This Highlight has a blue background color.',
   },
 };
 
 /**
- * Highlight with Larger Padding.
+ * Highlight with Larger Padding (via className).
  */
 export const LargerPadding: Story = {
   args: {
-    padding: 'px-3 py-1',
+    className: 'px-3 py-1',
     children: 'This Highlight has larger padding.',
   },
 };
@@ -147,20 +132,8 @@ export const LargerPadding: Story = {
  */
 export const CustomClassName: Story = {
   args: {
-    className: 'rounded-full shadow-lg',
+    className: 'rounded-full shadow-lg px-2',
     children: 'This Highlight has rounded corners and a shadow.',
-  },
-};
-
-/**
- * Highlight with Gradient Text.
- */
-export const GradientText: Story = {
-  args: {
-    textColor: 'accent',
-    className:
-      'bg-gradient-to-r from-red-400 to-red-600 text-transparent bg-clip-text',
-    children: 'This Highlight has gradient text.',
   },
 };
 
@@ -170,12 +143,11 @@ export const GradientText: Story = {
  */
 export const CombinedProps: Story = {
   args: {
-    bgColor: 'green-200',
-    textColor: 'green',
-    padding: 'px-2 py-1',
-    className: 'rounded-md border border-green-400',
+    bgColor: 'green',
+    textColor: 'primary',
+    className: 'px-2 py-1 rounded-md border border-green-400',
     children:
-      'This Highlight combines multiple properties: green background, green text, padding, rounded corners, and a border.',
+      'This Highlight combines multiple properties: green background, primary text, padding, rounded corners, and a border.',
   },
 };
 
@@ -198,42 +170,32 @@ export const Showcase: Story = {
         This Highlight has an accent text color.
       </Highlight>
 
-      {/* 4) Custom Background Color */}
-      <Highlight {...args} bgColor="#FFD700">
-        This Highlight has a custom gold background color.
+      {/* 4) Green Background */}
+      <Highlight {...args} bgColor="green">
+        This Highlight has a green background color.
       </Highlight>
 
-      {/* 5) Custom Text Color */}
-      <Highlight {...args} textColor="#FF5733">
-        This Highlight has a custom red text color.
+      {/* 5) Blue Background */}
+      <Highlight {...args} bgColor="blue">
+        This Highlight has a blue background color.
       </Highlight>
 
-      {/* 6) Larger Padding */}
-      <Highlight {...args} padding="px-3 py-1">
+      {/* 6) Larger Padding via className */}
+      <Highlight {...args} className="px-3 py-1">
         This Highlight has larger padding.
       </Highlight>
 
       {/* 7) Custom ClassName */}
-      <Highlight {...args} className="rounded-full shadow-lg">
+      <Highlight {...args} className="rounded-full shadow-lg px-2">
         This Highlight has rounded corners and a shadow.
       </Highlight>
 
-      {/* 8) Gradient Text */}
+      {/* 8) Combined Props */}
       <Highlight
         {...args}
-        textColor="accent"
-        className="bg-gradient-to-r from-red-400 to-red-600 text-transparent bg-clip-text"
-      >
-        This Highlight has gradient text.
-      </Highlight>
-
-      {/* 9) Combined Props */}
-      <Highlight
-        {...args}
-        bgColor="green-200"
-        textColor="green"
-        padding="px-2 py-1"
-        className="rounded-md border border-green-400"
+        bgColor="purple"
+        textColor="primary"
+        className="px-2 py-1 rounded-md border border-purple-400"
       >
         This Highlight combines multiple properties.
       </Highlight>
