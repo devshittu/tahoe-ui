@@ -10,7 +10,7 @@ import SmallText from './SmallText';
 import DisplayLarge from './DisplayLarge';
 import DisplayMedium from './DisplayMedium';
 import DisplaySmall from './DisplaySmall';
-import LinkText from './LinkText';
+import Link from './Link';
 import Emphasis from './Emphasis';
 import Strong from './Strong';
 import Highlight from './Highlight';
@@ -65,8 +65,8 @@ const TypographyExampleUsage = () => {
           letterSpacing="wide"
           textTransform="capitalize"
           textDecoration="underline"
-          background="yellow-100"
           margin="mt-4"
+          className="bg-yellow-100 p-2 rounded"
         >
           Advanced paragraph with customized font family, weight, color,
           alignment, line height, letter spacing, text transformation,
@@ -129,13 +129,9 @@ const TypographyExampleUsage = () => {
       <section>
         <Paragraph>
           Visit{' '}
-          <LinkText
-            href="https://nextjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Link href="https://nextjs.org/" external>
             Next.js
-          </LinkText>{' '}
+          </Link>{' '}
           for more information.
         </Paragraph>
         <Paragraph>
@@ -148,9 +144,8 @@ const TypographyExampleUsage = () => {
         </Paragraph>
         <Paragraph>
           Highlighting text with{' '}
-          <Highlight bgColor="yellow-200">background color</Highlight> for
-          emphasis.
-          <Highlight bgColor="blue-100" textColor="accent" padding="px-2 py-1">
+          <Highlight bgColor="yellow">background color</Highlight> for emphasis.
+          <Highlight bgColor="blue" textColor="accent" className="px-2 py-1">
             This text has a custom background, text color, and padding.
           </Highlight>
         </Paragraph>
@@ -297,7 +292,7 @@ const getUser = (id: number): User => {
         <ColorText colorScheme="blue" gradient>
           This text has a blue gradient.
         </ColorText>
-        <ColorText colorScheme="purple" opacity={75}>
+        <ColorText colorScheme="purple" className="opacity-75">
           This text has a purple color with 75% opacity.
         </ColorText>
       </section>
