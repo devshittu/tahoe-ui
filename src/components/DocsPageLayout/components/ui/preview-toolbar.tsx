@@ -30,7 +30,7 @@ import { cn } from '@/lib/utils';
 // Define types for preview controls
 export type PreviewViewMode = 'desktop' | 'tablet' | 'mobile';
 export type PreviewTheme = 'light' | 'dark';
-export type CodeLanguage = 'html' | 'typescript'; // Exported for use in other components
+export type CodeLanguage = 'html' | 'typescript';
 
 interface PreviewToolbarProps {
   currentViewMode: PreviewViewMode;
@@ -39,7 +39,8 @@ interface PreviewToolbarProps {
   onThemeChange: (theme: PreviewTheme) => void;
   isRtl: boolean;
   onRtlToggle: () => void;
-  githubLink?: string; // Optional GitHub link for the component
+  githubLink?: string;
+  isThemeOverridden?: boolean;
 }
 
 interface TooltipProps {
@@ -47,7 +48,6 @@ interface TooltipProps {
   children: React.ReactElement;
 }
 
-// Helper component for tooltips
 const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -82,7 +82,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
             ref={refs.setFloating}
             style={floatingStyles}
             {...getFloatingProps()}
-            className="z-50 px-3 py-2 text-xs font-medium text-white bg-gray-900 rounded-lg shadow-sm dark:bg-gray-700 opacity-90"
+            className="z-50 px-3 py-1.5 text-xs font-medium text-white bg-gray-900 rounded-lg shadow-lg"
           >
             {content}
           </div>
@@ -104,27 +104,12 @@ const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
   isRtl,
   onRtlToggle,
   githubLink,
+  isThemeOverridden = false,
 }) => {
-  // Base styles for all toolbar buttons
-  const buttonBaseClasses =
-    'flex items-center justify-center h-9 text-xs font-medium focus:outline-none focus:z-10 focus:ring-2 transition-all duration-200';
-
-  // Styles for primary action buttons (like GitHub link, RTL, Theme)
-  const actionButtonClasses =
-    'px-3 bg-white border border-gray-200 text-gray-700 hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 rounded-lg';
-
-  // Styles for device toggle buttons within their segmented group
-  const deviceToggleButtonClasses =
-    'w-9 text-gray-700 hover:bg-gray-100 hover:text-blue-700 focus:ring-gray-300 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700';
-
-  // Styles for active toggle buttons
-  const activeToggleClasses =
-    'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 ring-2 ring-blue-300 dark:ring-blue-600';
-
   const iconSize = 16;
 
   return (
-    <div className="w-full p-4 border border-gray-200 bg-gray-50 rounded-t-xl dark:border-gray-700 dark:bg-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <div className="w-full p-3 border border-gray-200 bg-white rounded-t-xl dark:border-gray-700 dark:bg-gray-800/50 flex flex-col sm:flex-row items-center justify-between gap-3">
       {/* Left section: GitHub Link */}
       <div className="flex-shrink-0 w-full sm:w-auto flex justify-start">
         {githubLink && (
@@ -133,9 +118,17 @@ const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
               href={githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(buttonBaseClasses, actionButtonClasses, 'mr-3')}
+              className={cn(
+                'flex items-center justify-center h-8 px-3 text-xs font-medium rounded-lg',
+                'bg-gray-100 text-gray-600 border border-gray-200',
+                'hover:bg-gray-200 hover:text-gray-900',
+                'dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600',
+                'dark:hover:bg-gray-700 dark:hover:text-white',
+                'transition-colors duration-150',
+              )}
             >
-              <FiGithub size={iconSize} className="mr-2" /> Edit on GitHub
+              <FiGithub size={iconSize} className="mr-2" />
+              Edit on GitHub
             </a>
           </Tooltip>
         )}
@@ -143,46 +136,45 @@ const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
 
       {/* Center section: Device Toggles */}
       <div className="flex items-center justify-center flex-grow w-full sm:w-auto">
-        <div className="inline-flex rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm overflow-hidden">
-          {' '}
-          {/* Removed inner borders */}
-          <Tooltip content="Toggle desktop view">
+        <div className="inline-flex rounded-lg bg-gray-100 dark:bg-gray-800 p-1 gap-1">
+          <Tooltip content="Desktop view">
             <button
               onClick={() => onViewModeChange('desktop')}
               className={cn(
-                buttonBaseClasses,
-                deviceToggleButtonClasses,
-                currentViewMode === 'desktop' && activeToggleClasses,
+                'flex items-center justify-center w-8 h-8 rounded-md transition-all duration-150',
+                currentViewMode === 'desktop'
+                  ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300',
               )}
-              aria-label="Toggle desktop view"
+              aria-label="Desktop view"
             >
               <FiMonitor size={iconSize} />
             </button>
           </Tooltip>
-          <Tooltip content="Toggle tablet view">
+          <Tooltip content="Tablet view">
             <button
               onClick={() => onViewModeChange('tablet')}
               className={cn(
-                buttonBaseClasses,
-                deviceToggleButtonClasses,
-                currentViewMode === 'tablet' && activeToggleClasses,
-                'border-l border-gray-200 dark:border-gray-600',
+                'flex items-center justify-center w-8 h-8 rounded-md transition-all duration-150',
+                currentViewMode === 'tablet'
+                  ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300',
               )}
-              aria-label="Toggle tablet view"
+              aria-label="Tablet view"
             >
               <FiTablet size={iconSize} />
             </button>
           </Tooltip>
-          <Tooltip content="Toggle mobile view">
+          <Tooltip content="Mobile view">
             <button
               onClick={() => onViewModeChange('mobile')}
               className={cn(
-                buttonBaseClasses,
-                deviceToggleButtonClasses,
-                currentViewMode === 'mobile' && activeToggleClasses,
-                'border-l border-gray-200 dark:border-gray-600',
+                'flex items-center justify-center w-8 h-8 rounded-md transition-all duration-150',
+                currentViewMode === 'mobile'
+                  ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300',
               )}
-              aria-label="Toggle mobile view"
+              aria-label="Mobile view"
             >
               <FiSmartphone size={iconSize} />
             </button>
@@ -191,31 +183,49 @@ const PreviewToolbar: React.FC<PreviewToolbarProps> = ({
       </div>
 
       {/* Right section: RTL and Dark/Light Mode */}
-      <div className="flex items-center justify-end space-x-2 flex-shrink-0 w-full sm:w-auto">
-        <Tooltip content={isRtl ? 'Disable RTL mode' : 'Enable RTL mode'}>
+      <div className="flex items-center justify-end gap-2 flex-shrink-0 w-full sm:w-auto">
+        <Tooltip content={isRtl ? 'Disable RTL' : 'Enable RTL'}>
           <button
             onClick={onRtlToggle}
-            className={cn(buttonBaseClasses, actionButtonClasses)}
+            className={cn(
+              'flex items-center justify-center h-8 px-3 text-xs font-medium rounded-lg',
+              'transition-colors duration-150',
+              isRtl
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400'
+                : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+              'hover:bg-gray-200 dark:hover:bg-gray-700',
+            )}
             aria-label="Toggle RTL mode"
           >
             <FiRefreshCcw
-              size={iconSize}
-              className={cn('mr-1', isRtl ? 'scale-x-[-1]' : '')}
+              size={14}
+              className={cn('mr-1.5', isRtl && 'scale-x-[-1]')}
             />
             RTL
           </button>
         </Tooltip>
         <Tooltip
           content={
-            currentTheme === 'dark' ? 'Toggle light mode' : 'Toggle dark mode'
+            isThemeOverridden
+              ? currentTheme === 'dark'
+                ? 'Using dark mode (click to toggle)'
+                : 'Using light mode (click to toggle)'
+              : 'Synced with app theme (click to override)'
           }
         >
           <button
             onClick={() =>
               onThemeChange(currentTheme === 'light' ? 'dark' : 'light')
             }
-            className={cn(buttonBaseClasses, actionButtonClasses)}
-            aria-label="Toggle dark/light mode"
+            className={cn(
+              'flex items-center justify-center w-8 h-8 rounded-lg',
+              'transition-colors duration-150',
+              isThemeOverridden
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-400'
+                : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
+              'hover:bg-gray-200 dark:hover:bg-gray-700',
+            )}
+            aria-label="Toggle theme"
           >
             {currentTheme === 'light' ? (
               <FiMoon size={iconSize} />
