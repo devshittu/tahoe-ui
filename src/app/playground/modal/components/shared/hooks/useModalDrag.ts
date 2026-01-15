@@ -18,8 +18,10 @@ import {
  * Options for useModalDrag hook
  */
 export type UseModalDragOptions = {
-  /** Modal position (determines drag direction) */
+  /** Handlebar position (determines drag initiation point) */
   position: Position;
+  /** Direction that triggers close (typically showFrom for Dialog) */
+  closeDirection: Position;
   /** Threshold (0-1) of viewport to trigger close */
   closeThreshold: number;
   /** Drag resistance configuration */
@@ -41,6 +43,8 @@ export type UseModalDragReturn = {
     isBeyondLimit: boolean;
     shouldClose: boolean;
     resistanceIntensity: number;
+    closeProgress: number;
+    dragDirection: 'towards-close' | 'away' | 'none';
   };
 
   /** Squash-stretch scale state for style binding */
@@ -112,6 +116,7 @@ export type UseModalDragReturn = {
  */
 export function useModalDrag({
   position,
+  closeDirection,
   closeThreshold,
   resistance,
   squashStretch,
@@ -135,6 +140,7 @@ export function useModalDrag({
     handleDragEnd: handleDragResistanceEnd,
   } = useDragResistance({
     position,
+    closeDirection,
     closeThreshold,
     resistance,
     onClose,
