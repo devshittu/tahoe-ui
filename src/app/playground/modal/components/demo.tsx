@@ -22,7 +22,9 @@ import {
   FiArrowRight,
   FiLock,
   FiUnlock,
+  FiMaximize2,
 } from 'react-icons/fi';
+import type { DialogSizingConfig } from './shared/types';
 import { Dialog } from './Dialog';
 import { PageMode } from './PageMode';
 import { usePageMode, useModals, useDialog } from './stores/useModalStore';
@@ -153,16 +155,27 @@ export default function ComponentDemo() {
     isOpen: boolean;
     position: 'top' | 'bottom' | 'left' | 'right';
     loading: boolean;
+    sizing?: DialogSizingConfig;
   }>({
     isOpen: false,
     position: 'top',
     loading: false,
+    sizing: undefined,
   });
 
   const { openPageMode, closeAll } = useModals();
 
   const openDialogDemo = (position: 'top' | 'bottom' | 'left' | 'right') => {
-    setDialogState({ isOpen: true, position, loading: false });
+    setDialogState({
+      isOpen: true,
+      position,
+      loading: false,
+      sizing: undefined,
+    });
+  };
+
+  const openDialogWithSizing = (sizing: DialogSizingConfig) => {
+    setDialogState({ isOpen: true, position: 'top', loading: false, sizing });
   };
 
   const closeDialog = () => {
@@ -294,27 +307,66 @@ export default function ComponentDemo() {
             </Paragraph>
           </div>
 
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
-            <Text fontWeight="bold" className="mb-4">
-              Open from direction
-            </Text>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {(['top', 'bottom', 'left', 'right'] as const).map((pos) => {
-                const Icon = positionIcons[pos];
-                return (
+          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 space-y-6">
+            <div>
+              <Text fontWeight="bold" className="mb-4">
+                Open from direction
+              </Text>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {(['top', 'bottom', 'left', 'right'] as const).map((pos) => {
+                  const Icon = positionIcons[pos];
+                  return (
+                    <button
+                      key={pos}
+                      onClick={() => openDialogDemo(pos)}
+                      className="group flex items-center justify-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      <Icon
+                        size={16}
+                        className="text-gray-400 group-hover:text-blue-500 transition-colors"
+                      />
+                      {pos.charAt(0).toUpperCase() + pos.slice(1)}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Content-Adaptive Sizing */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <FiMaximize2 size={16} className="text-blue-500" />
+                <Text fontWeight="bold">Content-adaptive sizing</Text>
+              </div>
+              <SmallText className="text-gray-500 dark:text-gray-500 mb-4 block">
+                Dialog width adapts to content with preset constraints. Try each
+                to see the difference.
+              </SmallText>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {(
+                  [
+                    { preset: 'narrow', label: 'Narrow', desc: '400px' },
+                    { preset: 'default', label: 'Default', desc: '600px' },
+                    { preset: 'wide', label: 'Wide', desc: '800px' },
+                    {
+                      preset: 'extraWide',
+                      label: 'Extra Wide',
+                      desc: '1200px',
+                    },
+                  ] as const
+                ).map(({ preset, label, desc }) => (
                   <button
-                    key={pos}
-                    onClick={() => openDialogDemo(pos)}
-                    className="group flex items-center justify-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    key={preset}
+                    onClick={() => openDialogWithSizing({ preset })}
+                    className="group flex flex-col items-center justify-center gap-1 px-4 py-3 bg-gray-50 dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
-                    <Icon
-                      size={16}
-                      className="text-gray-400 group-hover:text-blue-500 transition-colors"
-                    />
-                    {pos.charAt(0).toUpperCase() + pos.slice(1)}
+                    <span>{label}</span>
+                    <span className="text-xs text-gray-400 group-hover:text-blue-400">
+                      max {desc}
+                    </span>
                   </button>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -463,6 +515,7 @@ export default function ComponentDemo() {
         onClose={closeDialog}
         showFrom={dialogState.position}
         handlebarPosition={dialogState.position}
+        sizing={dialogState.sizing}
         roundedEdges={true}
         themeable={true}
         closeThreshold={0.5}
@@ -502,8 +555,16 @@ export default function ComponentDemo() {
         }}
       >
         <ModalContent
-          title={`Dialog — ${dialogState.position.charAt(0).toUpperCase() + dialogState.position.slice(1)}`}
-          description="A fully functional dialog with enhanced physics and accessibility features."
+          title={
+            dialogState.sizing?.preset
+              ? `Dialog — ${dialogState.sizing.preset.charAt(0).toUpperCase() + dialogState.sizing.preset.slice(1)} Size`
+              : `Dialog — ${dialogState.position.charAt(0).toUpperCase() + dialogState.position.slice(1)}`
+          }
+          description={
+            dialogState.sizing?.preset
+              ? `Content-adaptive dialog using the "${dialogState.sizing.preset}" preset. The width adjusts to content up to the maximum constraint.`
+              : 'A fully functional dialog with enhanced physics and accessibility features.'
+          }
           showLoadingToggle={true}
           isLoading={dialogState.loading}
           onToggleLoading={toggleDialogLoading}

@@ -5,7 +5,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Position, LoadingStateConfig } from './types';
 import { useReducedMotion } from './hooks/useReducedMotion';
-import { SPACING_TOKENS, MOTION_TOKENS } from '@/config/tokens';
+import { MOTION_TOKENS } from '@/config/tokens';
 
 export type HandlebarZoneProps = {
   position: Position;
@@ -121,51 +121,63 @@ export function HandlebarZone({
 }
 
 /**
- * Get position-specific classes with token-based sizing
+ * Get position-specific classes with responsive sizing
  *
- * Touch targets: 44-48px per design principles
- * - Horizontal (top/bottom): h-12 (48px)
+ * Touch targets: 44-56px per design principles
+ * - Horizontal (top/bottom): h-12 (48px), scaling up on larger screens
  * - Vertical (left/right): w-12 (48px), narrower on small screens
+ *
+ * Handlebar line: Premium responsive sizing
+ * - Thickness: 5px → 6px → 8px (mobile → tablet → desktop)
+ * - Width: 48px → 64px → 80px for horizontal
+ * - Height: 48px → 64px → 80px for vertical
+ * - Subtle inner shadow for depth (Apple-inspired)
  */
 function getPositionClasses(position: Position) {
   const baseZoneClasses =
     'absolute cursor-grab active:cursor-grabbing touch-none z-50 flex items-center justify-center';
-  const baseLineClasses = 'rounded-full bg-gray-400 dark:bg-gray-500';
 
-  // Token-based values
-  const { handlebar } = SPACING_TOKENS;
+  // Premium handlebar line with responsive sizing and subtle depth
+  // Shadow creates inner depth without looking heavy
+  const baseLineClasses = [
+    'rounded-full',
+    'bg-gray-400 dark:bg-gray-500',
+    // Premium inner shadow for depth
+    'shadow-[inset_0_1px_2px_rgba(0,0,0,0.15)]',
+    'dark:shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]',
+  ].join(' ');
 
   switch (position) {
     case 'top':
       return {
-        // Horizontal zone: 48px height, full width
-        zoneClasses: `${baseZoneClasses} top-0 left-0 right-0 h-12 min-h-[${handlebar.horizontal.minHeight}px] max-h-14`,
-        // Line: 5px height, 48-80px width
-        lineClasses: `${baseLineClasses} h-[5px] w-12 min-w-[${handlebar.line.length.min}px] max-w-20`,
+        // Horizontal zone: 48px → 56px height on larger screens
+        zoneClasses: `${baseZoneClasses} top-0 left-0 right-0 h-12 sm:h-14 min-h-11 max-h-14`,
+        // Line: Responsive thickness (5px→6px→8px) and width (48px→64px→80px)
+        lineClasses: `${baseLineClasses} h-[5px] sm:h-1.5 lg:h-2 w-12 sm:w-16 lg:w-20`,
       };
 
     case 'bottom':
       return {
-        // Horizontal zone: 48px height, full width
-        zoneClasses: `${baseZoneClasses} bottom-0 left-0 right-0 h-12 min-h-[${handlebar.horizontal.minHeight}px] max-h-14`,
-        // Line: 5px height, 48-80px width
-        lineClasses: `${baseLineClasses} h-[5px] w-12 min-w-[${handlebar.line.length.min}px] max-w-20`,
+        // Horizontal zone: 48px → 56px height on larger screens
+        zoneClasses: `${baseZoneClasses} bottom-0 left-0 right-0 h-12 sm:h-14 min-h-11 max-h-14`,
+        // Line: Responsive thickness (5px→6px→8px) and width (48px→64px→80px)
+        lineClasses: `${baseLineClasses} h-[5px] sm:h-1.5 lg:h-2 w-12 sm:w-16 lg:w-20`,
       };
 
     case 'left':
       return {
-        // Vertical zone: 48px width (44px on small screens), full height
-        zoneClasses: `${baseZoneClasses} left-0 top-0 bottom-0 w-12 min-w-[${handlebar.vertical.minWidth}px] max-w-14 max-sm:w-11 max-sm:min-w-10`,
-        // Line: 5px width, 48-80px height
-        lineClasses: `${baseLineClasses} w-[5px] h-12 min-h-[${handlebar.line.length.min}px] max-h-20`,
+        // Vertical zone: 44px on mobile, 48px on tablet, 56px on desktop
+        zoneClasses: `${baseZoneClasses} left-0 top-0 bottom-0 w-11 sm:w-12 lg:w-14 min-w-10 max-w-14`,
+        // Line: Responsive thickness (5px→6px→8px) and height (48px→64px→80px)
+        lineClasses: `${baseLineClasses} w-[5px] sm:w-1.5 lg:w-2 h-12 sm:h-16 lg:h-20`,
       };
 
     case 'right':
       return {
-        // Vertical zone: 48px width (44px on small screens), full height
-        zoneClasses: `${baseZoneClasses} right-0 top-0 bottom-0 w-12 min-w-[${handlebar.vertical.minWidth}px] max-w-14 max-sm:w-11 max-sm:min-w-10`,
-        // Line: 5px width, 48-80px height
-        lineClasses: `${baseLineClasses} w-[5px] h-12 min-h-[${handlebar.line.length.min}px] max-h-20`,
+        // Vertical zone: 44px on mobile, 48px on tablet, 56px on desktop
+        zoneClasses: `${baseZoneClasses} right-0 top-0 bottom-0 w-11 sm:w-12 lg:w-14 min-w-10 max-w-14`,
+        // Line: Responsive thickness (5px→6px→8px) and height (48px→64px→80px)
+        lineClasses: `${baseLineClasses} w-[5px] sm:w-1.5 lg:w-2 h-12 sm:h-16 lg:h-20`,
       };
   }
 }

@@ -1,8 +1,12 @@
 // src/app/playground/modal/components/PageMode/PageMode.tsx
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { Dialog as HeadlessDialog, DialogPanel } from '@headlessui/react';
+import React, { useEffect, useRef, useCallback } from 'react';
+import {
+  Dialog as HeadlessDialog,
+  DialogPanel,
+  TransitionChild,
+} from '@headlessui/react';
 import { useDragControls } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
 import { Portal } from '@/HOC/Portal';
@@ -17,12 +21,11 @@ import { usePageMode, useModals } from '../stores/useModalStore';
 import { useModalDrag, useModalA11y, useReducedMotion } from '../shared/hooks';
 
 // Shared components
-import { ModalBackdrop, CloseIndicator } from '../shared/components';
+import { ModalBackdrop } from '../shared/components';
 import { HandlebarZone } from '../shared/HandlebarZone';
 
 // Shared utilities
 import {
-  createSlideVariants,
   getDragAxis,
   getDragConstraints,
   getRoundedClasses,
@@ -76,8 +79,8 @@ export function PageMode({
   useContainer = false,
   roundedEdges = false,
   themeable = false,
-  closeThreshold = 0.5,
-  enhancedCloseBox = true,
+  closeThreshold = 0.15, // 15% threshold for snappy close feel
+  enhancedCloseBox = true, // Deprecated: visual feedback now via subtle transforms
   enableContentScroll = true,
   zIndex: propZIndex,
   resistance,
@@ -92,6 +95,8 @@ export function PageMode({
     isClosing,
     content,
     close,
+    completeClose,
+    id: modalId,
     position: storePosition,
     size: storeSize,
     isLoading: storeIsLoading,
@@ -132,7 +137,7 @@ export function PageMode({
     loadingMessage: loadingConfig.message,
   });
 
-  // Combined drag hook
+  // Combined drag hook - closeDirection is position (drag back to edge closes)
   const {
     dragState,
     squashState,
@@ -143,12 +148,18 @@ export function PageMode({
     isInteractionLocked,
   } = useModalDrag({
     position,
+    closeDirection: position, // PageMode closes by dragging back to its edge
     closeThreshold,
     resistance,
     squashStretch,
     loadingState: loadingConfig,
     onClose: close,
   });
+
+  // Calculate subtle transform feedback based on close progress
+  const closeProgress = dragState.closeProgress;
+  const closeFeedbackScale = 1 - closeProgress * 0.03; // Subtle scale for edge panels
+  const closeFeedbackOpacity = 1 - closeProgress * 0.25;
 
   // Analytics tracking
   const hasTrackedOpen = useRef(false);
@@ -168,10 +179,59 @@ export function PageMode({
     }
   }, [isClosing]);
 
+  // Transition complete handler - removes modal from stack after exit animation
+  const handleAfterLeave = useCallback(() => {
+    completeClose();
+  }, [completeClose]);
+
+  // Get position-based transition classes for slide animation
+  const getTransitionClasses = (pos: Position) => {
+    const base = {
+      enter: prefersReducedMotion ? 'duration-0' : 'ease-out duration-300',
+      leave: prefersReducedMotion ? 'duration-0' : 'ease-in duration-200',
+    };
+
+    switch (pos) {
+      case 'top':
+        return {
+          ...base,
+          enterFrom: '-translate-y-full opacity-0',
+          enterTo: 'translate-y-0 opacity-100',
+          leaveFrom: 'translate-y-0 opacity-100',
+          leaveTo: '-translate-y-full opacity-0',
+        };
+      case 'bottom':
+        return {
+          ...base,
+          enterFrom: 'translate-y-full opacity-0',
+          enterTo: 'translate-y-0 opacity-100',
+          leaveFrom: 'translate-y-0 opacity-100',
+          leaveTo: 'translate-y-full opacity-0',
+        };
+      case 'left':
+        return {
+          ...base,
+          enterFrom: '-translate-x-full opacity-0',
+          enterTo: 'translate-x-0 opacity-100',
+          leaveFrom: 'translate-x-0 opacity-100',
+          leaveTo: '-translate-x-full opacity-0',
+        };
+      case 'right':
+        return {
+          ...base,
+          enterFrom: 'translate-x-full opacity-0',
+          enterTo: 'translate-x-0 opacity-100',
+          leaveFrom: 'translate-x-0 opacity-100',
+          leaveTo: 'translate-x-full opacity-0',
+        };
+    }
+  };
+
+  const transitionClasses = getTransitionClasses(position);
+
   // Derived values
   const dragAxis = getDragAxis(position);
   const dragConstraints = getDragConstraints(position);
-  const variants = createSlideVariants(position, prefersReducedMotion);
 
   // Close handler
   const handleClose = () => {
@@ -240,10 +300,14 @@ export function PageMode({
     content
   );
 
+  // Dialog open state: close when isClosing is true to trigger leave animation
+  // The modal stays in stack until afterLeave completes
+  const dialogOpen = isOpen && !isClosing;
+
   return (
     <Portal>
       <HeadlessDialog
-        open={isOpen}
+        open={dialogOpen}
         onClose={canClose ? handleClose : () => {}}
         className="relative"
         style={{ zIndex }}
@@ -257,59 +321,57 @@ export function PageMode({
           canClose={!isInteractionLocked && a11y.closeOnOutsideClick}
         />
 
-        {/* Close indicator */}
-        {enhancedCloseBox && (
-          <CloseIndicator
-            isVisible={dragState.shouldClose && !loadingConfig.isLoading}
-            zIndex={zIndex + 1}
-          />
-        )}
+        {/* Close feedback is now via subtle modal transforms (scale/opacity)
+            The old CloseIndicator has been replaced with more refined visual feedback */}
 
-        {/* PageMode Panel */}
-        <DialogPanel
-          as={SafeMotionDiv}
-          ref={containerRef}
-          className={containerClasses}
-          style={{
-            ...sizeStyles,
-            scaleX: squashState.scaleX,
-            scaleY: squashState.scaleY,
-            zIndex,
-          }}
-          custom={position}
-          variants={variants}
-          initial="hidden"
-          animate={isClosing ? 'exit' : 'visible'}
-          exit="exit"
-          drag={dragAxis}
-          dragControls={dragControls}
-          dragListener={false}
-          dragElastic={0.08}
-          dragConstraints={dragConstraints}
-          onDragStart={handleDragStart}
-          onDrag={handleDrag}
-          onDragEnd={handleDragEnd}
-        >
-          {/* Handlebar - on opposite side */}
-          <HandlebarZone
-            position={getHandlebarPosition(position)}
-            onPointerDown={(e) =>
-              handlePointerDown(e, containerRef, dragControls)
-            }
-            onClick={handleClose}
-            isBeyondLimit={dragState.isBeyondLimit}
-            resistanceIntensity={dragState.resistanceIntensity}
-            ariaLabel={a11y.handlebarAriaLabel}
-            loadingState={loadingConfig}
-          />
-
-          {/* Content */}
-          <div
-            className={twMerge('flex-1 p-4', contentOverflow, getMarginClass())}
+        {/* PageMode Panel with TransitionChild for proper lifecycle */}
+        <TransitionChild afterLeave={handleAfterLeave} {...transitionClasses}>
+          <DialogPanel
+            as={SafeMotionDiv}
+            ref={containerRef}
+            className={containerClasses}
+            style={{
+              ...sizeStyles,
+              // Combine squash-stretch with close feedback
+              scaleX: squashState.scaleX * closeFeedbackScale,
+              scaleY: squashState.scaleY * closeFeedbackScale,
+              opacity: closeFeedbackOpacity,
+              zIndex,
+            }}
+            drag={dragAxis}
+            dragControls={dragControls}
+            dragListener={false}
+            dragElastic={0.08}
+            dragConstraints={dragConstraints}
+            onDragStart={handleDragStart}
+            onDrag={handleDrag}
+            onDragEnd={handleDragEnd}
           >
-            {renderedContent}
-          </div>
-        </DialogPanel>
+            {/* Handlebar - on opposite side */}
+            <HandlebarZone
+              position={getHandlebarPosition(position)}
+              onPointerDown={(e) =>
+                handlePointerDown(e, containerRef, dragControls)
+              }
+              onClick={handleClose}
+              isBeyondLimit={dragState.isBeyondLimit}
+              resistanceIntensity={dragState.resistanceIntensity}
+              ariaLabel={a11y.handlebarAriaLabel}
+              loadingState={loadingConfig}
+            />
+
+            {/* Content */}
+            <div
+              className={twMerge(
+                'flex-1 p-4',
+                contentOverflow,
+                getMarginClass(),
+              )}
+            >
+              {renderedContent}
+            </div>
+          </DialogPanel>
+        </TransitionChild>
       </HeadlessDialog>
     </Portal>
   );

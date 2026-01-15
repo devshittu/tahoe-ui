@@ -1,7 +1,7 @@
 'use client';
 
 import { createStore, useStore } from 'zustand';
-import { Position } from '../shared/types';
+import type { Position, DialogMaxWidthPreset } from '../shared/types';
 
 // Modal types
 export type ModalType = 'dialog' | 'pagemode';
@@ -20,6 +20,9 @@ export type ModalInstance = {
   // Dialog-specific
   showFrom?: Position;
   handlebarPosition?: Position;
+  // Dialog sizing (content-adaptive)
+  sizingPreset?: DialogMaxWidthPreset;
+  maxWidth?: number;
 };
 
 // Store state
@@ -30,7 +33,7 @@ export type ModalStoreState = {
   // Base z-index (increments for each new modal)
   baseZIndex: number;
 
-  // Close delay for animations
+  // Close delay for animations (fallback)
   closeDelay: number;
 
   // Actions
@@ -39,6 +42,10 @@ export type ModalStoreState = {
     options?: {
       showFrom?: Position;
       handlebarPosition?: Position;
+      /** Use a preset max-width for content-adaptive sizing */
+      sizingPreset?: DialogMaxWidthPreset;
+      /** Custom max-width in pixels (overrides sizingPreset) */
+      maxWidth?: number;
     },
   ) => string; // Returns modal ID
 
@@ -50,7 +57,8 @@ export type ModalStoreState = {
     },
   ) => string; // Returns modal ID
 
-  close: (id?: string) => void; // Close specific modal or top modal
+  close: (id?: string) => void; // Close specific modal or top modal (marks as closing)
+  completeClose: (id: string) => void; // Actually remove modal from stack (call after animation)
   closeAll: () => void;
 
   setLoading: (id: string, isLoading: boolean, message?: string) => void;
@@ -86,6 +94,8 @@ export const modalStore = createStore<ModalStoreState>((set, get) => ({
       position: options.showFrom || 'top',
       showFrom: options.showFrom || 'top',
       handlebarPosition: options.handlebarPosition || options.showFrom || 'top',
+      sizingPreset: options.sizingPreset,
+      maxWidth: options.maxWidth,
       isLoading: false,
       zIndex,
       isClosing: false,
@@ -126,19 +136,32 @@ export const modalStore = createStore<ModalStoreState>((set, get) => ({
       id = topModal.id;
     }
 
-    // Mark as closing
+    // Mark as closing (animation starts)
     set({
       stack: stack.map((modal) =>
         modal.id === id ? { ...modal, isClosing: true } : modal,
       ),
     });
 
-    // Remove after animation
+    // Fallback removal after extended delay (safety net if callback not called)
+    // Animation should complete well within 500ms
     setTimeout(() => {
-      set({
-        stack: get().stack.filter((modal) => modal.id !== id),
-      });
-    }, closeDelay);
+      const currentStack = get().stack;
+      const modal = currentStack.find((m) => m.id === id);
+      // Only remove if still marked as closing (wasn't already removed by completeClose)
+      if (modal?.isClosing) {
+        set({
+          stack: currentStack.filter((m) => m.id !== id),
+        });
+      }
+    }, closeDelay + 200);
+  },
+
+  completeClose: (id: string) => {
+    // Called by animation's onExitComplete - removes modal from stack
+    set({
+      stack: get().stack.filter((modal) => modal.id !== id),
+    });
   },
 
   closeAll: () => {
@@ -217,6 +240,7 @@ export const usePageMode = () => {
     id: pageMode?.id,
     open: store.openPageMode,
     close: () => pageMode && store.close(pageMode.id),
+    completeClose: () => pageMode && store.completeClose(pageMode.id),
     setLoading: (isLoading: boolean, message?: string) =>
       pageMode && store.setLoading(pageMode.id, isLoading, message),
   };
@@ -232,6 +256,8 @@ export const useDialog = () => {
     content: dialog?.content || null,
     showFrom: dialog?.showFrom || 'top',
     handlebarPosition: dialog?.handlebarPosition || 'top',
+    sizingPreset: dialog?.sizingPreset,
+    maxWidth: dialog?.maxWidth,
     isLoading: dialog?.isLoading || false,
     loadingMessage: dialog?.loadingMessage,
     id: dialog?.id,

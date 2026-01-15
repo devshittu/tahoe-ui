@@ -5,37 +5,48 @@ import { PanInfo } from 'framer-motion';
 import { Position, DragResistanceConfig } from './types';
 
 type DragState = {
-  isBeyondLimit: boolean; // Dragging in wrong direction (resistance zone)
+  isBeyondLimit: boolean; // Dragging past elastic limit
   shouldClose: boolean; // Dragging toward close threshold
   resistanceIntensity: number; // 0-1 for visual feedback
+  closeProgress: number; // 0-1 for smooth visual interpolation
+  dragDirection: 'towards-close' | 'away' | 'none'; // Current drag direction
 };
 
 type UseDragResistanceOptions = {
-  position: Position;
+  position: Position; // Handlebar position (drag initiation)
+  closeDirection: Position; // Direction that triggers close (typically showFrom)
   closeThreshold: number; // 0-1 fraction of viewport
   resistance?: DragResistanceConfig;
   onClose: () => void;
 };
 
+// Elastic resistance curve - exponential decay for natural feel
+function elasticResistance(distance: number, maxDistance: number): number {
+  const normalized = Math.min(distance / maxDistance, 1);
+  // Exponential decay: quick initial movement, heavy resistance at limit
+  return maxDistance * (1 - Math.exp(-normalized * 3)) * 0.4;
+}
+
 /**
- * Advanced drag resistance hook with directional physics
+ * Advanced drag resistance hook with bi-directional physics
  *
- * Handles:
- * - Wrong-direction resistance (dragging away from close direction)
- * - Close threshold detection
- * - Visual feedback intensity calculation
- * - Velocity-aware release handling
+ * Features:
+ * - Elastic snap zones (iOS 17+ sheet behavior)
+ * - Velocity-aware close detection
+ * - Progressive close feedback (0-1 interpolation)
+ * - Natural spring physics bounds
  */
 export function useDragResistance({
   position,
+  closeDirection,
   closeThreshold,
   resistance = {},
   onClose,
 }: UseDragResistanceOptions) {
   const {
     enabled = true,
-    threshold = 50, // px before resistance kicks in
-    strength = 0.6, // 0-1, higher = stronger resistance
+    threshold = 30, // px before elastic resistance starts
+    strength = 0.7, // 0-1, elastic resistance strength
     visualFeedback = true,
   } = resistance;
 
@@ -43,87 +54,93 @@ export function useDragResistance({
     isBeyondLimit: false,
     shouldClose: false,
     resistanceIntensity: 0,
+    closeProgress: 0,
+    dragDirection: 'none',
   });
 
-  // Normalize close threshold
+  // Close threshold: 15% default for snappy feel
   const normalizedThreshold = useMemo(
     () => Math.min(Math.max(closeThreshold, 0), 1),
     [closeThreshold],
   );
 
   /**
-   * Calculate if drag is in close direction and magnitude
+   * Calculate drag metrics with bi-directional support
    */
   const calculateDragMetrics = useCallback(
-    (offset: { x: number; y: number }) => {
+    (offset: { x: number; y: number }, velocity?: { x: number; y: number }) => {
       const { x, y } = offset;
-      let isClosing = false;
-      let isResisting = false;
-      let intensity = 0;
-
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
 
-      switch (position) {
+      // Determine close axis and close threshold distance
+      const isVerticalClose =
+        closeDirection === 'top' || closeDirection === 'bottom';
+      const closeAxisOffset = isVerticalClose ? y : x;
+      const viewportSize = isVerticalClose ? viewportHeight : viewportWidth;
+      const closeThresholdPx = viewportSize * normalizedThreshold;
+
+      // Determine if dragging towards close direction
+      let isTowardsClose = false;
+      let rawCloseDistance = 0;
+
+      switch (closeDirection) {
         case 'top':
-          // Close by dragging up (negative y)
-          if (y < 0) {
-            isClosing = Math.abs(y) > viewportHeight * normalizedThreshold;
-          } else if (y > threshold) {
-            // Resisting downward drag
-            isResisting = enabled;
-            intensity = Math.min((y - threshold) / (viewportHeight * 0.3), 1);
-          }
+          isTowardsClose = y < 0;
+          rawCloseDistance = Math.abs(Math.min(y, 0));
           break;
-
         case 'bottom':
-          // Close by dragging down (positive y)
-          if (y > 0) {
-            isClosing = y > viewportHeight * normalizedThreshold;
-          } else if (Math.abs(y) > threshold) {
-            // Resisting upward drag
-            isResisting = enabled;
-            intensity = Math.min(
-              (Math.abs(y) - threshold) / (viewportHeight * 0.3),
-              1,
-            );
-          }
+          isTowardsClose = y > 0;
+          rawCloseDistance = Math.max(y, 0);
           break;
-
         case 'left':
-          // Close by dragging left (negative x)
-          if (x < 0) {
-            isClosing = Math.abs(x) > viewportWidth * normalizedThreshold;
-          } else if (x > threshold) {
-            // Resisting rightward drag
-            isResisting = enabled;
-            intensity = Math.min((x - threshold) / (viewportWidth * 0.3), 1);
-          }
+          isTowardsClose = x < 0;
+          rawCloseDistance = Math.abs(Math.min(x, 0));
           break;
-
         case 'right':
-          // Close by dragging right (positive x)
-          if (x > 0) {
-            isClosing = x > viewportWidth * normalizedThreshold;
-          } else if (Math.abs(x) > threshold) {
-            // Resisting leftward drag
-            isResisting = enabled;
-            intensity = Math.min(
-              (Math.abs(x) - threshold) / (viewportWidth * 0.3),
-              1,
-            );
-          }
+          isTowardsClose = x > 0;
+          rawCloseDistance = Math.max(x, 0);
           break;
       }
+
+      // Calculate close progress (0-1) for visual interpolation
+      const closeProgress = Math.min(rawCloseDistance / closeThresholdPx, 1);
+      const isClosing = closeProgress >= 1;
+
+      // Calculate resistance for wrong-direction drag (elastic bounds)
+      let isResisting = false;
+      let resistanceIntensity = 0;
+
+      if (!isTowardsClose && enabled) {
+        const awayDistance = Math.abs(closeAxisOffset);
+        if (awayDistance > threshold) {
+          isResisting = true;
+          // Elastic resistance intensity
+          const elasticDistance = awayDistance - threshold;
+          const maxElastic = viewportSize * 0.2; // Max 20% viewport elastic
+          resistanceIntensity = Math.min(elasticDistance / maxElastic, 1);
+        }
+      }
+
+      // Determine drag direction for state
+      const dragDirection: DragState['dragDirection'] = isTowardsClose
+        ? 'towards-close'
+        : Math.abs(closeAxisOffset) > 5
+          ? 'away'
+          : 'none';
 
       return {
         isClosing,
         isResisting,
-        intensity: visualFeedback ? intensity * strength : 0,
+        closeProgress: visualFeedback ? closeProgress : 0,
+        resistanceIntensity: visualFeedback
+          ? resistanceIntensity * strength
+          : 0,
+        dragDirection,
       };
     },
     [
-      position,
+      closeDirection,
       normalizedThreshold,
       threshold,
       enabled,
@@ -133,41 +150,62 @@ export function useDragResistance({
   );
 
   /**
-   * Handle drag movement with resistance calculations
+   * Handle drag movement with elastic physics
    */
   const handleDrag = useCallback(
     (event: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
-      const { isClosing, isResisting, intensity } = calculateDragMetrics(
-        info.offset,
-      );
+      const metrics = calculateDragMetrics(info.offset, info.velocity);
 
       setDragState({
-        shouldClose: isClosing,
-        isBeyondLimit: isResisting,
-        resistanceIntensity: intensity,
+        shouldClose: metrics.isClosing,
+        isBeyondLimit: metrics.isResisting,
+        resistanceIntensity: metrics.resistanceIntensity,
+        closeProgress: metrics.closeProgress,
+        dragDirection: metrics.dragDirection,
       });
     },
     [calculateDragMetrics],
   );
 
   /**
-   * Handle drag end with velocity-aware closing
+   * Handle drag end with velocity-aware snap-to-close
    */
   const handleDragEnd = useCallback(
     (event: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
-      const { isClosing } = calculateDragMetrics(info.offset);
+      const metrics = calculateDragMetrics(info.offset, info.velocity);
 
-      // Check velocity for fling gestures (px/ms)
-      const velocity = Math.abs(
-        position === 'left' || position === 'right'
-          ? info.velocity.x
-          : info.velocity.y,
-      );
+      // Get velocity in close direction
+      const isVerticalClose =
+        closeDirection === 'top' || closeDirection === 'bottom';
+      const velocityValue = isVerticalClose ? info.velocity.y : info.velocity.x;
 
-      // Close if beyond threshold OR fast fling gesture
-      const shouldCloseOnVelocity = velocity > 500; // Tuned for natural feel
+      // Determine if velocity is towards close direction
+      let isVelocityTowardsClose = false;
+      switch (closeDirection) {
+        case 'top':
+          isVelocityTowardsClose = velocityValue < -400;
+          break;
+        case 'bottom':
+          isVelocityTowardsClose = velocityValue > 400;
+          break;
+        case 'left':
+          isVelocityTowardsClose = velocityValue < -400;
+          break;
+        case 'right':
+          isVelocityTowardsClose = velocityValue > 400;
+          break;
+      }
 
-      if (isClosing || shouldCloseOnVelocity) {
+      // Close if: threshold exceeded OR fast velocity towards close
+      // Also close if past 50% with moderate velocity (hybrid snap)
+      const moderateVelocity = Math.abs(velocityValue) > 200;
+      const pastHalfway = metrics.closeProgress > 0.5;
+
+      if (
+        metrics.isClosing ||
+        isVelocityTowardsClose ||
+        (pastHalfway && moderateVelocity)
+      ) {
         onClose();
       }
 
@@ -176,9 +214,11 @@ export function useDragResistance({
         isBeyondLimit: false,
         shouldClose: false,
         resistanceIntensity: 0,
+        closeProgress: 0,
+        dragDirection: 'none',
       });
     },
-    [calculateDragMetrics, onClose, position],
+    [calculateDragMetrics, closeDirection, onClose],
   );
 
   return {
