@@ -17,7 +17,7 @@ import { SPACING_TOKENS } from '@/config/tokens';
 import { useModalDrag, useModalA11y, useReducedMotion } from '../shared/hooks';
 
 // Shared components
-import { ModalBackdrop, CloseIndicator } from '../shared/components';
+import { ModalBackdrop } from '../shared/components';
 import { HandlebarZone } from '../shared/HandlebarZone';
 
 // Shared utilities
@@ -38,7 +38,9 @@ import type {
   BackdropEffectsConfig,
   SquashStretchConfig,
   LoadingStateConfig,
+  DialogSizingConfig,
 } from '../shared/types';
+import { getDialogSizingStyles } from '../shared/sizing';
 
 export type DialogProps = {
   isOpen?: boolean;
@@ -56,6 +58,11 @@ export type DialogProps = {
   backdropEffects?: BackdropEffectsConfig;
   squashStretch?: SquashStretchConfig;
   loadingState?: LoadingStateConfig;
+  /**
+   * Content-adaptive sizing configuration
+   * @default { preset: 'default' } - fits content, max 600px
+   */
+  sizing?: DialogSizingConfig;
   children: React.ReactNode;
 };
 
@@ -79,19 +86,23 @@ export function Dialog({
   roundedEdges = false,
   themeable = false,
   a11yOptions = {},
-  closeThreshold = 0.5,
-  enhancedCloseBox = false,
+  closeThreshold = 0.15, // 15% threshold for snappy close feel
+  enhancedCloseBox = false, // Deprecated: visual feedback now via subtle transforms
   useContainer = false,
   zIndex = SPACING_TOKENS.zIndex.backdrop,
   resistance,
   backdropEffects,
   squashStretch,
   loadingState,
+  sizing,
   children,
 }: DialogProps) {
   // Merge configs with defaults
   const backdropConfig = { ...DEFAULT_BACKDROP_EFFECTS, ...backdropEffects };
   const loadingConfig = { ...DEFAULT_LOADING_STATE, ...loadingState };
+
+  // Content-adaptive sizing styles
+  const sizingStyles = getDialogSizingStyles(sizing);
 
   // Motion preferences
   const { prefersReducedMotion } = useReducedMotion();
@@ -108,7 +119,7 @@ export function Dialog({
     loadingMessage: loadingConfig.message,
   });
 
-  // Combined drag hook
+  // Combined drag hook - closeDirection is showFrom (drag back to entry closes)
   const {
     dragState,
     squashState,
@@ -119,6 +130,7 @@ export function Dialog({
     isInteractionLocked,
   } = useModalDrag({
     position: handlebarPosition,
+    closeDirection: showFrom,
     closeThreshold,
     resistance,
     squashStretch,
@@ -126,9 +138,16 @@ export function Dialog({
     onClose: onClose || (() => {}),
   });
 
-  // Derived values
-  const dragAxis = getDragAxis(handlebarPosition);
-  const dragConstraints = getDragConstraints(handlebarPosition);
+  // Calculate subtle transform feedback based on close progress
+  const closeProgress = dragState.closeProgress;
+  const closeFeedbackScale = 1 - closeProgress * 0.05; // Scale down to 0.95 at max
+  const closeFeedbackOpacity = 1 - closeProgress * 0.3; // Fade to 0.7 at max
+
+  // Derived values - use showFrom for close direction, bi-directional for centered modal
+  const dragAxis = getDragAxis(showFrom);
+  const dragConstraints = getDragConstraints(showFrom, {
+    allowBidirectional: true,
+  });
   const variants = createSlideVariants(showFrom, prefersReducedMotion);
 
   // Close handler
@@ -147,7 +166,7 @@ export function Dialog({
     : 'bg-white text-gray-900';
 
   const dialogClasses = twMerge(
-    'relative w-full max-w-md sm:max-w-sm md:max-w-md lg:max-w-lg',
+    'relative',
     'shadow-xl rounded-2xl max-h-[90vh] flex flex-col overflow-hidden',
     themeClass,
   );
@@ -207,8 +226,17 @@ export function Dialog({
               onDragEnd={handleDragEnd}
               style={{
                 touchAction: 'none',
-                scaleX: squashState.scaleX,
-                scaleY: squashState.scaleY,
+                // Content-adaptive sizing
+                ...sizingStyles,
+                // Combine squash-stretch with close feedback
+                scaleX: squashState.scaleX * closeFeedbackScale,
+                scaleY: squashState.scaleY * closeFeedbackScale,
+                opacity: closeFeedbackOpacity,
+                // Subtle blur as approaching close threshold
+                filter:
+                  closeProgress > 0.5
+                    ? `blur(${(closeProgress - 0.5) * 2}px)`
+                    : undefined,
               }}
             >
               {/* Handlebar */}
@@ -224,13 +252,8 @@ export function Dialog({
                 loadingState={loadingConfig}
               />
 
-              {/* Close indicator */}
-              {enhancedCloseBox && (
-                <CloseIndicator
-                  isVisible={dragState.shouldClose && !loadingConfig.isLoading}
-                  zIndex={zIndex + 2}
-                />
-              )}
+              {/* Close feedback is now via subtle modal transforms (scale/opacity/blur)
+                  The old CloseIndicator has been replaced with more refined visual feedback */}
 
               {/* Content */}
               <div
