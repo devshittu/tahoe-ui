@@ -1,28 +1,31 @@
+// src/app/playground/modal/components/shared/HandlebarZone.tsx
 'use client';
 
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Position, LoadingStateConfig } from './types';
+import { useReducedMotion } from './hooks/useReducedMotion';
+import { SPACING_TOKENS, MOTION_TOKENS } from '@/config/tokens';
 
-type HandlebarZoneProps = {
+export type HandlebarZoneProps = {
   position: Position;
   ariaLabel?: string;
   onPointerDown: (e: React.PointerEvent) => void;
   onClick: () => void;
-  isBeyondLimit: boolean; // Resistance state
-  resistanceIntensity?: number; // 0-1 for visual feedback
-  loadingState?: LoadingStateConfig; // Loading state configuration
+  isBeyondLimit: boolean;
+  resistanceIntensity?: number;
+  loadingState?: LoadingStateConfig;
 };
 
 /**
- * Unified HandlebarZone with advanced resistance feedback and loading shimmer
+ * Unified HandlebarZone with token-based sizing and reduced motion support
  *
  * Features:
- * - Position-aware layout
- * - Smooth scale/color transitions for resistance
- * - Loading shimmer animation
+ * - Position-aware layout with proper touch targets (44-48px per design principles)
+ * - Smooth scale/color transitions for resistance feedback
+ * - Loading shimmer animation with reduced motion support
  * - Keyboard accessibility
- * - Touch-optimized hit targets
+ * - Responsive sizing (narrower on small screens for left/right)
  */
 export function HandlebarZone({
   position,
@@ -33,21 +36,26 @@ export function HandlebarZone({
   resistanceIntensity = 0,
   loadingState,
 }: HandlebarZoneProps) {
+  const { prefersReducedMotion, getSpringConfig } = useReducedMotion();
+
   const isLoading = loadingState?.isLoading ?? false;
   const lockInteraction = loadingState?.lockInteraction ?? true;
   const shimmerSpeed = loadingState?.shimmerSpeed ?? 'fast';
 
   // Calculate visual feedback based on resistance
   const scale = isBeyondLimit ? 1 + resistanceIntensity * 0.15 : 1;
-  const bgOpacity = 0.4 + resistanceIntensity * 0.4; // Darker when resisting
+  const bgOpacity = 0.4 + resistanceIntensity * 0.4;
 
-  // Position-specific classes
+  // Position-specific classes with token-based sizing
   const { zoneClasses, lineClasses } = getPositionClasses(position);
 
-  // Determine shimmer animation duration
+  // Shimmer animation (disabled for reduced motion)
   const shimmerDuration = shimmerSpeed === 'fast' ? 1.5 : 3;
 
-  // Handle pointer and click events (disabled during loading if locked)
+  // Spring config (instant for reduced motion)
+  const springConfig = getSpringConfig(MOTION_TOKENS.spring.snappy);
+
+  // Event handlers
   const handlePointerDown = (e: React.PointerEvent) => {
     if (isLoading && lockInteraction) return;
     onPointerDown(e);
@@ -85,18 +93,13 @@ export function HandlebarZone({
         animate={{
           scale,
           backgroundColor: isBeyondLimit
-            ? `rgba(75, 85, 99, ${bgOpacity})` // Gray-600 with opacity
+            ? `rgba(75, 85, 99, ${bgOpacity})`
             : undefined,
         }}
-        transition={{
-          type: 'spring',
-          damping: 20,
-          stiffness: 400,
-          mass: 0.5,
-        }}
+        transition={springConfig}
       >
         {/* Loading shimmer overlay */}
-        {isLoading && (
+        {isLoading && !prefersReducedMotion && (
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-white/20 to-transparent"
             initial={{ x: '-100%' }}
@@ -108,46 +111,61 @@ export function HandlebarZone({
             }}
           />
         )}
+        {/* Static loading indicator for reduced motion */}
+        {isLoading && prefersReducedMotion && (
+          <div className="absolute inset-0 bg-white/20 dark:bg-white/10" />
+        )}
       </motion.div>
     </div>
   );
 }
 
 /**
- * Get position-specific classes for handlebar zone and line
- * Now with responsive sizing based on viewport
+ * Get position-specific classes with token-based sizing
+ *
+ * Touch targets: 44-48px per design principles
+ * - Horizontal (top/bottom): h-12 (48px)
+ * - Vertical (left/right): w-12 (48px), narrower on small screens
  */
 function getPositionClasses(position: Position) {
   const baseZoneClasses =
-    'absolute cursor-grab active:cursor-grabbing touch-none z-50';
+    'absolute cursor-grab active:cursor-grabbing touch-none z-50 flex items-center justify-center';
   const baseLineClasses = 'rounded-full bg-gray-400 dark:bg-gray-500';
+
+  // Token-based values
+  const { handlebar } = SPACING_TOKENS;
 
   switch (position) {
     case 'top':
       return {
-        // Handlebar at top (close by dragging up)
-        zoneClasses: `${baseZoneClasses} top-0 w-full h-[8vh] min-h-[60px] max-h-[80px] flex items-center justify-center`,
-        lineClasses: `${baseLineClasses} h-[0.4vh] min-h-[5px] max-h-[8px] w-[8vw] min-w-[60px] max-w-[100px]`,
+        // Horizontal zone: 48px height, full width
+        zoneClasses: `${baseZoneClasses} top-0 left-0 right-0 h-12 min-h-[${handlebar.horizontal.minHeight}px] max-h-14`,
+        // Line: 5px height, 48-80px width
+        lineClasses: `${baseLineClasses} h-[5px] w-12 min-w-[${handlebar.line.length.min}px] max-w-20`,
       };
+
     case 'bottom':
       return {
-        // Handlebar at bottom (close by dragging down)
-        zoneClasses: `${baseZoneClasses} bottom-0 w-full h-[8vh] min-h-[60px] max-h-[80px] flex items-center justify-center`,
-        lineClasses: `${baseLineClasses} h-[0.4vh] min-h-[5px] max-h-[8px] w-[8vw] min-w-[60px] max-w-[100px]`,
+        // Horizontal zone: 48px height, full width
+        zoneClasses: `${baseZoneClasses} bottom-0 left-0 right-0 h-12 min-h-[${handlebar.horizontal.minHeight}px] max-h-14`,
+        // Line: 5px height, 48-80px width
+        lineClasses: `${baseLineClasses} h-[5px] w-12 min-w-[${handlebar.line.length.min}px] max-w-20`,
       };
+
     case 'left':
       return {
-        // Handlebar at left (close by dragging left)
-        zoneClasses: `${baseZoneClasses} left-0 h-full w-[8vw] min-w-[60px] max-w-[80px] flex items-center justify-center`,
-        lineClasses: `${baseLineClasses} w-[0.4vw] min-w-[5px] max-w-[8px] h-[8vh] min-h-[60px] max-h-[100px]`,
+        // Vertical zone: 48px width (44px on small screens), full height
+        zoneClasses: `${baseZoneClasses} left-0 top-0 bottom-0 w-12 min-w-[${handlebar.vertical.minWidth}px] max-w-14 max-sm:w-11 max-sm:min-w-10`,
+        // Line: 5px width, 48-80px height
+        lineClasses: `${baseLineClasses} w-[5px] h-12 min-h-[${handlebar.line.length.min}px] max-h-20`,
       };
+
     case 'right':
       return {
-        // Handlebar at right (close by dragging right)
-        zoneClasses: `${baseZoneClasses} right-0 h-full w-[8vw] min-w-[60px] max-w-[80px] flex items-center justify-center`,
-        lineClasses: `${baseLineClasses} w-[0.4vw] min-w-[5px] max-w-[8px] h-[8vh] min-h-[60px] max-h-[100px]`,
+        // Vertical zone: 48px width (44px on small screens), full height
+        zoneClasses: `${baseZoneClasses} right-0 top-0 bottom-0 w-12 min-w-[${handlebar.vertical.minWidth}px] max-w-14 max-sm:w-11 max-sm:min-w-10`,
+        // Line: 5px width, 48-80px height
+        lineClasses: `${baseLineClasses} w-[5px] h-12 min-h-[${handlebar.line.length.min}px] max-h-20`,
       };
   }
 }
-
-// src/app/playground/modal/components/shared/HandlebarZone.tsx
