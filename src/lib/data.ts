@@ -821,6 +821,7 @@ export default Offcanvas;
 // Static navigation links for the sidebar
 export const staticNavLinks: StaticNavLink[] = [
   { path: '/playground/pagemode', label: 'Playground Pagemode' },
+  { path: '/playground/typography', label: 'Typography System' },
   { path: '/playground/typo', label: 'Playground Typography' },
   { path: '/demo', label: 'Demo' },
   { path: '/docs', label: 'Docs' },
@@ -829,6 +830,7 @@ export const staticNavLinks: StaticNavLink[] = [
   { path: '/playground/frame', label: 'Playground Frame' },
   { path: '/playground/floating-panel', label: 'Floating Control panel' },
   { path: '/playground/modal', label: 'Modern Modal' },
+  { path: '/playground/modal/docs', label: 'Modal Docs' },
 ];
 
 // lib/data.ts

@@ -2,10 +2,11 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useTheme } from 'next-themes';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-markup'; // For HTML highlighting
+import 'prismjs/components/prism-markup';
 
 import PreviewFrame from './preview-frame';
 import PreviewToolbar, {
@@ -13,7 +14,7 @@ import PreviewToolbar, {
   PreviewViewMode,
   CodeLanguage,
 } from './preview-toolbar';
-import CodeSyntaxToolbar from './code-syntax-toolbar'; // New component
+import CodeSyntaxToolbar from './code-syntax-toolbar';
 import { ComponentData } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
@@ -23,7 +24,7 @@ interface CodePreviewSectionProps {
 
 /**
  * Encapsulates the live preview and code snippet sections for a UI component.
- * Manages preview controls (device, theme, RTL) and code display (HTML/TS tabs, copy).
+ * Auto-inherits app-wide theme unless user explicitly toggles it.
  */
 const CodePreviewSection: React.FC<CodePreviewSectionProps> = ({
   component,
@@ -32,12 +33,29 @@ const CodePreviewSection: React.FC<CodePreviewSectionProps> = ({
   const [copySuccess, setCopySuccess] = useState('');
   const [isCodeExpanded, setIsCodeExpanded] = useState(false);
 
+  // Get app-wide theme
+  const { resolvedTheme } = useTheme();
+
   // States for preview controls
   const [viewMode, setViewMode] = useState<PreviewViewMode>('desktop');
-  const [previewTheme, setPreviewTheme] = useState<PreviewTheme>('light');
   const [isRtl, setIsRtl] = useState(false);
   const [currentCodeLanguage, setCurrentCodeLanguage] =
     useState<CodeLanguage>('typescript');
+
+  // Track if user has manually overridden the theme
+  const [isThemeOverridden, setIsThemeOverridden] = useState(false);
+  const [manualTheme, setManualTheme] = useState<PreviewTheme>('light');
+
+  // Effective theme: use manual if overridden, otherwise sync with app
+  const previewTheme: PreviewTheme = isThemeOverridden
+    ? manualTheme
+    : (resolvedTheme as PreviewTheme) || 'light';
+
+  // Handle theme toggle - marks as user override
+  const handleThemeChange = (theme: PreviewTheme) => {
+    setIsThemeOverridden(true);
+    setManualTheme(theme);
+  };
 
   // Effect to highlight code whenever the component data or language changes
   useEffect(() => {
@@ -47,15 +65,15 @@ const CodePreviewSection: React.FC<CodePreviewSectionProps> = ({
           ? component.codeSnippet
           : component.previewComponentCode;
 
-      codeRef.current.textContent = codeToHighlight.trim(); // Set text content before highlighting
+      codeRef.current.textContent = codeToHighlight.trim();
       Prism.highlightElement(codeRef.current);
     }
     // Reset preview controls when component changes
     setViewMode('desktop');
-    setPreviewTheme('light');
     setIsRtl(false);
-    setCurrentCodeLanguage('typescript'); // Default to TS when component changes
-    setIsCodeExpanded(false); // Collapse code when component changes
+    setIsThemeOverridden(false); // Reset to app theme when component changes
+    setCurrentCodeLanguage('typescript');
+    setIsCodeExpanded(false);
   }, [component, currentCodeLanguage]);
 
   const handleCopyCode = () => {
@@ -89,55 +107,37 @@ const CodePreviewSection: React.FC<CodePreviewSectionProps> = ({
   };
 
   return (
-    <div className="mt-8 code-example">
+    <div className="code-example">
       {/* Toolbar for Live Preview controls */}
       <PreviewToolbar
         currentViewMode={viewMode}
         onViewModeChange={setViewMode}
         currentTheme={previewTheme}
-        onThemeChange={setPreviewTheme}
+        onThemeChange={handleThemeChange}
         isRtl={isRtl}
         onRtlToggle={() => setIsRtl((prev) => !prev)}
-        githubLink={`https://github.com/devshittu/tahoe-ui/blob/main/src/components/ui/${component.id}.tsx`} // Example GitHub link
+        githubLink={`https://github.com/devshittu/tahoe-ui/blob/main/src/components/ui/${component.id}.tsx`}
+        isThemeOverridden={isThemeOverridden}
       />
 
       {/* Preview Frame Wrapper */}
       <div
         className={cn(
-          'code-preview-wrapper flex items-center justify-center p-5 border-x border-gray-200 dark:border-gray-700',
-          'transition-colors duration-300 ease-in-out', // Smooth transition for background
-          // Apply canvas grid only for tablet/mobile view modes (outer container)
-          (viewMode === 'tablet' || viewMode === 'mobile') &&
-            `
-          bg-[url('/path/to/light-grid.svg')] dark:bg-[url('/path/to/dark-grid.svg')]
-          bg-repeat bg-center
-        `, // Placeholder for grid images
-          // Fallback for grid images - using CSS gradients for now
-          (viewMode === 'tablet' || viewMode === 'mobile') &&
-            'bg-grid-light dark:bg-grid-dark',
+          'code-preview-wrapper flex items-center justify-center p-6 border-x border-gray-200 dark:border-gray-700',
+          'transition-colors duration-300 ease-in-out bg-gray-50 dark:bg-gray-900/50',
         )}
+        style={
+          viewMode === 'tablet' || viewMode === 'mobile'
+            ? {
+                backgroundImage:
+                  resolvedTheme === 'dark'
+                    ? 'linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px)',
+                backgroundSize: '20px 20px',
+              }
+            : undefined
+        }
       >
-        {/* Inline style for grid background, as Tailwind doesn't support dynamic URLs easily */}
-        <style jsx>{`
-          .bg-grid-light {
-            background-image: linear-gradient(
-                to right,
-                #e2e8f0 1px,
-                transparent 1px
-              ),
-              linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
-            background-size: 20px 20px;
-          }
-          .dark .bg-grid-dark {
-            background-image: linear-gradient(
-                to right,
-                #374151 1px,
-                transparent 1px
-              ),
-              linear-gradient(to bottom, #374151 1px, transparent 1px);
-            background-size: 20px 20px;
-          }
-        `}</style>
         <PreviewFrame
           previewComponentCode={component.previewComponentCode}
           viewMode={viewMode}
@@ -148,7 +148,12 @@ const CodePreviewSection: React.FC<CodePreviewSectionProps> = ({
 
       {/* Code Syntax Wrapper */}
       <div className="code-syntax-wrapper">
-        <div className="relative border-gray-200 border-x border-b rounded-b-lg dark:border-gray-700">
+        <div
+          className={cn(
+            'relative border-x border-b rounded-b-xl overflow-hidden',
+            'border-gray-200 dark:border-gray-700',
+          )}
+        >
           {/* Toolbar for Code Syntax (HTML/TS tabs, Copy button) */}
           <CodeSyntaxToolbar
             currentCodeLanguage={currentCodeLanguage}
@@ -161,13 +166,15 @@ const CodePreviewSection: React.FC<CodePreviewSectionProps> = ({
           <div className="relative">
             <div
               data-code-wrapper=""
-              className="overflow-hidden"
-              style={{ maxHeight: isCodeExpanded ? 'none' : '18rem' }} // Fixed max-height for collapsed state
-              // tabIndex={0} // Make div focusable for keyboard navigation
+              className={cn(
+                'overflow-auto custom-scrollbar',
+                isCodeExpanded ? 'max-h-[600px]' : 'max-h-72',
+              )}
             >
               <pre
                 className={cn(
-                  'p-4 pr-12 overflow-x-auto text-sm custom-scrollbar',
+                  'p-4 pr-12 text-sm min-w-full',
+                  'bg-gray-50 dark:bg-gray-900',
                   currentCodeLanguage === 'typescript'
                     ? 'language-typescript'
                     : 'language-markup',
@@ -175,11 +182,12 @@ const CodePreviewSection: React.FC<CodePreviewSectionProps> = ({
               >
                 <code
                   ref={codeRef}
-                  className={
+                  className={cn(
+                    'block',
                     currentCodeLanguage === 'typescript'
                       ? 'language-typescript'
-                      : 'language-markup'
-                  }
+                      : 'language-markup',
+                  )}
                 >
                   {/* Content set dynamically in useEffect */}
                 </code>
@@ -187,7 +195,15 @@ const CodePreviewSection: React.FC<CodePreviewSectionProps> = ({
             </div>
             <button
               onClick={toggleExpandCode}
-              className="absolute bottom-0 left-0 py-2.5 px-5 w-full text-sm font-medium text-gray-900 bg-gray-100 border-t border-gray-200 hover:bg-gray-100 hover:text-blue-700 dark:bg-gray-700 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 rounded-b-lg"
+              className={cn(
+                'sticky bottom-0 left-0 py-2.5 px-5 w-full text-sm font-medium',
+                'bg-gray-100 dark:bg-gray-800 border-t',
+                'border-gray-200 dark:border-gray-700',
+                'text-gray-600 dark:text-gray-300',
+                'hover:bg-gray-200 dark:hover:bg-gray-700',
+                'hover:text-gray-900 dark:hover:text-white',
+                'transition-colors duration-150',
+              )}
             >
               {isCodeExpanded ? 'Collapse code' : 'Expand code'}
             </button>

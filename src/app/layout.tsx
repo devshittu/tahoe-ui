@@ -6,7 +6,7 @@ import './globals.css'; // Corrected path to globals.css
 import { AppProvider } from '@/providers/app';
 import { SplashScreenConfig, SplashScreenWrapper } from '@/components/Splash';
 import { TfiLayoutAccordionList } from 'react-icons/tfi';
-import 'prismjs/themes/prism-tomorrow.css'; // Import a Prism theme globally for syntax highlighting
+import './prism.css'; // Theme-aware Prism syntax highlighting (light/dark)
 import { ThemeProviders } from '@/providers/theme-provider'; // Import the new ThemeProviders wrapper
 import ThemeToggle from '@/components/Theme/theme-toggle';
 

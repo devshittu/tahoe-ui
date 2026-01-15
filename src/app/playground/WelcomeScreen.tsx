@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FlexBox, StackBox, BaseBox } from '@/components/Box';
-import { Heading, Paragraph, Span, LinkText } from '@/components/Typography';
+import { Heading, Paragraph, Span, Link } from '@/components/Typography';
 import BaseImage from '@/components/Image/BaseImage';
 
 type ScreenProps = {
@@ -56,12 +56,9 @@ export const WelcomeScreen: React.FC<ScreenProps> = ({ onContinue }) => {
             Your device serial number may be used to check eligibility for
             offers, and your device phone number may be used to check for Music
             subscriptions through your mobile network provider.{' '}
-            <LinkText
-              href="/data-management"
-              className="text-red-500 underline"
-            >
+            <Link href="/data-management" className="text-red-500" underline>
               See how your data is managed.
-            </LinkText>
+            </Link>
           </Paragraph>
         </StackBox>
 

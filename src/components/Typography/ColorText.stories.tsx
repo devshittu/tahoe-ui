@@ -20,7 +20,6 @@ const meta: Meta<typeof ColorText> = {
     children: 'Sample ColorText Content',
     colorScheme: 'blue',
     gradient: false,
-    opacity: undefined,
     className: '',
   },
   argTypes: {
@@ -44,11 +43,10 @@ const meta: Meta<typeof ColorText> = {
         'cyan',
         'indigo',
       ],
-      description:
-        'Predefined color schemes or any valid CSS color string for the text color.',
+      description: 'Predefined color schemes for the text color.',
       table: {
         type: {
-          summary: `'blue' | 'red' | 'green' | 'yellow' | 'purple' | 'pink' | 'cyan' | 'indigo' | string`,
+          summary: `'blue' | 'red' | 'green' | 'yellow' | 'purple' | 'pink' | 'cyan' | 'indigo'`,
         },
         defaultValue: { summary: `'blue'` },
       },
@@ -62,22 +60,10 @@ const meta: Meta<typeof ColorText> = {
         defaultValue: { summary: 'false' },
       },
     },
-    opacity: {
-      control: {
-        type: 'range',
-        min: 10,
-        max: 100,
-        step: 10,
-      },
-      description: 'Opacity level for the text color (10-100).',
-      table: {
-        type: { summary: 'number | undefined' },
-        defaultValue: { summary: 'undefined' },
-      },
-    },
     className: {
       control: 'text',
-      description: 'Additional CSS classes for custom styling.',
+      description:
+        'Additional CSS classes for custom styling (use for opacity via Tailwind classes like opacity-50).',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: '' },
@@ -110,30 +96,30 @@ export const Gradient: Story = {
 };
 
 /**
- * Custom Color Scheme
+ * Red Color Scheme
  */
-export const CustomColor: Story = {
+export const RedColorScheme: Story = {
   args: {
-    colorScheme: '#FF5733',
-    children: 'This text has a custom color (#FF5733).',
+    colorScheme: 'red',
+    children: 'This text uses the red color scheme.',
   },
 };
 
 /**
- * Opacity Applied
+ * Purple with Opacity (via className)
  */
-export const Opacity: Story = {
+export const WithOpacity: Story = {
   args: {
-    opacity: 50,
     colorScheme: 'purple',
-    children: 'This text has 50% opacity.',
+    className: 'opacity-50',
+    children: 'This text has 50% opacity via className.',
   },
 };
 
 /**
- * Gradient with Custom Color Scheme
+ * Gradient with Cyan Color Scheme
  */
-export const GradientWithCustomColor: Story = {
+export const GradientWithCyan: Story = {
   args: {
     gradient: true,
     colorScheme: 'cyan',
@@ -148,9 +134,9 @@ export const CombinedProps: Story = {
   args: {
     colorScheme: 'pink',
     gradient: true,
-    opacity: 80,
+    className: 'text-lg font-bold',
     children:
-      'This ColorText combines color scheme, gradient, and opacity for a vibrant look.',
+      'This ColorText combines color scheme, gradient, and custom styling.',
   },
 };
 
@@ -168,15 +154,13 @@ export const Showcase: Story = {
         This is a red ColorText with gradient.
       </ColorText>
 
-      <ColorText {...args} colorScheme="#28a745" opacity={70}>
-        This is a custom green ColorText with 70% opacity.
+      <ColorText {...args} colorScheme="green" className="opacity-70">
+        This is a green ColorText with 70% opacity.
       </ColorText>
 
-      <ColorText {...args} colorScheme="purple" gradient opacity={60}>
+      <ColorText {...args} colorScheme="purple" gradient className="opacity-60">
         This is a purple ColorText with gradient and 60% opacity.
       </ColorText>
     </div>
   ),
 };
-
-// src/components/Typography/ColorText.stories.tsx

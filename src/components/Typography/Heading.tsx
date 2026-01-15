@@ -1,48 +1,66 @@
 'use client';
 
-import React, { ReactNode } from 'react';
-import Text from './Text';
+import React, { forwardRef } from 'react';
+import { cn } from '@/lib/utils';
+import type { HeadingProps, TextColor } from './typography.types';
+import {
+  fontWeightClasses,
+  textColorClasses,
+  alignClasses,
+  headingSizeClasses,
+  isNamedColor,
+} from './typography.classes';
 
-export type HeadingProps = {
-  children: ReactNode;
-  level?: 1 | 2 | 3 | 4 | 5 | 6;
-  size?: 'xl' | 'lg' | 'md' | 'sm';
-  weight?: 'light' | 'regular' | 'bold' | 'extrabold';
-  color?: 'primary' | 'secondary' | 'accent' | string;
-  align?: 'left' | 'center' | 'right' | 'justify';
-  margin?: string;
-  truncate?: boolean;
-};
+/**
+ * Heading component for semantic headings (h1-h6).
+ * Supports anchor links via the id prop.
+ */
+const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
+  (
+    {
+      children,
+      level = 1,
+      size = 'xl',
+      weight = 'bold',
+      color = 'primary',
+      align = 'left',
+      margin = 'my-4',
+      truncate = false,
+      id,
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const sizeClasses: Record<NonNullable<HeadingProps['size']>, string> = {
-  xl: 'text-4xl md:text-5xl lg:text-6xl',
-  lg: 'text-3xl md:text-4xl lg:text-5xl',
-  md: 'text-2xl md:text-3xl lg:text-4xl',
-  sm: 'text-xl md:text-2xl lg:text-3xl',
-};
+    const colorClass = isNamedColor(color as string)
+      ? textColorClasses[color as TextColor]
+      : '';
 
-const Heading = ({
-  children,
-  level = 1,
-  size = 'xl',
-  weight = 'bold',
-  color = 'primary',
-  align = 'left',
-  margin = 'my-4',
-  truncate = false,
-}: HeadingProps) => {
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements;
-  const sizeClass = sizeClasses[size];
-
-  return (
-    <Tag className={`${sizeClass} ${margin}`}>
-      <Text fontWeight={weight} color={color} align={align} truncate={truncate}>
+    return (
+      <Tag
+        ref={ref}
+        id={id}
+        className={cn(
+          headingSizeClasses[size],
+          fontWeightClasses[weight],
+          colorClass,
+          alignClasses[align],
+          margin,
+          truncate && 'truncate',
+          // Add scroll margin for anchor navigation
+          id && 'scroll-mt-20',
+          className,
+        )}
+        {...props}
+      >
         {children}
-      </Text>
-    </Tag>
-  );
-};
+      </Tag>
+    );
+  },
+);
 
+Heading.displayName = 'Heading';
 export default Heading;
-
-// src/components/Typography/Heading.tsx
+export type { HeadingProps };

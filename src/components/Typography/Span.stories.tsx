@@ -28,7 +28,6 @@ const meta: Meta<typeof Span> = {
     letterSpacing: 'normal',
     textTransform: 'none',
     textDecoration: 'none',
-    background: '',
     truncate: false,
     className: '',
   },
@@ -120,15 +119,6 @@ const meta: Meta<typeof Span> = {
       table: {
         type: { summary: `'underline' | 'line-through' | 'none'` },
         defaultValue: { summary: `'none'` },
-      },
-    },
-    background: {
-      control: 'text',
-      description:
-        'Background color. Provide a valid CSS color string. Leave empty for no background.',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: `''` },
       },
     },
     truncate: {
@@ -345,11 +335,11 @@ export const LineThroughText: Story = {
 };
 
 /**
- * Span with Background Color.
+ * Span with Background Color (via className).
  */
 export const WithBackground: Story = {
   args: {
-    background: '#F0E68C', // Khaki background
+    className: 'bg-yellow-200 px-1 rounded',
     children: 'This Span has a khaki background.',
   },
 };
@@ -384,17 +374,16 @@ export const CombinedProps: Story = {
   args: {
     fontFamily: 'secondary',
     fontWeight: 'bold',
-    color: '#4B0082', // Indigo
+    color: 'accent',
     align: 'justify',
     lineHeight: 'loose',
     letterSpacing: 'wide',
     textTransform: 'capitalize',
     textDecoration: 'underline',
-    background: '#FFFACD', // LemonChiffon
     truncate: false,
     className: 'bg-yellow-100 p-2 rounded',
     children:
-      'This Span combines multiple properties: secondary font, bold weight, indigo color, justified alignment, loose line height, wide letter spacing, capitalized text, underlined decoration, lemon chiffon background, and additional styling.',
+      'This Span combines multiple properties: secondary font, bold weight, accent color, justified alignment, loose line height, wide letter spacing, capitalized text, underlined decoration, and additional styling.',
   },
 };
 
@@ -498,8 +487,8 @@ export const Showcase: Story = {
         This Span has a line through it.
       </Span>
 
-      {/* 20) Background Color */}
-      <Span {...args} background="#F0E68C">
+      {/* 20) Background Color via className */}
+      <Span {...args} className="bg-yellow-200 px-1 rounded">
         This Span has a khaki background.
       </Span>
 
@@ -519,20 +508,19 @@ export const Showcase: Story = {
         {...args}
         fontFamily="secondary"
         fontWeight="bold"
-        color="#4B0082"
+        color="accent"
         align="justify"
         lineHeight="loose"
         letterSpacing="wide"
         textTransform="capitalize"
         textDecoration="underline"
-        background="#FFFACD"
         truncate={false}
         className="bg-yellow-100 p-2 rounded"
       >
         This Span combines multiple properties: secondary font, bold weight,
-        indigo color, justified alignment, loose line height, wide letter
-        spacing, capitalized text, underlined decoration, lemon chiffon
-        background, and additional styling.
+        accent color, justified alignment, loose line height, wide letter
+        spacing, capitalized text, underlined decoration, and additional
+        styling.
       </Span>
     </div>
   ),

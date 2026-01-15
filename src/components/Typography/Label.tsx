@@ -1,37 +1,60 @@
 'use client';
 
-import React, { ReactNode } from 'react';
-import Text from './Text';
+import React, { forwardRef } from 'react';
+import { cn } from '@/lib/utils';
+import type { LabelProps, TextColor } from './typography.types';
+import {
+  textColorClasses,
+  fontWeightClasses,
+  labelSizeClasses,
+  isNamedColor,
+} from './typography.classes';
 
-export type LabelProps = {
-  children: ReactNode;
-  size?: 'sm' | 'md';
-  color?: 'primary' | 'secondary' | 'accent' | string;
-  fontWeight?: 'light' | 'regular' | 'bold' | 'extrabold';
-  className?: string;
-};
+/**
+ * Label component for form elements with semantic HTML.
+ * Uses the <label> element with proper htmlFor support.
+ */
+const Label = forwardRef<HTMLLabelElement, LabelProps>(
+  (
+    {
+      children,
+      className,
+      htmlFor,
+      size = 'sm',
+      color = 'primary',
+      fontWeight = 'bold',
+      required = false,
+      ...props
+    },
+    ref,
+  ) => {
+    const colorClass = isNamedColor(color as string)
+      ? textColorClasses[color as TextColor]
+      : '';
 
-const sizeClasses: Record<NonNullable<LabelProps['size']>, string> = {
-  sm: 'text-xs',
-  md: 'text-sm',
-};
-
-const Label = ({
-  children,
-  size = 'sm',
-  color = 'primary',
-  fontWeight = 'bold',
-  className = '',
-}: LabelProps) => {
-  return (
-    <span className={`${sizeClasses[size]} ${className}`}>
-      <Text fontWeight={fontWeight} color={color}>
+    return (
+      <label
+        ref={ref}
+        htmlFor={htmlFor}
+        className={cn(
+          labelSizeClasses[size],
+          colorClass,
+          fontWeightClasses[fontWeight],
+          className,
+        )}
+        {...props}
+      >
         {children}
-      </Text>
-    </span>
-  );
-};
+        {required && (
+          <span className="ml-0.5 text-red-500" aria-hidden="true">
+            *
+          </span>
+        )}
+      </label>
+    );
+  },
+);
 
+Label.displayName = 'Label';
 export default Label;
-
-// src/components/Typography/Label.tsx
+export type { LabelProps };

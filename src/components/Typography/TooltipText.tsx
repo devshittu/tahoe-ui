@@ -1,59 +1,65 @@
 'use client';
 
-import React, { ReactNode, useState } from 'react';
-import clsx from 'clsx';
+import React, { forwardRef, useState, useId, useCallback, useRef } from 'react';
+import { cn } from '@/lib/utils';
+import type { TooltipTextProps } from './typography.types';
+import { tooltipPositionClasses } from './typography.classes';
 
-export type TooltipTextProps = {
-  children: ReactNode;
-  tooltip: string;
-  position?: 'top' | 'bottom' | 'left' | 'right';
-  delay?: number;
-  style?: React.CSSProperties;
-  className?: string;
-};
+/**
+ * TooltipText component with proper accessibility support.
+ * Includes role="tooltip", aria-describedby, and keyboard support.
+ */
+const TooltipText = forwardRef<HTMLSpanElement, TooltipTextProps>(
+  (
+    { children, tooltip, position = 'top', delay = 300, className, ...props },
+    ref,
+  ) => {
+    const [visible, setVisible] = useState(false);
+    const tooltipId = useId();
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-const positionClasses: Record<
-  NonNullable<TooltipTextProps['position']>,
-  string
-> = {
-  top: 'bottom-full left-1/2 transform -translate-x-1/2 mb-2',
-  bottom: 'top-full left-1/2 transform -translate-x-1/2 mt-2',
-  left: 'right-full top-1/2 transform -translate-y-1/2 mr-2',
-  right: 'left-full top-1/2 transform -translate-y-1/2 ml-2',
-};
+    const showTooltip = useCallback(() => {
+      timeoutRef.current = setTimeout(() => setVisible(true), delay);
+    }, [delay]);
 
-const TooltipText = ({
-  children,
-  tooltip,
-  position = 'top',
-  delay = 300,
-  style = {},
-  className = '',
-}: TooltipTextProps) => {
-  const [visible, setVisible] = useState(false);
+    const hideTooltip = useCallback(() => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      setVisible(false);
+    }, []);
 
-  return (
-    <span
-      className={clsx('relative inline-block', className)}
-      onMouseEnter={() => setTimeout(() => setVisible(true), delay)}
-      onMouseLeave={() => setVisible(false)}
-      style={style}
-    >
-      {children}
-      {visible && (
-        <span
-          className={clsx(
-            'absolute whitespace-nowrap bg-black text-white text-xs rounded py-1 px-2 z-10 transition-opacity duration-200',
-            positionClasses[position],
-          )}
-        >
-          {tooltip}
-        </span>
-      )}
-    </span>
-  );
-};
+    return (
+      <span
+        ref={ref}
+        className={cn('relative inline-block', className)}
+        onMouseEnter={showTooltip}
+        onMouseLeave={hideTooltip}
+        onFocus={showTooltip}
+        onBlur={hideTooltip}
+        aria-describedby={visible ? tooltipId : undefined}
+        {...props}
+      >
+        {children}
+        {visible && (
+          <span
+            id={tooltipId}
+            role="tooltip"
+            className={cn(
+              'absolute z-50 whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs text-white',
+              'pointer-events-none transition-opacity duration-200',
+              tooltipPositionClasses[position],
+            )}
+          >
+            {tooltip}
+          </span>
+        )}
+      </span>
+    );
+  },
+);
 
+TooltipText.displayName = 'TooltipText';
 export default TooltipText;
-
-// src/components/Typography/TooltipText.tsx
+export type { TooltipTextProps };

@@ -1,0 +1,38 @@
+name: tahoe-ui
+
+services:
+  tahoe-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_BASE_PATH=/tahoe
+    container_name: tahoe-ui
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_PUBLIC_BASE_PATH=/tahoe
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      # Router configuration - path-based routing
+      - "traefik.http.routers.tahoe-ui.rule=PathPrefix(`/tahoe`)"
+      - "traefik.http.routers.tahoe-ui.entrypoints=websecure"
+      - "traefik.http.routers.tahoe-ui.tls=true"
+      - "traefik.http.routers.tahoe-ui.middlewares=chain-web@file"
+      - "traefik.http.routers.tahoe-ui.priority=100"
+      # Service configuration
+      - "traefik.http.services.tahoe-ui.loadbalancer.server.port=3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/tahoe', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+networks:
+  traefik-public:
+    external: true

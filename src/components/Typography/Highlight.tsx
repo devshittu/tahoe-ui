@@ -1,34 +1,50 @@
 'use client';
 
-import React, { ReactNode } from 'react';
-import Text from './Text';
-import clsx from 'clsx';
+import React, { forwardRef } from 'react';
+import { cn } from '@/lib/utils';
+import type { HighlightProps, TextColor } from './typography.types';
+import {
+  highlightBgClasses,
+  textColorClasses,
+  isNamedColor,
+} from './typography.classes';
 
-export type HighlightProps = {
-  children: ReactNode;
-  bgColor?: string;
-  textColor?: 'primary' | 'secondary' | 'accent' | string;
-  padding?: string;
-  className?: string;
-};
+/**
+ * Highlight component for emphasized text with background.
+ * Uses the semantic <mark> element.
+ */
+const Highlight = forwardRef<HTMLElement, HighlightProps>(
+  (
+    {
+      children,
+      bgColor = 'yellow',
+      textColor = 'primary',
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    const colorClass = isNamedColor(textColor as string)
+      ? textColorClasses[textColor as TextColor]
+      : '';
 
-const Highlight = ({
-  children,
-  bgColor = 'yellow-200',
-  textColor = 'primary',
-  padding = 'px-1',
-  className = '',
-}: HighlightProps) => {
-  const computedClassName = clsx(
-    `bg-${bgColor}`,
-    `text-${textColor}`,
-    padding,
-    className,
-  );
+    return (
+      <mark
+        ref={ref}
+        className={cn(
+          'rounded-sm px-1',
+          highlightBgClasses[bgColor],
+          colorClass,
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </mark>
+    );
+  },
+);
 
-  return <Text className={computedClassName}>{children}</Text>;
-};
-
+Highlight.displayName = 'Highlight';
 export default Highlight;
-
-// src/components/Typography/Highlight.tsx
+export type { HighlightProps };

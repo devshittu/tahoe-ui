@@ -29,7 +29,6 @@ const meta: Meta<typeof Text> = {
     letterSpacing: 'normal',
     textTransform: 'none',
     textDecoration: 'none',
-    background: '',
     truncate: false,
   },
   argTypes: {
@@ -43,7 +42,8 @@ const meta: Meta<typeof Text> = {
     },
     className: {
       control: 'text',
-      description: 'Additional CSS classes for custom styling.',
+      description:
+        'Additional CSS classes for custom styling (use for background colors via Tailwind classes).',
       table: {
         type: { summary: 'string' },
         defaultValue: { summary: '' },
@@ -68,11 +68,13 @@ const meta: Meta<typeof Text> = {
       },
     },
     color: {
-      control: 'text',
-      description:
-        'Text color. Can be one of the predefined options ("primary", "secondary", "accent") or any valid CSS color string.',
+      control: 'select',
+      options: ['primary', 'secondary', 'accent', 'muted', 'inherit'],
+      description: 'Text color from the design system.',
       table: {
-        type: { summary: `'primary' | 'secondary' | 'accent' | string` },
+        type: {
+          summary: `'primary' | 'secondary' | 'accent' | 'muted' | 'inherit'`,
+        },
         defaultValue: { summary: `'primary'` },
       },
     },
@@ -87,10 +89,10 @@ const meta: Meta<typeof Text> = {
     },
     lineHeight: {
       control: 'select',
-      options: ['tight', 'normal', 'loose'],
+      options: ['tight', 'normal', 'loose', 'relaxed'],
       description: 'Line height for the text.',
       table: {
-        type: { summary: `'tight' | 'normal' | 'loose'` },
+        type: { summary: `'tight' | 'normal' | 'loose' | 'relaxed'` },
         defaultValue: { summary: `'normal'` },
       },
     },
@@ -119,15 +121,6 @@ const meta: Meta<typeof Text> = {
       table: {
         type: { summary: `'underline' | 'line-through' | 'none'` },
         defaultValue: { summary: `'none'` },
-      },
-    },
-    background: {
-      control: 'text',
-      description:
-        'Background color. Provide a valid CSS color string. Leave empty for no background.',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: `''` },
       },
     },
     truncate: {
@@ -235,12 +228,12 @@ export const AccentColor: Story = {
 };
 
 /**
- * Custom Color
+ * Muted Color
  */
-export const CustomColor: Story = {
+export const MutedColor: Story = {
   args: {
-    color: '#FF5733',
-    children: 'This text has a custom color (#FF5733).',
+    color: 'muted',
+    children: 'This text has muted color.',
   },
 };
 
@@ -335,12 +328,12 @@ export const LineThroughText: Story = {
 };
 
 /**
- * Background Color
+ * With Background Color (via className)
  */
 export const WithBackground: Story = {
   args: {
-    background: '#F0E68C', // Khaki background
-    children: 'This text has a khaki background.',
+    className: 'bg-yellow-200 px-1 rounded',
+    children: 'This text has a yellow background via className.',
   },
 };
 
@@ -363,15 +356,15 @@ export const CombinedProps: Story = {
   args: {
     fontFamily: 'secondary',
     fontWeight: 'bold',
-    color: '#4B0082', // Indigo
-    align: 'justify',
+    color: 'accent',
+    align: 'left',
     lineHeight: 'loose',
     letterSpacing: 'wide',
     textTransform: 'capitalize',
     textDecoration: 'underline',
-    background: '#FFFACD', // LemonChiffon
+    className: 'bg-yellow-100 px-2 rounded',
     truncate: false,
     children:
-      'This text combines multiple properties: secondary font, bold weight, indigo color, justified alignment, loose line height, wide letter spacing, capitalized text, underlined decoration, and a lemon chiffon background.',
+      'This text combines multiple properties: secondary font, bold weight, accent color, loose line height, wide letter spacing, capitalized text, and underlined decoration.',
   },
 };
