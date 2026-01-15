@@ -83,19 +83,41 @@ export function getDragAxis(position: Position): 'x' | 'y' {
 }
 
 /**
- * Calculate drag constraints based on position
- * Prevents dragging in wrong direction
+ * Calculate drag constraints based on close direction
+ *
+ * For PageMode (edge-attached): strict uni-directional, only towards close
+ * For Dialog (centered): allows slight bi-directional with elastic
  */
-export function getDragConstraints(position: Position) {
-  switch (position) {
+export function getDragConstraints(
+  closeDirection: Position,
+  options: { allowBidirectional?: boolean; elasticLimit?: number } = {},
+) {
+  const { allowBidirectional = false, elasticLimit = 50 } = options;
+
+  // Bi-directional mode for centered modals (Dialog)
+  if (allowBidirectional) {
+    switch (closeDirection) {
+      case 'top':
+        return { top: -9999, bottom: elasticLimit };
+      case 'bottom':
+        return { top: -elasticLimit, bottom: 9999 };
+      case 'left':
+        return { left: -9999, right: elasticLimit };
+      case 'right':
+        return { left: -elasticLimit, right: 9999 };
+    }
+  }
+
+  // Uni-directional mode for edge panels (PageMode) - original behavior
+  switch (closeDirection) {
     case 'top':
-      return { bottom: 0 };
+      return { bottom: 0 }; // Can only drag up
     case 'bottom':
-      return { top: 0 };
+      return { top: 0 }; // Can only drag down
     case 'left':
-      return { right: 0 };
+      return { right: 0 }; // Can only drag left
     case 'right':
-      return { left: 0 };
+      return { left: 0 }; // Can only drag right
   }
 }
 
