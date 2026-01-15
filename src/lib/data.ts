@@ -830,6 +830,7 @@ export const staticNavLinks: StaticNavLink[] = [
   { path: '/playground/frame', label: 'Playground Frame' },
   { path: '/playground/floating-panel', label: 'Floating Control panel' },
   { path: '/playground/modal', label: 'Modern Modal' },
+  { path: '/playground/modal/docs', label: 'Modal Docs' },
 ];
 
 // lib/data.ts
