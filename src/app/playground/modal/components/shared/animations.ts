@@ -1,18 +1,49 @@
+// src/app/playground/modal/components/shared/animations.ts
 'use client';
 
 import { Variants } from 'framer-motion';
 import { Position, SLIDE_TRANSITION } from './types';
+import { MOTION_TOKENS, SPACING_TOKENS } from '@/config/tokens';
 
 /**
  * Generate slide animation variants based on position
- * Uses improved spring physics for natural, fluid motion
- * Includes negative offset for premium fade-in effect
+ *
+ * Features:
+ * - Spring physics for natural, fluid motion
+ * - Negative offset for premium fade-in effect
+ * - Reduced motion support (opacity-only transitions)
+ *
+ * @param position - Modal position (top/bottom/left/right)
+ * @param prefersReducedMotion - Whether to use simplified animations
  */
-export function createSlideVariants(position: Position): Variants {
+export function createSlideVariants(
+  position: Position,
+  prefersReducedMotion = false,
+): Variants {
+  // Reduced motion: simple opacity transition without position changes
+  if (prefersReducedMotion) {
+    return {
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          duration: MOTION_TOKENS.duration.fast / 1000,
+        },
+      },
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: MOTION_TOKENS.duration.fast / 1000,
+        },
+      },
+    };
+  }
+
+  // Full motion: position-based slide animations
   const getHiddenState = (pos: Position) => {
     switch (pos) {
       case 'top':
-        return { y: '-120%', opacity: 0 }; // Negative offset
+        return { y: '-120%', opacity: 0 };
       case 'bottom':
         return { y: '120%', opacity: 0 };
       case 'left':
@@ -26,8 +57,8 @@ export function createSlideVariants(position: Position): Variants {
     return {
       ...getHiddenState(pos),
       transition: {
-        duration: 0.25,
-        ease: [0.4, 0, 0.2, 1], // Smooth ease-out
+        duration: MOTION_TOKENS.duration.base / 1000,
+        ease: MOTION_TOKENS.easing.smooth,
       },
     };
   };
@@ -58,13 +89,13 @@ export function getDragAxis(position: Position): 'x' | 'y' {
 export function getDragConstraints(position: Position) {
   switch (position) {
     case 'top':
-      return { bottom: 0 }; // Can only drag down (negative y)
+      return { bottom: 0 };
     case 'bottom':
-      return { top: 0 }; // Can only drag up (positive y)
+      return { top: 0 };
     case 'left':
-      return { right: 0 }; // Can only drag right (negative x)
+      return { right: 0 };
     case 'right':
-      return { left: 0 }; // Can only drag left (positive x)
+      return { left: 0 };
   }
 }
 
@@ -86,5 +117,24 @@ export function getRoundedClasses(
       return 'rounded-r-xl sm:rounded-r-2xl';
     case 'right':
       return 'rounded-l-xl sm:rounded-l-2xl';
+  }
+}
+
+/**
+ * Get content padding class based on handlebar position
+ * Uses token-based values for handlebar clearance
+ */
+export function getContentPadding(handlebarPosition: Position): string {
+  const clearance = SPACING_TOKENS.padding.handlebarClearance;
+
+  switch (handlebarPosition) {
+    case 'top':
+      return `pt-14 pb-4 px-4`; // 56px top for handlebar + breathing room
+    case 'bottom':
+      return `pt-4 pb-14 px-4`;
+    case 'left':
+      return `pl-14 pr-4 py-4`;
+    case 'right':
+      return `pr-14 pl-4 py-4`;
   }
 }
