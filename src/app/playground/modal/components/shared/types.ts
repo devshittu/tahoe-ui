@@ -54,6 +54,23 @@ export type SpringConfig = {
   mass?: number;
 };
 
+/**
+ * Dialog max-width preset type
+ */
+export type DialogMaxWidthPreset = 'narrow' | 'default' | 'wide' | 'extraWide';
+
+/**
+ * Dialog sizing configuration for content-adaptive behavior
+ */
+export type DialogSizingConfig = {
+  /** Use a preset max-width */
+  preset?: DialogMaxWidthPreset;
+  /** Custom max-width in pixels (overrides preset) */
+  maxWidth?: number;
+  /** Custom min-width in pixels (overrides default 280px) */
+  minWidth?: number;
+};
+
 // Shared animation configuration with improved physics
 export const SPRING_CONFIG: SpringConfig = {
   damping: 28, // Reduced oscillation
