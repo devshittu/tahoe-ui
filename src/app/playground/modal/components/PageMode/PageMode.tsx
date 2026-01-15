@@ -26,6 +26,7 @@ import { HandlebarZone } from '../shared/HandlebarZone';
 
 // Shared utilities
 import {
+  createSlideVariants,
   getDragAxis,
   getDragConstraints,
   getRoundedClasses,
@@ -184,50 +185,8 @@ export function PageMode({
     completeClose();
   }, [completeClose]);
 
-  // Get position-based transition classes for slide animation
-  const getTransitionClasses = (pos: Position) => {
-    const base = {
-      enter: prefersReducedMotion ? 'duration-0' : 'ease-out duration-300',
-      leave: prefersReducedMotion ? 'duration-0' : 'ease-in duration-200',
-    };
-
-    switch (pos) {
-      case 'top':
-        return {
-          ...base,
-          enterFrom: '-translate-y-full opacity-0',
-          enterTo: 'translate-y-0 opacity-100',
-          leaveFrom: 'translate-y-0 opacity-100',
-          leaveTo: '-translate-y-full opacity-0',
-        };
-      case 'bottom':
-        return {
-          ...base,
-          enterFrom: 'translate-y-full opacity-0',
-          enterTo: 'translate-y-0 opacity-100',
-          leaveFrom: 'translate-y-0 opacity-100',
-          leaveTo: 'translate-y-full opacity-0',
-        };
-      case 'left':
-        return {
-          ...base,
-          enterFrom: '-translate-x-full opacity-0',
-          enterTo: 'translate-x-0 opacity-100',
-          leaveFrom: 'translate-x-0 opacity-100',
-          leaveTo: '-translate-x-full opacity-0',
-        };
-      case 'right':
-        return {
-          ...base,
-          enterFrom: 'translate-x-full opacity-0',
-          enterTo: 'translate-x-0 opacity-100',
-          leaveFrom: 'translate-x-0 opacity-100',
-          leaveTo: 'translate-x-full opacity-0',
-        };
-    }
-  };
-
-  const transitionClasses = getTransitionClasses(position);
+  // Framer Motion variants for slide animation
+  const variants = createSlideVariants(position, prefersReducedMotion);
 
   // Derived values
   const dragAxis = getDragAxis(position);
@@ -325,11 +284,24 @@ export function PageMode({
             The old CloseIndicator has been replaced with more refined visual feedback */}
 
         {/* PageMode Panel with TransitionChild for proper lifecycle */}
-        <TransitionChild afterLeave={handleAfterLeave} {...transitionClasses}>
+        <TransitionChild
+          afterLeave={handleAfterLeave}
+          enter={prefersReducedMotion ? 'duration-0' : 'ease-out duration-300'}
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave={prefersReducedMotion ? 'duration-0' : 'ease-in duration-200'}
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
           <DialogPanel
             as={SafeMotionDiv}
             ref={containerRef}
             className={containerClasses}
+            custom={position}
+            variants={variants}
+            initial="hidden"
+            animate={isClosing ? 'exit' : 'visible'}
+            exit="exit"
             style={{
               ...sizeStyles,
               // Combine squash-stretch with close feedback
