@@ -61,9 +61,16 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const getComponentPath = (compId: string) => {
-    // Check if we're in typography playground
+    // Use provided basePath or derive from pathname
+    if (basePath) {
+      return `${basePath}/${compId}`;
+    }
+    // Legacy fallback paths
     if (pathname?.includes('/playground/typography')) {
       return `/playground/typography/${compId}`;
+    }
+    if (pathname?.includes('/playground/modal/docs')) {
+      return `/playground/modal/docs/${compId}`;
     }
     return `/docs/${compId}`;
   };
