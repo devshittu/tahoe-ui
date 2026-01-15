@@ -92,8 +92,35 @@ export const SPACING_TOKENS = {
     large: '80',
     full: '100',
   },
+
+  /**
+   * Dialog sizing constraints for content-adaptive behavior
+   *
+   * Philosophy: Dialog uses fit-content with min/max constraints to adapt
+   * to children while preventing edge cases (too narrow, too wide, overflow).
+   */
+  dialogSize: {
+    /** Minimum width to prevent overly narrow dialogs */
+    minWidth: 280,
+    /** Maximum width presets */
+    maxWidth: {
+      /** Confirmations, alerts, simple prompts */
+      narrow: 400,
+      /** Standard content - forms, messages */
+      default: 600,
+      /** Data-heavy content, tables, wider forms */
+      wide: 800,
+      /** Dashboards, complex layouts */
+      extraWide: 1200,
+    },
+    /** Viewport-relative maximum (prevents overflow) */
+    viewportMax: 90,
+    /** Height constraint */
+    maxHeight: 90,
+  },
 } as const;
 
 // Type exports for TypeScript inference
 export type TouchTargetSize = keyof typeof SPACING_TOKENS.touchTarget;
 export type ModalSizePreset = keyof typeof SPACING_TOKENS.modalSize;
+export type DialogSizePreset = keyof typeof SPACING_TOKENS.dialogSize.maxWidth;
