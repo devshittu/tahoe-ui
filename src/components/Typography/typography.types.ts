@@ -6,13 +6,22 @@ import { HTMLAttributes, ReactNode, LabelHTMLAttributes } from 'react';
 // ============ Base Prop Types ============
 
 export type FontFamily = 'primary' | 'secondary' | 'mono';
-export type FontWeight = 'light' | 'regular' | 'bold' | 'extrabold';
+export type FontWeight =
+  | 'thin'
+  | 'light'
+  | 'regular'
+  | 'medium'
+  | 'semibold'
+  | 'bold'
+  | 'extrabold';
 export type TextColor =
   | 'primary'
   | 'secondary'
+  | 'tertiary'
   | 'accent'
   | 'muted'
-  | 'inherit';
+  | 'inherit'
+  | 'white';
 export type TextAlign = 'left' | 'center' | 'right' | 'justify';
 export type LineHeight = 'tight' | 'normal' | 'loose' | 'relaxed';
 export type LetterSpacing = 'tight' | 'normal' | 'wide';
@@ -62,7 +71,15 @@ export type ParagraphProps = TypographyBaseProps &
 // ============ Heading Props ============
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-export type HeadingSize = 'xl' | 'lg' | 'md' | 'sm';
+export type HeadingSize =
+  | '4xl'
+  | '3xl'
+  | '2xl'
+  | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs';
 
 export type HeadingProps = Omit<TypographyBaseProps, 'fontWeight'> &
   Omit<HTMLAttributes<HTMLHeadingElement>, keyof TypographyBaseProps> & {
