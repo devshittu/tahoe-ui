@@ -29,8 +29,11 @@ export const fontFamilyClasses: Record<FontFamily, string> = {
 } as const;
 
 export const fontWeightClasses: Record<FontWeight, string> = {
+  thin: 'font-thin',
   light: 'font-light',
   regular: 'font-normal',
+  medium: 'font-medium',
+  semibold: 'font-semibold',
   bold: 'font-bold',
   extrabold: 'font-extrabold',
 } as const;
@@ -39,11 +42,13 @@ export const fontWeightClasses: Record<FontWeight, string> = {
 
 // Centralized color system with dark mode support
 export const textColorClasses: Record<TextColor, string> = {
-  primary: 'text-gray-800 dark:text-gray-100',
+  primary: 'text-gray-900 dark:text-gray-100',
   secondary: 'text-gray-600 dark:text-gray-400',
+  tertiary: 'text-gray-500 dark:text-gray-500',
   accent: 'text-accent',
-  muted: 'text-gray-500 dark:text-gray-500',
+  muted: 'text-gray-400 dark:text-gray-600',
   inherit: 'text-inherit',
+  white: 'text-white',
 } as const;
 
 // ============ Text Layout Classes ============
@@ -98,10 +103,14 @@ export const textSizeClasses: Record<TextSize, string> = {
 
 // Heading responsive sizes (static, JIT-safe)
 export const headingSizeClasses: Record<HeadingSize, string> = {
-  xl: 'text-4xl md:text-5xl lg:text-6xl',
-  lg: 'text-3xl md:text-4xl lg:text-5xl',
-  md: 'text-2xl md:text-3xl lg:text-4xl',
-  sm: 'text-xl md:text-2xl lg:text-3xl',
+  '4xl': 'text-5xl md:text-6xl lg:text-7xl',
+  '3xl': 'text-4xl md:text-5xl lg:text-6xl',
+  '2xl': 'text-3xl sm:text-4xl',
+  xl: 'text-3xl md:text-4xl lg:text-5xl',
+  lg: 'text-2xl md:text-3xl lg:text-4xl',
+  md: 'text-xl md:text-2xl lg:text-3xl',
+  sm: 'text-lg md:text-xl lg:text-2xl',
+  xs: 'text-base md:text-lg',
 } as const;
 
 // ============ Highlight Classes ============
