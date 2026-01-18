@@ -7,7 +7,7 @@ import 'prismjs/components/prism-css'; // CSS
 import 'prismjs/plugins/line-numbers/prism-line-numbers.css'; // Line numbers CSS
 import 'prismjs/plugins/line-numbers/prism-line-numbers'; // Line numbers plugin
 import clsx from 'clsx';
-import BaseBox from '../Box/BaseBox';
+import Box from '../Box/Box';
 
 export type CodeProps = {
   children: ReactNode;
@@ -44,7 +44,7 @@ const Code = ({
   }, [children, language]);
 
   return (
-    <BaseBox
+    <Box
       as="pre"
       className={clsx(
         themeClasses[theme], // Apply the appropriate theme class
@@ -60,7 +60,7 @@ const Code = ({
       <code ref={codeRef} className={`language-${language}`}>
         {children}
       </code>
-    </BaseBox>
+    </Box>
   );
 };
 
