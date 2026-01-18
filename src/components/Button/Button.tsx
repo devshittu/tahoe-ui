@@ -14,11 +14,13 @@ import { twMerge } from 'tailwind-merge';
 
 /**
  * The style variant of the button's rendering approach:
- * - solid: background color blocks
+ * - solid: background color blocks (primary actions)
+ * - subtle: low-emphasis with tinted background
  * - outline: border only, transparent background
+ * - ghost: minimal, text-based approach (alias for text)
  * - text: minimal, text-based approach
  */
-export type ButtonVariant = 'solid' | 'outline' | 'text';
+export type ButtonVariant = 'solid' | 'subtle' | 'outline' | 'ghost' | 'text';
 
 /**
  * The color scheme.
@@ -34,7 +36,8 @@ export type ButtonColor =
   | 'green'
   | 'purple'
   | 'foreground'
-  | 'background';
+  | 'background'
+  | 'destructive';
 
 /**
  * Sizing options for consistent spacing & typography.
@@ -113,53 +116,100 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
    */
   const colorMap = useMemo(() => {
     // For each color, define how it appears in each variant
+    // ghost is an alias for text, subtle is a new low-emphasis variant
     return {
       primary: {
         solid: 'bg-primary text-white hover:bg-[#2b2b2b]',
+        subtle:
+          'bg-primary/10 text-primary hover:bg-primary/20 dark:bg-primary/20 dark:hover:bg-primary/30',
         outline: 'border border-primary text-primary hover:bg-primary/10',
+        ghost: 'bg-transparent text-primary hover:bg-primary/10',
         text: 'bg-transparent text-primary hover:bg-primary/10',
       },
       secondary: {
         solid: 'bg-secondary text-white hover:bg-[#555555]',
+        subtle:
+          'bg-secondary/10 text-secondary hover:bg-secondary/20 dark:bg-secondary/20 dark:hover:bg-secondary/30',
         outline: 'border border-secondary text-secondary hover:bg-secondary/10',
+        ghost: 'bg-transparent text-secondary hover:bg-secondary/10',
         text: 'bg-transparent text-secondary hover:bg-secondary/10',
       },
       accent: {
         solid: 'bg-accent text-white hover:bg-[#e64e2d]',
+        subtle:
+          'bg-accent/10 text-accent hover:bg-accent/20 dark:bg-accent/20 dark:hover:bg-accent/30',
         outline: 'border border-accent text-accent hover:bg-accent/10',
+        ghost: 'bg-transparent text-accent hover:bg-accent/10',
         text: 'bg-transparent text-accent hover:bg-accent/10',
       },
       blue: {
         solid: 'bg-blue-500 text-white hover:bg-blue-600',
-        outline: 'border border-blue-500 text-blue-500 hover:bg-blue-50',
-        text: 'bg-transparent text-blue-500 hover:bg-blue-100',
+        subtle:
+          'bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50',
+        outline:
+          'border border-blue-500 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950',
+        ghost:
+          'bg-transparent text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900/30',
+        text: 'bg-transparent text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-900/30',
       },
       red: {
         solid: 'bg-red-500 text-white hover:bg-red-600',
-        outline: 'border border-red-500 text-red-500 hover:bg-red-50',
-        text: 'bg-transparent text-red-500 hover:bg-red-100',
+        subtle:
+          'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50',
+        outline:
+          'border border-red-500 text-red-500 hover:bg-red-50 dark:hover:bg-red-950',
+        ghost:
+          'bg-transparent text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30',
+        text: 'bg-transparent text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30',
       },
       green: {
         solid: 'bg-green-500 text-white hover:bg-green-600',
-        outline: 'border border-green-500 text-green-500 hover:bg-green-50',
-        text: 'bg-transparent text-green-500 hover:bg-green-100',
+        subtle:
+          'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50',
+        outline:
+          'border border-green-500 text-green-500 hover:bg-green-50 dark:hover:bg-green-950',
+        ghost:
+          'bg-transparent text-green-500 hover:bg-green-100 dark:hover:bg-green-900/30',
+        text: 'bg-transparent text-green-500 hover:bg-green-100 dark:hover:bg-green-900/30',
       },
       purple: {
         solid: 'bg-purple-500 text-white hover:bg-purple-600',
-        outline: 'border border-purple-500 text-purple-500 hover:bg-purple-50',
-        text: 'bg-transparent text-purple-500 hover:bg-purple-100',
+        subtle:
+          'bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:hover:bg-purple-900/50',
+        outline:
+          'border border-purple-500 text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-950',
+        ghost:
+          'bg-transparent text-purple-500 hover:bg-purple-100 dark:hover:bg-purple-900/30',
+        text: 'bg-transparent text-purple-500 hover:bg-purple-100 dark:hover:bg-purple-900/30',
       },
       foreground: {
         solid: 'bg-foreground text-background hover:opacity-90',
+        subtle:
+          'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700',
         outline:
           'border border-foreground text-foreground hover:bg-foreground/10',
+        ghost: 'bg-transparent text-foreground hover:bg-foreground/10',
         text: 'bg-transparent text-foreground hover:bg-foreground/10',
       },
       background: {
         solid: 'bg-background text-foreground hover:opacity-90',
+        subtle:
+          'bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800',
         outline:
           'border border-background text-background hover:bg-background/10',
+        ghost: 'bg-transparent text-background hover:bg-background/10',
         text: 'bg-transparent text-background hover:bg-background/10',
+      },
+      destructive: {
+        solid:
+          'bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700',
+        subtle:
+          'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50',
+        outline:
+          'border border-red-600 text-red-600 hover:bg-red-50 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-950',
+        ghost:
+          'bg-transparent text-red-600 hover:bg-red-100 dark:text-red-500 dark:hover:bg-red-900/30',
+        text: 'bg-transparent text-red-600 hover:bg-red-100 dark:text-red-500 dark:hover:bg-red-900/30',
       },
     };
   }, []);
