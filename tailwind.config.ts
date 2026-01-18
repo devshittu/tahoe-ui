@@ -127,6 +127,14 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
         },
+        shimmer: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
+        stripes: {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '40px 0' },
+        },
       },
       animation: {
         scroll: 'scroll 10s linear infinite',
@@ -148,6 +156,8 @@ export default {
         rotation: 'rotation 3s linear infinite',
         shake: 'shake 0.5s ease-in-out',
         bounce: 'bounce 1s infinite',
+        shimmer: 'shimmer 2s linear infinite',
+        stripes: 'stripes 1s linear infinite',
       },
       zIndex: {
         '10': '10',
