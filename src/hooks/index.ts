@@ -24,3 +24,34 @@ export {
   useConfirmation,
   type UseConfirmationOptions,
 } from './use-confirmation';
+
+// Media query and breakpoints
+export { useMediaQuery } from './useMediaQuery';
+export {
+  useBreakpoint,
+  breakpoints,
+  type BreakpointKey,
+  type BreakpointState,
+} from './useBreakpoint';
+
+// Focus management
+export {
+  useFocusTrap,
+  type UseFocusTrapOptions,
+  type UseFocusTrapReturn,
+} from './useFocusTrap';
+
+// Click outside detection
+export {
+  useClickOutside,
+  type UseClickOutsideOptions,
+  type UseClickOutsideReturn,
+} from './useClickOutside';
+
+// Escape key handling
+export {
+  useEscapeKey,
+  getEscapeStack,
+  clearEscapeStack,
+  type UseEscapeKeyOptions,
+} from './useEscapeKey';
