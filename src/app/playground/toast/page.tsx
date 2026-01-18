@@ -18,7 +18,7 @@ import {
   type ToastPosition,
   type ToastVariant,
   type DismissMode,
-} from './components';
+} from '@/components/Toast';
 import {
   FiCheck,
   FiAlertTriangle,
