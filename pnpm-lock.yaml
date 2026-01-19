@@ -172,6 +172,37 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/button:
+    dependencies:
+      '@tahoe-ui/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.8
+      '@types/react-dom':
+        specifier: ^19.0.0
+        version: 19.2.3(@types/react@19.2.8)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      react:
+        specifier: ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.0
+        version: 5.9.3
+
   packages/core:
     dependencies:
       clsx:
@@ -195,6 +226,40 @@ importers:
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
       typescript:
         specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/form:
+    dependencies:
+      '@tahoe-ui/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@headlessui/react':
+        specifier: ^2.0.0
+        version: 2.2.9(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.8
+      '@types/react-dom':
+        specifier: ^19.0.0
+        version: 19.2.3(@types/react@19.2.8)
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      react:
+        specifier: ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.0
         version: 5.9.3
 
   packages/hooks:
