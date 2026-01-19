@@ -52,7 +52,9 @@ export function Progress({
   className,
 }: ProgressProps) {
   const isIndeterminate = value === undefined;
-  const percentage = isIndeterminate ? 0 : Math.min(100, Math.max(0, (value / max) * 100));
+  const percentage = isIndeterminate
+    ? 0
+    : Math.min(100, Math.max(0, (value / max) * 100));
 
   // Accessibility attributes
   const a11yProps = isIndeterminate
@@ -92,7 +94,7 @@ export function Progress({
         className={twMerge(
           'w-full overflow-hidden rounded-full',
           'bg-gray-200 dark:bg-gray-700',
-          SIZE_HEIGHT[size]
+          SIZE_HEIGHT[size],
         )}
       >
         {/* Progress bar */}
@@ -103,10 +105,9 @@ export function Progress({
             // Indeterminate animation
             isIndeterminate && 'animate-progress-indeterminate',
             // Striped pattern
-            striped &&
-              'bg-stripes bg-[length:1rem_1rem]',
+            striped && 'bg-stripes bg-[length:1rem_1rem]',
             // Animated stripes
-            striped && animated && 'animate-progress-stripes'
+            striped && animated && 'animate-progress-stripes',
           )}
           style={{
             width: isIndeterminate ? '30%' : `${percentage}%`,
@@ -133,11 +134,14 @@ export function CircularProgress({
   const percentage = isIndeterminate ? 0 : Math.min(100, Math.max(0, value));
 
   // Size calculations
-  const numericSize = typeof size === 'number' ? size : { sm: 24, md: 40, lg: 56 }[size];
+  const numericSize =
+    typeof size === 'number' ? size : { sm: 24, md: 40, lg: 56 }[size];
   const strokeWidth = numericSize < 32 ? 3 : 4;
   const radius = (numericSize - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = isIndeterminate ? 0 : circumference - (percentage / 100) * circumference;
+  const offset = isIndeterminate
+    ? 0
+    : circumference - (percentage / 100) * circumference;
 
   // Color for stroke
   const strokeColors: Record<FeedbackColor, string> = {
@@ -158,7 +162,7 @@ export function CircularProgress({
       <svg
         className={twMerge(
           'transform -rotate-90',
-          isIndeterminate && 'animate-spin'
+          isIndeterminate && 'animate-spin',
         )}
         width={numericSize}
         height={numericSize}
@@ -180,7 +184,7 @@ export function CircularProgress({
         <circle
           className={twMerge(
             'transition-all duration-300 ease-out',
-            strokeColors[color]
+            strokeColors[color],
           )}
           fill="none"
           strokeWidth={strokeWidth}
