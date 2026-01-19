@@ -1,88 +1,95 @@
 /**
  * @tahoe-ui/wizard
  *
- * Multi-step wizard component with event bus validation.
+ * Headless compound component wizard with static step definitions.
  *
  * Features:
- * - Multi-step form navigation
- * - Event bus for step validation
+ * - Headless compound components (WizardRoot, WizardContent, WizardPanel)
+ * - Static step definitions (no render callbacks needed)
  * - Zustand-powered state management
- * - Framer Motion animations
- * - Conditional step visibility
- * - Lazy rendering support
- * - Full keyboard navigation
- * - Accessible (ARIA compliant)
- * - Customizable theming
+ * - Framer Motion spring animations
+ * - Conditional step visibility based on form data
+ * - Panel-level and step-level validation (sync/async)
+ * - State persistence (localStorage, sessionStorage, URL)
+ * - Full keyboard navigation (arrow keys)
+ * - Accessible (ARIA compliant, focus management)
+ * - Respects prefers-reduced-motion
  *
- * @example
+ * @example Basic Usage
  * ```tsx
- * import { Wizard, WizardProvider, useWizardStep } from '@tahoe-ui/wizard';
+ * import {
+ *   WizardRoot,
+ *   WizardContent,
+ *   WizardPanel,
+ *   WizardProgress,
+ *   WizardNextTrigger,
+ *   WizardPrevTrigger,
+ * } from '@tahoe-ui/wizard';
  *
  * const steps = [
- *   { id: 'step1', title: 'Personal Info', render: () => <PersonalInfoForm /> },
- *   { id: 'step2', title: 'Address', render: () => <AddressForm /> },
- *   { id: 'step3', title: 'Review', render: () => <ReviewStep /> },
+ *   { id: 'account', title: 'Account' },
+ *   { id: 'security', title: 'Security' },
+ *   { id: 'confirm', title: 'Confirm' },
  * ];
  *
- * function App() {
+ * function MyWizard() {
  *   return (
- *     <WizardProvider
- *       steps={steps}
- *       hooks={{ onWizardComplete: (data) => console.log(data) }}
- *     >
- *       <Wizard showProgress />
- *     </WizardProvider>
+ *     <WizardRoot steps={steps}>
+ *       <WizardProgress variant="numbers" />
+ *       <WizardContent>
+ *         <WizardPanel stepId="account">
+ *           <AccountForm />
+ *         </WizardPanel>
+ *         <WizardPanel stepId="security">
+ *           <SecurityForm />
+ *         </WizardPanel>
+ *         <WizardPanel stepId="confirm">
+ *           <ConfirmationStep />
+ *         </WizardPanel>
+ *       </WizardContent>
+ *       <div className="flex gap-2">
+ *         <WizardPrevTrigger>
+ *           <button>Back</button>
+ *         </WizardPrevTrigger>
+ *         <WizardNextTrigger>
+ *           <button>Next</button>
+ *         </WizardNextTrigger>
+ *       </div>
+ *     </WizardRoot>
  *   );
  * }
  * ```
+ *
+ * @example With Validation
+ * ```tsx
+ * const steps = [
+ *   {
+ *     id: 'account',
+ *     title: 'Account',
+ *     validate: async (data) => {
+ *       if (!data?.email) return 'Email is required';
+ *       return true;
+ *     },
+ *   },
+ * ];
+ * ```
+ *
+ * @example With Conditional Steps
+ * ```tsx
+ * const steps = [
+ *   { id: 'type', title: 'Account Type' },
+ *   {
+ *     id: 'business',
+ *     title: 'Business Info',
+ *     isVisible: (data) => data.type?.accountType === 'business',
+ *   },
+ *   { id: 'confirm', title: 'Confirm' },
+ * ];
+ * ```
  */
 
-// Components
-export { Wizard } from './Wizard';
-export { WizardProvider } from './WizardProvider';
+// Core exports
+export * from './core';
 
-// Hooks
-export {
-  useWizard,
-  useWizardStep,
-  useWizardNavigation,
-  WizardContext,
-} from './hooks';
-
-// Store
-export { createWizardStore } from './store';
-export type { WizardStore } from './store';
-
-// Event Bus
-export {
-  default as eventBus,
-  validateStep,
-  updateStepData,
-  navigateWizard,
-  reportError,
-  completeWizard,
-  onValidationStatus,
-  offValidationStatus,
-  EVENT_STEP_VALIDATE,
-  EVENT_STEP_VALIDATION_STATUS,
-  EVENT_STEP_DATA_UPDATE,
-  EVENT_WIZARD_NAVIGATE,
-  EVENT_WIZARD_ERROR,
-  EVENT_WIZARD_COMPLETE,
-} from './eventBus';
-export type { WizardEventMap } from './eventBus';
-
-// Types
-export type {
-  WizardStep,
-  WizardState,
-  WizardConfig,
-  WizardHooks,
-  WizardTheme,
-  WizardError,
-  StepMeta,
-  StepDataMap,
-} from './types';
-
-// Default theme
-export { defaultTheme } from './types';
+// Utilities
+export { cn } from './utils';
