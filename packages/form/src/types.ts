@@ -6,7 +6,12 @@
  * @packageDocumentation
  */
 
-import { type InputHTMLAttributes, type TextareaHTMLAttributes, type ReactNode, type ReactElement } from 'react';
+import {
+  type InputHTMLAttributes,
+  type TextareaHTMLAttributes,
+  type ReactNode,
+  type ReactElement,
+} from 'react';
 
 // ============================================================================
 // Input Types
@@ -16,7 +21,10 @@ export type InputVariant = 'default' | 'filled' | 'outlined';
 export type InputSize = 'sm' | 'md' | 'lg';
 export type InputState = 'error' | 'success' | undefined;
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface InputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'size'
+> {
   /** Visual variant */
   variant?: InputVariant;
   /** Input size */
@@ -39,7 +47,10 @@ export type TextareaVariant = 'default' | 'filled' | 'outlined';
 export type TextareaSize = 'sm' | 'md' | 'lg';
 export type TextareaState = 'error' | 'success' | undefined;
 
-export interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
+export interface TextareaProps extends Omit<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  'size'
+> {
   /** Visual variant */
   variant?: TextareaVariant;
   /** Size preset */
