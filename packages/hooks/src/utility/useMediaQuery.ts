@@ -9,7 +9,7 @@ export function useMediaQuery(query: string): boolean {
     (event: MediaQueryListEvent | MediaQueryList) => {
       setMatches(event.matches);
     },
-    []
+    [],
   );
 
   useEffect(() => {
