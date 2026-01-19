@@ -1,11 +1,11 @@
+// src/components/Button/ToggleButton.stories.tsx
+
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import ToggleButton from './ToggleButton';
-import { AppProvider } from '@/providers/app'; // Adjust the import path as necessary
+import { AppProvider } from '@/providers/app';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { action } from '@storybook/addon-actions';
-import clsx from 'clsx';
-import { twMerge } from 'tailwind-merge';
 
 const meta: Meta<typeof ToggleButton> = {
   title: 'Elements/Button/ToggleButton',
@@ -13,7 +13,6 @@ const meta: Meta<typeof ToggleButton> = {
   decorators: [
     (Story) => (
       <AppProvider>
-        {/* Container with padding and flex layout for better visualization */}
         <div className="p-4 flex flex-col items-center space-y-6 bg-gray-50 min-h-screen">
           <Story />
         </div>
@@ -24,20 +23,19 @@ const meta: Meta<typeof ToggleButton> = {
     variant: 'solid',
     color: 'primary',
     size: 'md',
-    rounded: 'md',
+    radius: 'md',
     isLoading: false,
     fullWidth: false,
-    focusable: true,
     initialToggled: false,
     children: 'Toggle',
   },
   argTypes: {
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'text'],
+      options: ['solid', 'subtle', 'outline', 'ghost', 'glass'],
       description: 'Style variant of the button based on toggle state.',
       table: {
-        type: { summary: `'solid' | 'outline' | 'text'` },
+        type: { summary: `'solid' | 'subtle' | 'outline' | 'ghost' | 'glass'` },
         defaultValue: { summary: `'solid'` },
       },
     },
@@ -47,17 +45,15 @@ const meta: Meta<typeof ToggleButton> = {
         'primary',
         'secondary',
         'accent',
-        'blue',
-        'red',
-        'green',
-        'purple',
-        'foreground',
-        'background',
+        'neutral',
+        'success',
+        'warning',
+        'error',
       ],
       description: 'Color scheme of the button when toggled.',
       table: {
         type: {
-          summary: `'primary' | 'secondary' | 'accent' | 'blue' | 'red' | 'green' | 'purple' | 'foreground' | 'background'`,
+          summary: `'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error'`,
         },
         defaultValue: { summary: `'primary'` },
       },
@@ -71,7 +67,7 @@ const meta: Meta<typeof ToggleButton> = {
         defaultValue: { summary: `'md'` },
       },
     },
-    rounded: {
+    radius: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg', 'full'],
       description: 'Border radius of the button.',
@@ -91,14 +87,6 @@ const meta: Meta<typeof ToggleButton> = {
     fullWidth: {
       control: 'boolean',
       description: 'If true, the button takes the full width of its container.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
-    focusable: {
-      control: 'boolean',
-      description: 'Determines if the button can receive focus.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -128,7 +116,6 @@ const meta: Meta<typeof ToggleButton> = {
         defaultValue: { summary: 'undefined' },
       },
     },
-    // Disable controls for leftIcon and rightIcon as they expect ReactNodes
     leftIcon: {
       control: false,
       description: 'Icon to display on the left side of the button.',
@@ -137,12 +124,10 @@ const meta: Meta<typeof ToggleButton> = {
       control: false,
       description: 'Icon to display on the right side of the button.',
     },
-    // Disable control for spinner as it expects ReactNode
     spinner: {
       control: false,
       description: 'Custom spinner element to display when loading.',
     },
-    // Disable control for children to allow for text content
     children: {
       control: 'text',
       description: 'Content of the button.',
@@ -177,8 +162,8 @@ export const InitiallyToggled: Story = {
  */
 export const CustomColor: Story = {
   args: {
-    color: 'green',
-    children: 'Green Toggle',
+    color: 'success',
+    children: 'Success Toggle',
   },
 };
 
@@ -235,14 +220,13 @@ export const FullWidth: Story = {
 
 /**
  * ToggleButton with Combined Props.
- * Demonstrates multiple props applied together for enhanced styling and functionality.
  */
 export const CombinedProps: Story = {
   args: {
     variant: 'outline',
-    color: 'purple',
+    color: 'secondary',
     size: 'lg',
-    rounded: 'full',
+    radius: 'full',
     initialToggled: true,
     onToggle: action('Toggle state changed'),
     leftIcon: <FaThumbsUp />,
@@ -258,30 +242,24 @@ export const CombinedProps: Story = {
 export const Showcase: Story = {
   render: (args) => (
     <div className="space-y-6">
-      {/* 1) Default ToggleButton */}
       <ToggleButton {...args}>Default Toggle</ToggleButton>
 
-      {/* 2) Initially Toggled */}
       <ToggleButton {...args} initialToggled>
         Enabled
       </ToggleButton>
 
-      {/* 3) Custom Color */}
-      <ToggleButton {...args} color="green">
-        Green Toggle
+      <ToggleButton {...args} color="success">
+        Success Toggle
       </ToggleButton>
 
-      {/* 4) With Left Icon */}
       <ToggleButton {...args} leftIcon={<FaThumbsUp />}>
         Like
       </ToggleButton>
 
-      {/* 5) With Right Icon */}
       <ToggleButton {...args} rightIcon={<FaThumbsDown />}>
         Dislike
       </ToggleButton>
 
-      {/* 6) With Both Icons */}
       <ToggleButton
         {...args}
         leftIcon={<FaThumbsUp />}
@@ -290,23 +268,20 @@ export const Showcase: Story = {
         Vote
       </ToggleButton>
 
-      {/* 7) Loading State */}
       <ToggleButton {...args} isLoading>
         Loading...
       </ToggleButton>
 
-      {/* 8) Full Width */}
       <ToggleButton {...args} fullWidth>
         Full Width Toggle
       </ToggleButton>
 
-      {/* 9) Combined Props */}
       <ToggleButton
         {...args}
         variant="outline"
-        color="purple"
+        color="secondary"
         size="lg"
-        rounded="full"
+        radius="full"
         initialToggled
         onToggle={action('Toggle state changed')}
         leftIcon={<FaThumbsUp />}
@@ -318,5 +293,3 @@ export const Showcase: Story = {
     </div>
   ),
 };
-
-// src/components/Button/ToggleButton.stories.tsx
