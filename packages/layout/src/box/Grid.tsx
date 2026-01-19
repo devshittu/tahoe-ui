@@ -37,7 +37,8 @@ import type { BaseLayoutProps, GridProps as GridLayoutProps } from '../types';
  */
 
 export interface GridProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'color'>,
+  extends
+    Omit<HTMLAttributes<HTMLElement>, 'color'>,
     BaseLayoutProps,
     Omit<GridLayoutProps, keyof BaseLayoutProps> {
   as?: ElementType;
