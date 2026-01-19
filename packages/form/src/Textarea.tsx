@@ -2,7 +2,12 @@
 
 import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
 import { cn } from '@tahoe-ui/core';
-import type { TextareaProps, TextareaVariant, TextareaSize, TextareaState } from './types';
+import type {
+  TextareaProps,
+  TextareaVariant,
+  TextareaSize,
+  TextareaState,
+} from './types';
 
 /**
  * Textarea - Multi-line text input with auto-resize support
