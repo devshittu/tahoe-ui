@@ -14,18 +14,26 @@ export type HandlebarZoneProps = {
   onClick: () => void;
   isBeyondLimit: boolean;
   resistanceIntensity?: number;
+  /** Progress toward close threshold (0-1) for visual feedback */
+  closeProgress?: number;
   loadingState?: LoadingStateConfig;
 };
 
 /**
- * Unified HandlebarZone with token-based sizing and reduced motion support
+ * HandlebarZone - Apple-inspired drag indicator
  *
- * Features:
- * - Position-aware layout with proper touch targets (44-48px per design principles)
- * - Smooth scale/color transitions for resistance feedback
- * - Loading shimmer animation with reduced motion support
- * - Keyboard accessibility
- * - Responsive sizing (narrower on small screens for left/right)
+ * Design principles applied:
+ * - #9 Obvious Affordances: Clear drag target with tactile visual depth
+ * - #16 Micro-Interaction Precision: Refined hover, active, resistance states
+ * - #4 System Consistency: Token-based colors and sizing
+ * - #6 Purposeful Motion: Spring physics, reduced motion support
+ *
+ * Visual refinements:
+ * - Delicate proportions matching Apple's modal handlebars
+ * - Subtle inner shadow for tactile depth
+ * - Gradient overlay for premium feel
+ * - Glow effect when approaching close threshold
+ * - Smooth state transitions
  */
 export function HandlebarZone({
   position,
@@ -34,6 +42,7 @@ export function HandlebarZone({
   onClick,
   isBeyondLimit,
   resistanceIntensity = 0,
+  closeProgress = 0,
   loadingState,
 }: HandlebarZoneProps) {
   const { prefersReducedMotion, getSpringConfig } = useReducedMotion();
@@ -42,17 +51,21 @@ export function HandlebarZone({
   const lockInteraction = loadingState?.lockInteraction ?? true;
   const shimmerSpeed = loadingState?.shimmerSpeed ?? 'fast';
 
-  // Calculate visual feedback based on resistance
-  const scale = isBeyondLimit ? 1 + resistanceIntensity * 0.15 : 1;
-  const bgOpacity = 0.4 + resistanceIntensity * 0.4;
+  // Visual feedback based on drag state
+  const scale = isBeyondLimit ? 1 + resistanceIntensity * 0.12 : 1;
 
-  // Position-specific classes with token-based sizing
-  const { zoneClasses, lineClasses } = getPositionClasses(position);
+  // Close progress glow (subtle blue glow as approaching close)
+  const glowOpacity = closeProgress > 0.3 ? (closeProgress - 0.3) * 0.7 : 0;
+  const glowBlur = closeProgress > 0.3 ? 8 + closeProgress * 8 : 0;
 
-  // Shimmer animation (disabled for reduced motion)
+  // Position-specific classes
+  const { zoneClasses, lineClasses, isHorizontal } =
+    getPositionClasses(position);
+
+  // Shimmer animation timing
   const shimmerDuration = shimmerSpeed === 'fast' ? 1.5 : 3;
 
-  // Spring config (instant for reduced motion)
+  // Spring config
   const springConfig = getSpringConfig(MOTION_TOKENS.spring.snappy);
 
   // Event handlers
@@ -88,20 +101,53 @@ export function HandlebarZone({
         cursor: isLoading && lockInteraction ? 'not-allowed' : undefined,
       }}
     >
+      {/* Close progress glow effect */}
+      {closeProgress > 0.3 && !prefersReducedMotion && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: glowOpacity }}
+          style={{
+            background: `radial-gradient(ellipse at center, rgba(59, 130, 246, ${glowOpacity * 0.3}) 0%, transparent 70%)`,
+            filter: `blur(${glowBlur}px)`,
+          }}
+        />
+      )}
+
       <motion.div
-        className={`${lineClasses} relative overflow-hidden`}
+        className={lineClasses}
+        initial={false}
         animate={{
           scale,
-          backgroundColor: isBeyondLimit
-            ? `rgba(75, 85, 99, ${bgOpacity})`
+        }}
+        whileHover={
+          !isLoading
+            ? {
+                scale: 1.05,
+              }
+            : undefined
+        }
+        whileTap={
+          !isLoading
+            ? {
+                scale: 0.95,
+              }
+            : undefined
+        }
+        transition={springConfig}
+        style={{
+          // Dynamic background based on resistance
+          background: isBeyondLimit
+            ? `linear-gradient(${isHorizontal ? '180deg' : '90deg'},
+                rgba(75, 85, 99, ${0.5 + resistanceIntensity * 0.3}) 0%,
+                rgba(107, 114, 128, ${0.6 + resistanceIntensity * 0.3}) 100%)`
             : undefined,
         }}
-        transition={springConfig}
       >
         {/* Loading shimmer overlay */}
         {isLoading && !prefersReducedMotion && (
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 dark:via-white/20 to-transparent"
+            className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/30 dark:via-white/20 to-transparent"
             initial={{ x: '-100%' }}
             animate={{ x: '200%' }}
             transition={{
@@ -113,7 +159,7 @@ export function HandlebarZone({
         )}
         {/* Static loading indicator for reduced motion */}
         {isLoading && prefersReducedMotion && (
-          <div className="absolute inset-0 bg-white/20 dark:bg-white/10" />
+          <div className="absolute inset-0 rounded-full bg-white/20 dark:bg-white/10" />
         )}
       </motion.div>
     </div>
@@ -121,63 +167,83 @@ export function HandlebarZone({
 }
 
 /**
- * Get position-specific classes with responsive sizing
+ * Get position-specific classes with Apple-inspired styling
  *
- * Touch targets: 44-56px per design principles
- * - Horizontal (top/bottom): h-12 (48px), scaling up on larger screens
- * - Vertical (left/right): w-12 (48px), narrower on small screens
- *
- * Handlebar line: Premium responsive sizing
- * - Thickness: 5px → 6px → 8px (mobile → tablet → desktop)
- * - Width: 48px → 64px → 80px for horizontal
- * - Height: 48px → 64px → 80px for vertical
- * - Subtle inner shadow for depth (Apple-inspired)
+ * Design refinements:
+ * - Delicate proportions (4px height, 36-40px width) matching Apple's iOS modals
+ * - Touch zone remains 44-48px for accessibility
+ * - Subtle gradient background for depth
+ * - Inner shadow for tactile feel
+ * - Smooth rounded ends
  */
-function getPositionClasses(position: Position) {
-  const baseZoneClasses =
-    'absolute cursor-grab active:cursor-grabbing touch-none z-50 flex items-center justify-center';
-
-  // Premium handlebar line with responsive sizing and subtle depth
-  // Shadow creates inner depth without looking heavy
-  const baseLineClasses = [
-    'rounded-full',
-    'bg-gray-400 dark:bg-gray-500',
-    // Premium inner shadow for depth
-    'shadow-[inset_0_1px_2px_rgba(0,0,0,0.15)]',
-    'dark:shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)]',
+function getPositionClasses(position: Position): {
+  zoneClasses: string;
+  lineClasses: string;
+  isHorizontal: boolean;
+} {
+  const baseZoneClasses = [
+    'absolute',
+    'cursor-grab active:cursor-grabbing',
+    'touch-none',
+    'z-50',
+    'flex items-center justify-center',
+    // Subtle highlight on hover for affordance
+    'transition-colors duration-150',
   ].join(' ');
+
+  // Apple-inspired handlebar: delicate, refined, tactile
+  // - Thinner than before (4px instead of 5-8px)
+  // - Subtle gradient for depth
+  // - Inner shadow for pressed/tactile feel
+  // - Slightly translucent for layered look
+  const baseLineClasses = [
+    'relative',
+    'rounded-full',
+    'overflow-hidden',
+    // Refined gradient background (light mode)
+    'bg-gradient-to-b from-gray-300 to-gray-400',
+    // Dark mode: lighter, more visible
+    'dark:from-gray-500 dark:to-gray-600',
+    // Inner shadow for tactile depth
+    'shadow-[inset_0_1px_0_rgba(255,255,255,0.2),inset_0_-1px_1px_rgba(0,0,0,0.1)]',
+    'dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),inset_0_-1px_1px_rgba(0,0,0,0.2)]',
+    // Subtle outer glow for lift
+    'ring-1 ring-black/5 dark:ring-white/5',
+  ].join(' ');
+
+  const isHorizontal = position === 'top' || position === 'bottom';
 
   switch (position) {
     case 'top':
       return {
-        // Horizontal zone: 48px → 56px height on larger screens
-        zoneClasses: `${baseZoneClasses} top-0 left-0 right-0 h-12 sm:h-14 min-h-11 max-h-14`,
-        // Line: Responsive thickness (5px→6px→8px) and width (48px→64px→80px)
-        lineClasses: `${baseLineClasses} h-[5px] sm:h-1.5 lg:h-2 w-12 sm:w-16 lg:w-20`,
+        // Touch zone: 48px height
+        zoneClasses: `${baseZoneClasses} top-0 left-0 right-0 h-12 min-h-11`,
+        // Handlebar: 4px height, 36px→40px width (more delicate than before)
+        lineClasses: `${baseLineClasses} h-1 w-9 sm:w-10`,
+        isHorizontal: true,
       };
 
     case 'bottom':
       return {
-        // Horizontal zone: 48px → 56px height on larger screens
-        zoneClasses: `${baseZoneClasses} bottom-0 left-0 right-0 h-12 sm:h-14 min-h-11 max-h-14`,
-        // Line: Responsive thickness (5px→6px→8px) and width (48px→64px→80px)
-        lineClasses: `${baseLineClasses} h-[5px] sm:h-1.5 lg:h-2 w-12 sm:w-16 lg:w-20`,
+        zoneClasses: `${baseZoneClasses} bottom-0 left-0 right-0 h-12 min-h-11`,
+        lineClasses: `${baseLineClasses} h-1 w-9 sm:w-10`,
+        isHorizontal: true,
       };
 
     case 'left':
       return {
-        // Vertical zone: 44px on mobile, 48px on tablet, 56px on desktop
-        zoneClasses: `${baseZoneClasses} left-0 top-0 bottom-0 w-11 sm:w-12 lg:w-14 min-w-10 max-w-14`,
-        // Line: Responsive thickness (5px→6px→8px) and height (48px→64px→80px)
-        lineClasses: `${baseLineClasses} w-[5px] sm:w-1.5 lg:w-2 h-12 sm:h-16 lg:h-20`,
+        // Touch zone: 48px width
+        zoneClasses: `${baseZoneClasses} left-0 top-0 bottom-0 w-12 min-w-11`,
+        // Handlebar: 4px width, 36px→40px height
+        lineClasses: `${baseLineClasses} w-1 h-9 sm:h-10`,
+        isHorizontal: false,
       };
 
     case 'right':
       return {
-        // Vertical zone: 44px on mobile, 48px on tablet, 56px on desktop
-        zoneClasses: `${baseZoneClasses} right-0 top-0 bottom-0 w-11 sm:w-12 lg:w-14 min-w-10 max-w-14`,
-        // Line: Responsive thickness (5px→6px→8px) and height (48px→64px→80px)
-        lineClasses: `${baseLineClasses} w-[5px] sm:w-1.5 lg:w-2 h-12 sm:h-16 lg:h-20`,
+        zoneClasses: `${baseZoneClasses} right-0 top-0 bottom-0 w-12 min-w-11`,
+        lineClasses: `${baseLineClasses} w-1 h-9 sm:h-10`,
+        isHorizontal: false,
       };
   }
 }
