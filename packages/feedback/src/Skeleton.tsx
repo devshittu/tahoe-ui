@@ -83,7 +83,7 @@ export function Skeleton({
     animationClass,
     widthClass,
     heightClass,
-    className
+    className,
   );
 
   // Handle multiple text lines
@@ -96,7 +96,7 @@ export function Skeleton({
             className={twMerge(
               baseClasses,
               // Last line is shorter for natural appearance
-              index === lines - 1 && 'w-3/4'
+              index === lines - 1 && 'w-3/4',
             )}
             style={getStyle()}
             role="presentation"
@@ -125,7 +125,9 @@ export function SkeletonText({
   className,
   ...props
 }: Omit<SkeletonProps, 'variant'> & { lines?: number }) {
-  return <Skeleton variant="text" lines={lines} className={className} {...props} />;
+  return (
+    <Skeleton variant="text" lines={lines} className={className} {...props} />
+  );
 }
 
 /**
