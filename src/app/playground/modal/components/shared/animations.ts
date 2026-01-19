@@ -8,10 +8,14 @@ import { MOTION_TOKENS, SPACING_TOKENS } from '@/config/tokens';
 /**
  * Generate slide animation variants based on position
  *
- * Features:
- * - Spring physics for natural, fluid motion
- * - Negative offset for premium fade-in effect
- * - Reduced motion support (opacity-only transitions)
+ * Design principles applied:
+ * - #6 Purposeful Motion: Entry/exit explain spatial relationships
+ * - #16 Micro-Interaction Precision: Refined spring physics
+ *
+ * Refinements:
+ * - Smaller offset (105%) for less dramatic entry
+ * - Slight scale for "materializing" effect
+ * - Faster exit for responsive feel
  *
  * @param position - Modal position (top/bottom/left/right)
  * @param prefersReducedMotion - Whether to use simplified animations
@@ -39,28 +43,62 @@ export function createSlideVariants(
     };
   }
 
-  // Full motion: position-based slide animations
+  // Full motion: refined position-based slide animations
+  // Using 105% offset (less dramatic than 120%)
+  // Adding slight scale for "materializing" effect
   const getHiddenState = (pos: Position) => {
     switch (pos) {
       case 'top':
-        return { y: '-120%', opacity: 0 };
+        return { y: '-105%', opacity: 0, scale: 0.98 };
       case 'bottom':
-        return { y: '120%', opacity: 0 };
+        return { y: '105%', opacity: 0, scale: 0.98 };
       case 'left':
-        return { x: '-120%', opacity: 0 };
+        return { x: '-105%', opacity: 0, scale: 0.98 };
       case 'right':
-        return { x: '120%', opacity: 0 };
+        return { x: '105%', opacity: 0, scale: 0.98 };
     }
   };
 
   const getExitState = (pos: Position) => {
-    return {
-      ...getHiddenState(pos),
-      transition: {
-        duration: MOTION_TOKENS.duration.base / 1000,
-        ease: MOTION_TOKENS.easing.smooth,
-      },
+    // Exit uses slightly faster, snappier transition
+    const exitOffset = '102%'; // Smaller exit offset for quicker departure
+    const exitTransition = {
+      type: 'spring' as const,
+      damping: 32,
+      stiffness: 350,
+      mass: 0.6,
     };
+
+    switch (pos) {
+      case 'top':
+        return {
+          y: `-${exitOffset}`,
+          opacity: 0,
+          scale: 0.98,
+          transition: exitTransition,
+        };
+      case 'bottom':
+        return {
+          y: exitOffset,
+          opacity: 0,
+          scale: 0.98,
+          transition: exitTransition,
+        };
+      case 'left':
+        return {
+          x: `-${exitOffset}`,
+          opacity: 0,
+          scale: 0.98,
+          transition: exitTransition,
+        };
+      case 'right':
+        return {
+          x: exitOffset,
+          opacity: 0,
+          scale: 0.98,
+          transition: exitTransition,
+        };
+    }
   };
 
   return {
@@ -69,7 +107,13 @@ export function createSlideVariants(
       x: 0,
       y: 0,
       opacity: 1,
-      transition: SLIDE_TRANSITION,
+      scale: 1,
+      transition: {
+        ...SLIDE_TRANSITION,
+        // Slight overshoot for premium feel
+        stiffness: 260,
+        damping: 26,
+      },
     },
     exit: (customPos?: Position) => getExitState(customPos || position),
   };
