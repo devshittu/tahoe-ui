@@ -12,23 +12,29 @@ import {
   FiHeart,
   FiShare,
   FiEdit,
+  FiCheck,
+  FiX,
+  FiLoader,
+  FiZap,
 } from 'react-icons/fi';
 import { HeadlineBlock } from '@/app/playground/headline/components';
 import { SegmentedControl } from '@/app/playground/segmented-control/components';
-import Button, {
-  ButtonVariant,
-  ButtonColor,
-  ButtonSize,
-  ButtonRounded,
-} from '@/components/Button/Button';
+import {
+  Button,
+  type ButtonVariant,
+  type ButtonColor,
+  type ButtonSize,
+  type ButtonRadius,
+} from '@/components/Button';
 
 export default function ButtonPage() {
   const [variant, setVariant] = useState<ButtonVariant>('solid');
   const [color, setColor] = useState<ButtonColor>('primary');
   const [size, setSize] = useState<ButtonSize>('md');
-  const [rounded, setRounded] = useState<ButtonRounded>('md');
+  const [radius, setRadius] = useState<ButtonRadius>('md');
   const [isLoading, setIsLoading] = useState(false);
   const [fullWidth, setFullWidth] = useState(false);
+  const [disableAnimation, setDisableAnimation] = useState(false);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
@@ -36,7 +42,7 @@ export default function ButtonPage() {
         {/* Header */}
         <HeadlineBlock
           headline="Button"
-          subheadline="Interactive button component with multiple variants, colors, sizes, and states. Supports icons, loading states, and full accessibility."
+          subheadline="Physics-based button with Apple-inspired interactions. Features spring animations, haptic feedback support, and full accessibility."
           size="medium"
         />
 
@@ -61,7 +67,7 @@ export default function ButtonPage() {
                   <option value="subtle">Subtle</option>
                   <option value="outline">Outline</option>
                   <option value="ghost">Ghost</option>
-                  <option value="text">Text</option>
+                  <option value="glass">Glass</option>
                 </select>
               </div>
 
@@ -77,11 +83,11 @@ export default function ButtonPage() {
                 >
                   <option value="primary">Primary</option>
                   <option value="secondary">Secondary</option>
-                  <option value="blue">Blue</option>
-                  <option value="green">Green</option>
-                  <option value="red">Red</option>
-                  <option value="purple">Purple</option>
-                  <option value="destructive">Destructive</option>
+                  <option value="accent">Accent</option>
+                  <option value="neutral">Neutral</option>
+                  <option value="success">Success</option>
+                  <option value="warning">Warning</option>
+                  <option value="error">Error</option>
                 </select>
               </div>
 
@@ -104,10 +110,10 @@ export default function ButtonPage() {
                 />
               </div>
 
-              {/* Rounded */}
+              {/* Radius */}
               <div>
                 <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Rounded
+                  Radius
                 </span>
                 <SegmentedControl
                   options={[
@@ -117,8 +123,8 @@ export default function ButtonPage() {
                     { value: 'lg', label: 'L' },
                     { value: 'full', label: 'Full' },
                   ]}
-                  value={rounded}
-                  onChange={setRounded}
+                  value={radius}
+                  onChange={setRadius}
                   size="sm"
                 />
               </div>
@@ -145,25 +151,25 @@ export default function ButtonPage() {
                 </button>
               </div>
 
-              {/* Full Width */}
+              {/* Animation Toggle */}
               <div>
                 <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Full Width
+                  Animation
                 </span>
                 <button
                   type="button"
-                  onClick={() => setFullWidth(!fullWidth)}
+                  onClick={() => setDisableAnimation(!disableAnimation)}
                   className={`
                     px-4 py-2 rounded-lg text-sm font-medium transition-colors
                     ${
-                      fullWidth
+                      !disableAnimation
                         ? 'bg-blue-500 text-white'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                     }
                   `}
-                  aria-pressed={fullWidth}
+                  aria-pressed={!disableAnimation}
                 >
-                  {fullWidth ? 'On' : 'Off'}
+                  {disableAnimation ? 'Off' : 'On'}
                 </button>
               </div>
             </div>
@@ -176,14 +182,18 @@ export default function ButtonPage() {
             Interactive Demo
           </h2>
           <div className="p-8 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Hover and click to experience spring physics
+            </p>
             <div className={fullWidth ? 'space-y-4' : 'flex flex-wrap gap-4'}>
               <Button
                 variant={variant}
                 color={color}
                 size={size}
-                rounded={rounded}
+                radius={radius}
                 isLoading={isLoading}
                 fullWidth={fullWidth}
+                disableAnimation={disableAnimation}
               >
                 Button
               </Button>
@@ -191,9 +201,11 @@ export default function ButtonPage() {
                 variant={variant}
                 color={color}
                 size={size}
-                rounded={rounded}
+                radius={radius}
                 isLoading={isLoading}
+                loadingText="Sending..."
                 fullWidth={fullWidth}
+                disableAnimation={disableAnimation}
                 leftIcon={<FiSend />}
               >
                 With Icon
@@ -202,12 +214,62 @@ export default function ButtonPage() {
                 variant={variant}
                 color={color}
                 size={size}
-                rounded={rounded}
+                radius={radius}
                 isLoading={isLoading}
                 fullWidth={fullWidth}
+                disableAnimation={disableAnimation}
                 rightIcon={<FiArrowRight />}
               >
                 Continue
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Physics Animation Demo */}
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Physics-Based Animation
+          </h2>
+          <div className="p-6 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border border-gray-200 dark:border-gray-800">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+              Buttons use spring physics for natural, Apple-like interactions.
+              Hover lifts the button, press squashes it.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button variant="solid" color="primary" leftIcon={<FiZap />}>
+                Spring Hover
+              </Button>
+              <Button variant="solid" color="accent" leftIcon={<FiCheck />}>
+                Press Effect
+              </Button>
+              <Button variant="glass" color="primary" leftIcon={<FiLoader />}>
+                Glass Vibrancy
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Glass Variant Showcase */}
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Glass Variant
+          </h2>
+          <div className="relative p-8 rounded-xl overflow-hidden">
+            {/* Gradient background to showcase glass effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500" />
+            <div className="relative flex flex-wrap gap-4">
+              <Button variant="glass" color="primary">
+                Primary Glass
+              </Button>
+              <Button variant="glass" color="accent">
+                Accent Glass
+              </Button>
+              <Button variant="glass" color="success" leftIcon={<FiCheck />}>
+                Success Glass
+              </Button>
+              <Button variant="glass" color="error" leftIcon={<FiX />}>
+                Error Glass
               </Button>
             </div>
           </div>
@@ -219,7 +281,7 @@ export default function ButtonPage() {
             Variants
           </h2>
           <div className="p-6 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
-            {(['solid', 'subtle', 'outline', 'ghost', 'text'] as const).map(
+            {(['solid', 'subtle', 'outline', 'ghost', 'glass'] as const).map(
               (v) => (
                 <div key={v} className="flex items-center gap-4">
                   <span className="w-16 text-sm font-medium text-gray-500 dark:text-gray-400 capitalize">
@@ -229,14 +291,14 @@ export default function ButtonPage() {
                     <Button variant={v} color="primary">
                       Primary
                     </Button>
-                    <Button variant={v} color="blue">
-                      Blue
+                    <Button variant={v} color="accent">
+                      Accent
                     </Button>
-                    <Button variant={v} color="green">
-                      Green
+                    <Button variant={v} color="success">
+                      Success
                     </Button>
-                    <Button variant={v} color="destructive">
-                      Destructive
+                    <Button variant={v} color="error">
+                      Error
                     </Button>
                   </div>
                 </div>
@@ -251,6 +313,9 @@ export default function ButtonPage() {
             Sizes
           </h2>
           <div className="p-6 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              All sizes maintain 44px minimum touch target for accessibility
+            </p>
             <div className="flex flex-wrap items-end gap-4">
               {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((s) => (
                 <div key={s} className="text-center">
@@ -264,20 +329,27 @@ export default function ButtonPage() {
           </div>
         </section>
 
-        {/* Rounded */}
+        {/* Semantic Colors */}
         <section className="mt-12">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Border Radius
+            Semantic Colors
           </h2>
           <div className="p-6 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
-            <div className="flex flex-wrap items-center gap-4">
-              {(['none', 'sm', 'md', 'lg', 'full'] as const).map((r) => (
-                <div key={r} className="text-center">
-                  <Button rounded={r} color="blue">
-                    Button
-                  </Button>
-                  <span className="block text-xs text-gray-400 mt-2">{r}</span>
-                </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {(
+                [
+                  'primary',
+                  'secondary',
+                  'accent',
+                  'neutral',
+                  'success',
+                  'warning',
+                  'error',
+                ] as const
+              ).map((c) => (
+                <Button key={c} color={c} className="capitalize">
+                  {c}
+                </Button>
               ))}
             </div>
           </div>
@@ -293,22 +365,46 @@ export default function ButtonPage() {
               <Button color="primary" leftIcon={<FiPlus />}>
                 Add Item
               </Button>
-              <Button color="blue" rightIcon={<FiDownload />}>
+              <Button color="accent" rightIcon={<FiDownload />}>
                 Download
               </Button>
-              <Button color="green" leftIcon={<FiEdit />}>
+              <Button color="success" leftIcon={<FiEdit />}>
                 Edit
               </Button>
-              <Button color="destructive" leftIcon={<FiTrash2 />}>
+              <Button color="error" leftIcon={<FiTrash2 />}>
                 Delete
               </Button>
-              <Button variant="outline" color="purple" leftIcon={<FiHeart />}>
+              <Button variant="outline" color="accent" leftIcon={<FiHeart />}>
                 Like
               </Button>
-              <Button variant="ghost" color="blue" leftIcon={<FiShare />}>
+              <Button variant="ghost" color="accent" leftIcon={<FiShare />}>
                 Share
               </Button>
             </div>
+          </div>
+        </section>
+
+        {/* Loading States */}
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Loading States
+          </h2>
+          <div className="p-6 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
+            <div className="flex flex-wrap gap-4">
+              <Button color="primary" isLoading>
+                Loading
+              </Button>
+              <Button color="accent" isLoading loadingText="Saving...">
+                Save
+              </Button>
+              <Button color="success" isLoading loadingText="Processing...">
+                Submit
+              </Button>
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Use <code className="text-blue-600">loadingText</code> to show
+              custom text during loading
+            </p>
           </div>
         </section>
 
@@ -320,17 +416,9 @@ export default function ButtonPage() {
           <div className="p-6 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-4">
             <div>
               <span className="block text-sm text-gray-500 dark:text-gray-400 mb-3">
-                Normal
+                Normal (hover and press to see animation)
               </span>
               <Button color="primary">Normal Button</Button>
-            </div>
-            <div>
-              <span className="block text-sm text-gray-500 dark:text-gray-400 mb-3">
-                Loading
-              </span>
-              <Button color="primary" isLoading>
-                Loading...
-              </Button>
             </div>
             <div>
               <span className="block text-sm text-gray-500 dark:text-gray-400 mb-3">
@@ -347,33 +435,6 @@ export default function ButtonPage() {
               <Button color="primary" fullWidth>
                 Full Width Button
               </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Color Palette */}
-        <section className="mt-12">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Color Palette
-          </h2>
-          <div className="p-6 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {(
-                [
-                  'primary',
-                  'secondary',
-                  'blue',
-                  'green',
-                  'red',
-                  'purple',
-                  'destructive',
-                  'foreground',
-                ] as const
-              ).map((c) => (
-                <Button key={c} color={c} className="capitalize">
-                  {c}
-                </Button>
-              ))}
             </div>
           </div>
         </section>
@@ -403,7 +464,7 @@ export default function ButtonPage() {
                 Destructive action confirmation
               </p>
               <div className="flex gap-3">
-                <Button color="destructive" leftIcon={<FiTrash2 />}>
+                <Button color="error" leftIcon={<FiTrash2 />}>
                   Delete Account
                 </Button>
                 <Button variant="ghost" color="primary">
@@ -420,7 +481,7 @@ export default function ButtonPage() {
               <div className="flex gap-2">
                 <Button
                   variant="subtle"
-                  color="red"
+                  color="error"
                   size="sm"
                   leftIcon={<FiHeart />}
                 >
@@ -428,7 +489,7 @@ export default function ButtonPage() {
                 </Button>
                 <Button
                   variant="subtle"
-                  color="blue"
+                  color="accent"
                   size="sm"
                   leftIcon={<FiShare />}
                 >
@@ -447,29 +508,43 @@ export default function ButtonPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
               {
-                title: 'Five Variants',
-                description: 'Solid, subtle, outline, ghost, and text styles',
-              },
-              {
-                title: 'Multiple Colors',
+                title: 'Spring Physics',
                 description:
-                  'Primary, secondary, semantic colors, and destructive',
+                  'Framer Motion spring animations for hover and press states',
               },
               {
-                title: 'Five Sizes',
-                description: 'XS to XL for different contexts',
+                title: 'Glass Variant',
+                description:
+                  'Premium vibrancy effect with backdrop blur for modern UIs',
               },
               {
-                title: 'Icon Support',
-                description: 'Left and right icon slots',
+                title: 'Reduced Motion',
+                description:
+                  'Automatically respects prefers-reduced-motion preference',
               },
               {
-                title: 'Loading State',
-                description: 'Built-in spinner with customizable component',
+                title: 'Haptic Feedback',
+                description: 'onHaptic callback for native app integration',
               },
               {
-                title: 'Accessible',
-                description: 'ARIA attributes and keyboard support',
+                title: '44px Touch Targets',
+                description:
+                  'All sizes maintain minimum touch target for accessibility',
+              },
+              {
+                title: 'Semantic Colors',
+                description:
+                  'Primary, accent, success, warning, error color system',
+              },
+              {
+                title: 'Loading Text',
+                description:
+                  'Optional loadingText prop for contextual loading messages',
+              },
+              {
+                title: 'Focus Always On',
+                description:
+                  'Keyboard focus ring enabled by default for accessibility',
               },
             ].map((feature) => (
               <div
@@ -514,24 +589,24 @@ export default function ButtonPage() {
                 {[
                   {
                     prop: 'variant',
-                    type: "'solid' | 'subtle' | 'outline' | 'ghost' | 'text'",
+                    type: "'solid' | 'subtle' | 'outline' | 'ghost' | 'glass'",
                     default: "'solid'",
-                    desc: 'Visual style',
+                    desc: 'Visual style variant',
                   },
                   {
                     prop: 'color',
-                    type: 'ButtonColor',
+                    type: "'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error'",
                     default: "'primary'",
-                    desc: 'Color scheme',
+                    desc: 'Semantic color scheme',
                   },
                   {
                     prop: 'size',
                     type: "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
                     default: "'md'",
-                    desc: 'Button size',
+                    desc: 'Button size (all enforce 44px touch target)',
                   },
                   {
-                    prop: 'rounded',
+                    prop: 'radius',
                     type: "'none' | 'sm' | 'md' | 'lg' | 'full'",
                     default: "'md'",
                     desc: 'Border radius',
@@ -541,6 +616,12 @@ export default function ButtonPage() {
                     type: 'boolean',
                     default: 'false',
                     desc: 'Show loading spinner',
+                  },
+                  {
+                    prop: 'loadingText',
+                    type: 'string',
+                    default: '—',
+                    desc: 'Text to show during loading',
                   },
                   {
                     prop: 'fullWidth',
@@ -561,6 +642,18 @@ export default function ButtonPage() {
                     desc: 'Icon after text',
                   },
                   {
+                    prop: 'disableAnimation',
+                    type: 'boolean',
+                    default: 'false',
+                    desc: 'Disable spring physics (auto-disabled if prefers-reduced-motion)',
+                  },
+                  {
+                    prop: 'onHaptic',
+                    type: '(type: HapticFeedback) => void',
+                    default: '—',
+                    desc: 'Callback for haptic feedback (native apps)',
+                  },
+                  {
                     prop: 'disabled',
                     type: 'boolean',
                     default: 'false',
@@ -571,7 +664,7 @@ export default function ButtonPage() {
                     <td className="py-3 px-4 font-mono text-blue-600 dark:text-blue-400">
                       {row.prop}
                     </td>
-                    <td className="py-3 px-4 font-mono text-gray-600 dark:text-gray-400">
+                    <td className="py-3 px-4 font-mono text-gray-600 dark:text-gray-400 text-xs">
                       {row.type}
                     </td>
                     <td className="py-3 px-4 text-gray-600 dark:text-gray-400">
