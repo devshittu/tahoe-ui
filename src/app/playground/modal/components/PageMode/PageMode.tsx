@@ -216,16 +216,24 @@ export function PageMode({
     }
   };
 
-  // Styling
+  // Styling - Apple-inspired edge panel surface
   const roundClass = getRoundedClasses(position, roundedEdges);
   const themeClass = themeable
-    ? 'dark:bg-gray-800 dark:text-gray-100 bg-white text-gray-900'
+    ? 'dark:bg-gray-900 dark:text-gray-100 bg-white text-gray-900'
     : 'bg-white text-gray-900';
 
+  // Get edge-specific border and highlight styling
+  const edgeStyles = getEdgeSurfaceStyles(position);
+
   const containerClasses = twMerge(
-    'fixed flex flex-col will-change-transform shadow-xl',
+    'fixed flex flex-col will-change-transform',
     roundClass,
     themeClass,
+    // Refined shadow (Principle #10: not heavier than allowed)
+    'shadow-[0_8px_16px_rgba(0,0,0,0.08),0_4px_8px_rgba(0,0,0,0.04)]',
+    'dark:shadow-[0_8px_24px_rgba(0,0,0,0.4),0_4px_12px_rgba(0,0,0,0.3)]',
+    // Subtle border for edge definition
+    edgeStyles.borderClass,
   );
 
   // Size-based dimensions
@@ -286,10 +294,10 @@ export function PageMode({
         {/* PageMode Panel with TransitionChild for proper lifecycle */}
         <TransitionChild
           afterLeave={handleAfterLeave}
-          enter={prefersReducedMotion ? 'duration-0' : 'ease-out duration-300'}
+          enter={prefersReducedMotion ? 'duration-0' : 'ease-out duration-350'}
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave={prefersReducedMotion ? 'duration-0' : 'ease-in duration-200'}
+          leave={prefersReducedMotion ? 'duration-0' : 'ease-in duration-250'}
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
@@ -328,6 +336,7 @@ export function PageMode({
               onClick={handleClose}
               isBeyondLimit={dragState.isBeyondLimit}
               resistanceIntensity={dragState.resistanceIntensity}
+              closeProgress={closeProgress}
               ariaLabel={a11y.handlebarAriaLabel}
               loadingState={loadingConfig}
             />
@@ -347,6 +356,34 @@ export function PageMode({
       </HeadlessDialog>
     </Portal>
   );
+}
+
+/**
+ * Get edge-specific surface styles for Apple-inspired depth
+ * Adds subtle border only on the exposed edge for clean separation
+ */
+function getEdgeSurfaceStyles(position: Position): {
+  borderClass: string;
+} {
+  // Border only on the edge facing content, not all sides
+  switch (position) {
+    case 'top':
+      return {
+        borderClass: 'border-b border-gray-200/60 dark:border-gray-700/60',
+      };
+    case 'bottom':
+      return {
+        borderClass: 'border-t border-gray-200/60 dark:border-gray-700/60',
+      };
+    case 'left':
+      return {
+        borderClass: 'border-r border-gray-200/60 dark:border-gray-700/60',
+      };
+    case 'right':
+      return {
+        borderClass: 'border-l border-gray-200/60 dark:border-gray-700/60',
+      };
+  }
 }
 
 /**
