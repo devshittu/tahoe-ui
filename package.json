@@ -9,22 +9,25 @@
     "Muhammed Shittu <devshittu@gmail.com>"
   ],
   "private": true,
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "next dev",
-    "dev:https": "next dev --experimental-https --experimental-https-key /app/certs/tailscale_key.pem --experimental-https-cert /app/certs/tailscale_cert.pem",
-    "build": "next build",
-    "start": "next start",
-    "prettier": "prettier \"**/*.+(json|ts|tsx)\"",
-    "format:fix": "npm run prettier -- --write",
-    "format:check": "npm run prettier -- --check",
-    "types:check": "tsc --noEmit --pretty",
-    "lint": "eslint --ext .ts,.tsx ./src ",
-    "lint:fix": "eslint --ext .ts,.tsx ./src --fix",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "turbo clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo build --filter=./packages/* && changeset publish",
+    "playground:dev": "turbo dev --filter=playground",
+    "playground:build": "turbo build --filter=playground",
     "storybook": "storybook dev -p 6006",
-    "postbuild-storybook": "mv storybook-static public/storybook",
     "build-storybook": "storybook build -o storybook-static",
+    "postbuild-storybook": "mv storybook-static public/storybook",
     "build-storybook-docs": "storybook build --docs",
-    "build:vercel": "next build && yarn build-storybook",
+    "build:vercel": "turbo build --filter=playground && yarn build-storybook",
     "prepare": "husky"
   },
   "dependencies": {
@@ -53,6 +56,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.0",
     "@chromatic-com/storybook": "^3.2.2",
     "@storybook/addon-essentials": "8.4.2",
     "@storybook/addon-interactions": "8.4.2",
@@ -81,6 +85,7 @@
     "prettier": "^3.3.3",
     "storybook": "8.4.2",
     "tailwindcss": "^3.4.1",
+    "turbo": "^2.3.0",
     "typescript": "^5.9.3"
   },
   "keywords": [
