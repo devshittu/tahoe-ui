@@ -255,14 +255,7 @@ export type PositionValue =
 /**
  * Z-index presets
  */
-export type ZIndexValue =
-  | '0'
-  | '10'
-  | '20'
-  | '30'
-  | '40'
-  | '50'
-  | 'auto';
+export type ZIndexValue = '0' | '10' | '20' | '30' | '40' | '50' | 'auto';
 
 // ============================================================================
 // Flexbox Types
@@ -294,12 +287,7 @@ export type JustifyContent =
 /**
  * Align items (cross axis alignment)
  */
-export type AlignItems =
-  | 'start'
-  | 'end'
-  | 'center'
-  | 'baseline'
-  | 'stretch';
+export type AlignItems = 'start' | 'end' | 'center' | 'baseline' | 'stretch';
 
 /**
  * Align content (multi-line cross axis)
@@ -511,22 +499,12 @@ export type PlaceContent =
 /**
  * Place items
  */
-export type PlaceItems =
-  | 'start'
-  | 'end'
-  | 'center'
-  | 'baseline'
-  | 'stretch';
+export type PlaceItems = 'start' | 'end' | 'center' | 'baseline' | 'stretch';
 
 /**
  * Place self
  */
-export type PlaceSelf =
-  | 'auto'
-  | 'start'
-  | 'end'
-  | 'center'
-  | 'stretch';
+export type PlaceSelf = 'auto' | 'start' | 'end' | 'center' | 'stretch';
 
 /**
  * Gap values (shared between flex and grid)
