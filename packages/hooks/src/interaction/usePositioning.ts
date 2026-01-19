@@ -70,7 +70,7 @@ function parsePlacement(placement: Placement): {
 } {
   const [side, alignment = 'center'] = placement.split('-') as [
     Side,
-    Alignment?
+    Alignment?,
   ];
   return { side, alignment: alignment || 'center' };
 }
@@ -108,7 +108,7 @@ function calculateBasePosition(
   floatingRect: DOMRect,
   side: Side,
   alignment: Alignment,
-  offset: number
+  offset: number,
 ): { x: number; y: number } {
   let x = 0;
   let y = 0;
@@ -160,7 +160,7 @@ function getOverflow(
   position: { x: number; y: number },
   floatingRect: DOMRect,
   viewportRect: DOMRect,
-  padding: number
+  padding: number,
 ): { top: number; bottom: number; left: number; right: number } {
   return {
     top: padding - position.y,
@@ -175,7 +175,7 @@ function calculateArrowPosition(
   floatingPosition: { x: number; y: number },
   floatingRect: DOMRect,
   side: Side,
-  arrowPadding: number
+  arrowPadding: number,
 ): { x?: number; y?: number } {
   const axis = getAxis(side);
 
@@ -184,7 +184,7 @@ function calculateArrowPosition(
     const arrowX = anchorCenter - floatingPosition.x;
     const clampedX = Math.max(
       arrowPadding,
-      Math.min(arrowX, floatingRect.width - arrowPadding)
+      Math.min(arrowX, floatingRect.width - arrowPadding),
     );
     return { x: clampedX };
   } else {
@@ -192,14 +192,14 @@ function calculateArrowPosition(
     const arrowY = anchorCenter - floatingPosition.y;
     const clampedY = Math.max(
       arrowPadding,
-      Math.min(arrowY, floatingRect.height - arrowPadding)
+      Math.min(arrowY, floatingRect.height - arrowPadding),
     );
     return { y: clampedY };
   }
 }
 
 export function usePositioning(
-  options: PositioningOptions = {}
+  options: PositioningOptions = {},
 ): UsePositioningReturn {
   const {
     placement: preferredPlacement = DEFAULT_OPTIONS.placement,
@@ -241,9 +241,14 @@ export function usePositioning(
       floatingRect,
       side,
       alignment,
-      offset
+      offset,
     );
-    let overflow = getOverflow(pos, floatingRect, viewportRect, viewportPadding);
+    let overflow = getOverflow(
+      pos,
+      floatingRect,
+      viewportRect,
+      viewportPadding,
+    );
 
     if (flip) {
       const axis = getAxis(side);
@@ -263,13 +268,13 @@ export function usePositioning(
           floatingRect,
           oppositeSide,
           alignment,
-          offset
+          offset,
         );
         const oppositeOverflow = getOverflow(
           oppositePos,
           floatingRect,
           viewportRect,
-          viewportPadding
+          viewportPadding,
         );
         const oppositeMainOverflow =
           axis === 'y'
@@ -316,7 +321,7 @@ export function usePositioning(
       pos,
       floatingRect,
       side,
-      arrowPadding
+      arrowPadding,
     );
 
     const maxHeight = viewportRect.height - viewportPadding * 2;
@@ -447,7 +452,7 @@ export function usePositioning(
 export function calculatePosition(
   anchor: HTMLElement,
   floating: HTMLElement,
-  options: PositioningOptions = {}
+  options: PositioningOptions = {},
 ): PositionData | null {
   const {
     placement: preferredPlacement = DEFAULT_OPTIONS.placement,
@@ -471,7 +476,7 @@ export function calculatePosition(
     floatingRect,
     side,
     alignment,
-    offset
+    offset,
   );
   let overflow = getOverflow(pos, floatingRect, viewportRect, viewportPadding);
 
@@ -493,13 +498,13 @@ export function calculatePosition(
         floatingRect,
         oppositeSide,
         alignment,
-        offset
+        offset,
       );
       const oppositeOverflow = getOverflow(
         oppositePos,
         floatingRect,
         viewportRect,
-        viewportPadding
+        viewportPadding,
       );
       const oppositeMainOverflow =
         axis === 'y'
@@ -546,7 +551,7 @@ export function calculatePosition(
     pos,
     floatingRect,
     side,
-    arrowPadding
+    arrowPadding,
   );
   const maxHeight = viewportRect.height - viewportPadding * 2;
   const maxWidth = viewportRect.width - viewportPadding * 2;
