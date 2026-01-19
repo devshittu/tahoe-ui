@@ -20,10 +20,10 @@ const meta: Meta<typeof Button> = {
     variant: 'solid',
     color: 'primary',
     size: 'md',
-    rounded: 'md',
+    radius: 'md',
     isLoading: false,
     fullWidth: false,
-    focusable: false,
+    disableAnimation: false,
     spinner: null,
     leftIcon: null,
     rightIcon: null,
@@ -34,10 +34,10 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'text'],
+      options: ['solid', 'subtle', 'outline', 'ghost', 'glass'],
       description: 'Styling variant of the button.',
       table: {
-        type: { summary: `'solid' | 'outline' | 'text'` },
+        type: { summary: `'solid' | 'subtle' | 'outline' | 'ghost' | 'glass'` },
         defaultValue: { summary: `'solid'` },
       },
     },
@@ -47,17 +47,15 @@ const meta: Meta<typeof Button> = {
         'primary',
         'secondary',
         'accent',
-        'blue',
-        'red',
-        'green',
-        'purple',
-        'foreground',
-        'background',
+        'neutral',
+        'success',
+        'warning',
+        'error',
       ],
-      description: 'Color scheme of the button.',
+      description: 'Semantic color scheme of the button.',
       table: {
         type: {
-          summary: `'primary' | 'secondary' | 'accent' | 'blue' | 'red' | 'green' | 'purple' | 'foreground' | 'background'`,
+          summary: `'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error'`,
         },
         defaultValue: { summary: `'primary'` },
       },
@@ -71,7 +69,7 @@ const meta: Meta<typeof Button> = {
         defaultValue: { summary: `'md'` },
       },
     },
-    rounded: {
+    radius: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg', 'full'],
       description: 'Corner rounding of the button.',
@@ -88,6 +86,13 @@ const meta: Meta<typeof Button> = {
         defaultValue: { summary: 'false' },
       },
     },
+    loadingText: {
+      control: 'text',
+      description: 'Text to show during loading state.',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
     fullWidth: {
       control: 'boolean',
       description: 'Makes the button span the full width of its container.',
@@ -96,9 +101,9 @@ const meta: Meta<typeof Button> = {
         defaultValue: { summary: 'false' },
       },
     },
-    focusable: {
+    disableAnimation: {
       control: 'boolean',
-      description: 'Enables focus ring when true.',
+      description: 'Disables spring physics animations.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -159,34 +164,39 @@ export const Default: Story = {
  */
 export const Variants: Story = {
   render: () => (
-    <div className="space-x-4">
+    <div className="space-x-4 flex flex-wrap gap-2">
       <Button variant="solid" color="primary">
         Primary Solid
       </Button>
-      <Button variant="outline" color="secondary">
-        Secondary Outline
+      <Button variant="subtle" color="secondary">
+        Secondary Subtle
       </Button>
-      <Button variant="text" color="accent">
-        Accent Text
+      <Button variant="outline" color="accent">
+        Accent Outline
       </Button>
-      <Button variant="solid" color="blue">
-        Blue Solid
+      <Button variant="ghost" color="neutral">
+        Neutral Ghost
       </Button>
-      <Button variant="outline" color="red">
-        Red Outline
+      <Button variant="glass" color="primary">
+        Glass
       </Button>
-      <Button variant="text" color="green">
-        Green Text
-      </Button>
-      <Button variant="solid" color="purple">
-        Purple Solid
-      </Button>
-      <Button variant="outline" color="foreground">
-        Foreground Outline
-      </Button>
-      <Button variant="text" color="background">
-        Background Text
-      </Button>
+    </div>
+  ),
+};
+
+/**
+ * Semantic Colors.
+ */
+export const SemanticColors: Story = {
+  render: () => (
+    <div className="space-x-4 flex flex-wrap gap-2">
+      <Button color="primary">Primary</Button>
+      <Button color="secondary">Secondary</Button>
+      <Button color="accent">Accent</Button>
+      <Button color="neutral">Neutral</Button>
+      <Button color="success">Success</Button>
+      <Button color="warning">Warning</Button>
+      <Button color="error">Error</Button>
     </div>
   ),
 };
@@ -196,7 +206,7 @@ export const Variants: Story = {
  */
 export const Sizes: Story = {
   render: () => (
-    <div className="space-x-2">
+    <div className="space-x-2 flex items-end">
       <Button size="xs">Extra Small</Button>
       <Button size="sm">Small</Button>
       <Button size="md">Medium</Button>
@@ -207,16 +217,16 @@ export const Sizes: Story = {
 };
 
 /**
- * Rounded Corners.
+ * Border Radius options.
  */
-export const Rounded: Story = {
+export const BorderRadius: Story = {
   render: () => (
-    <div className="space-x-2">
-      <Button rounded="none">No Rounding</Button>
-      <Button rounded="sm">Small Round</Button>
-      <Button rounded="md">Medium Round</Button>
-      <Button rounded="lg">Large Round</Button>
-      <Button rounded="full">Full Round</Button>
+    <div className="space-x-2 flex flex-wrap gap-2">
+      <Button radius="none">No Rounding</Button>
+      <Button radius="sm">Small Round</Button>
+      <Button radius="md">Medium Round</Button>
+      <Button radius="lg">Large Round</Button>
+      <Button radius="full">Full Round</Button>
     </div>
   ),
 };
@@ -232,6 +242,17 @@ export const Loading: Story = {
 };
 
 /**
+ * Loading with custom text.
+ */
+export const LoadingWithText: Story = {
+  args: {
+    isLoading: true,
+    loadingText: 'Saving...',
+    children: 'Save',
+  },
+};
+
+/**
  * Full Width Button.
  */
 export const FullWidth: Story = {
@@ -242,31 +263,21 @@ export const FullWidth: Story = {
 };
 
 /**
- * Focusable Button.
- */
-export const Focusable: Story = {
-  args: {
-    focusable: true,
-    children: 'Focusable Button',
-  },
-};
-
-/**
  * Button with Icons.
  */
 export const WithIcons: Story = {
   render: () => (
-    <div className="space-x-4">
-      <Button leftIcon={<FaBeer />} color="blue">
+    <div className="space-x-4 flex flex-wrap gap-2">
+      <Button leftIcon={<FaBeer />} color="accent">
         Left Icon
       </Button>
-      <Button rightIcon={<FaCoffee />} color="red">
+      <Button rightIcon={<FaCoffee />} color="error">
         Right Icon
       </Button>
-      <Button leftIcon={<FaBeer />} rightIcon={<FaCoffee />} color="green">
+      <Button leftIcon={<FaBeer />} rightIcon={<FaCoffee />} color="success">
         Both Icons
       </Button>
-      <Button leftIcon={<FaBeer />} variant="outline" color="purple">
+      <Button leftIcon={<FaBeer />} variant="outline" color="accent">
         Outline with Icon
       </Button>
     </div>
@@ -311,34 +322,37 @@ export const WithRef: Story = {
 };
 
 /**
- * Button with Custom Spinner.
+ * Glass Variant Showcase.
  */
-export const CustomSpinner: Story = {
+export const GlassVariant: Story = {
+  render: () => (
+    <div className="relative p-8 rounded-xl overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500" />
+      <div className="relative space-x-4 flex flex-wrap gap-2">
+        <Button variant="glass" color="primary">
+          Primary Glass
+        </Button>
+        <Button variant="glass" color="accent">
+          Accent Glass
+        </Button>
+        <Button variant="glass" color="success">
+          Success Glass
+        </Button>
+        <Button variant="glass" color="error">
+          Error Glass
+        </Button>
+      </div>
+    </div>
+  ),
+};
+
+/**
+ * Animation disabled.
+ */
+export const NoAnimation: Story = {
   args: {
-    isLoading: true,
-    children: 'Submitting...',
-    spinner: (
-      <svg
-        className="animate-spin mr-2 h-4 w-4 text-current"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-        ></circle>
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8v8H4z"
-        ></path>
-      </svg>
-    ),
+    disableAnimation: true,
+    children: 'No Animation',
   },
 };
 
@@ -349,20 +363,26 @@ export const Showcase: Story = {
   render: () => (
     <div className="space-y-4">
       {/* Variants */}
-      <div className="space-x-4">
+      <div className="space-x-4 flex flex-wrap gap-2">
         <Button variant="solid" color="primary">
           Primary Solid
         </Button>
-        <Button variant="outline" color="secondary">
-          Secondary Outline
+        <Button variant="subtle" color="secondary">
+          Secondary Subtle
         </Button>
-        <Button variant="text" color="accent">
-          Accent Text
+        <Button variant="outline" color="accent">
+          Accent Outline
+        </Button>
+        <Button variant="ghost" color="neutral">
+          Neutral Ghost
+        </Button>
+        <Button variant="glass" color="primary">
+          Glass
         </Button>
       </div>
 
       {/* Sizes */}
-      <div className="space-x-2">
+      <div className="space-x-2 flex items-end">
         <Button size="xs">XS</Button>
         <Button size="sm">SM</Button>
         <Button size="md">MD</Button>
@@ -370,93 +390,56 @@ export const Showcase: Story = {
         <Button size="xl">XL</Button>
       </div>
 
-      {/* Rounded Corners */}
-      <div className="space-x-2">
-        <Button rounded="none">No Rounding</Button>
-        <Button rounded="sm">Small Round</Button>
-        <Button rounded="md">Medium Round</Button>
-        <Button rounded="lg">Large Round</Button>
-        <Button rounded="full">Full Round</Button>
+      {/* Border Radius */}
+      <div className="space-x-2 flex flex-wrap gap-2">
+        <Button radius="none">No Rounding</Button>
+        <Button radius="sm">Small Round</Button>
+        <Button radius="md">Medium Round</Button>
+        <Button radius="lg">Large Round</Button>
+        <Button radius="full">Full Round</Button>
       </div>
 
       {/* Loading and Disabled */}
-      <div className="space-x-4">
-        <Button isLoading color="blue">
+      <div className="space-x-4 flex flex-wrap gap-2">
+        <Button isLoading color="accent">
           Loading...
         </Button>
-        <Button disabled color="red">
+        <Button isLoading loadingText="Saving..." color="success">
+          Save
+        </Button>
+        <Button disabled color="error">
           Disabled
         </Button>
       </div>
 
       {/* Full Width */}
       <div>
-        <Button fullWidth color="green">
+        <Button fullWidth color="success">
           Full Width Button
         </Button>
       </div>
 
-      {/* Focusable */}
-      <div>
-        <Button focusable color="purple">
-          Focusable Button
-        </Button>
-      </div>
-
       {/* With Icons */}
-      <div className="space-x-4">
-        <Button leftIcon={<FaBeer />} color="blue">
+      <div className="space-x-4 flex flex-wrap gap-2">
+        <Button leftIcon={<FaBeer />} color="accent">
           Left Icon
         </Button>
-        <Button rightIcon={<FaCoffee />} color="red">
+        <Button rightIcon={<FaCoffee />} color="error">
           Right Icon
         </Button>
-        <Button leftIcon={<FaBeer />} rightIcon={<FaCoffee />} color="green">
+        <Button leftIcon={<FaBeer />} rightIcon={<FaCoffee />} color="success">
           Both Icons
         </Button>
-        <Button leftIcon={<FaBeer />} variant="outline" color="purple">
+        <Button leftIcon={<FaBeer />} variant="outline" color="accent">
           Outline with Icon
         </Button>
       </div>
 
-      {/* Custom ClassName and Spinner */}
+      {/* Custom ClassName */}
       <div className="space-x-4">
         <Button className="bg-yellow-500 hover:bg-yellow-600 text-black">
           Custom Styled
         </Button>
-        <Button
-          isLoading
-          spinner={
-            <svg
-              className="animate-spin mr-2 h-4 w-4 text-current"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"
-              ></path>
-            </svg>
-          }
-          color="accent"
-        >
-          Custom Spinner
-        </Button>
-      </div>
-
-      {/* Button with Ref */}
-      <div>
-        <Button ref={useRef<HTMLButtonElement>(null)}>Button with Ref</Button>
       </div>
     </div>
   ),
