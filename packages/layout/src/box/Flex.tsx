@@ -36,7 +36,8 @@ import type { BaseLayoutProps, FlexProps as FlexLayoutProps } from '../types';
  */
 
 export interface FlexProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'color'>,
+  extends
+    Omit<HTMLAttributes<HTMLElement>, 'color'>,
     BaseLayoutProps,
     Omit<FlexLayoutProps, keyof BaseLayoutProps> {
   as?: ElementType;
