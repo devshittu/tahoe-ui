@@ -1,0 +1,105 @@
+{
+  "name": "@tahoe-ui/overlay",
+  "version": "0.0.1",
+  "description": "Overlay components (Modal, Toast, Tooltip) for Tahoe UI design system",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./modal": {
+      "import": {
+        "types": "./dist/modal/index.d.mts",
+        "default": "./dist/modal/index.mjs"
+      },
+      "require": {
+        "types": "./dist/modal/index.d.ts",
+        "default": "./dist/modal/index.js"
+      }
+    },
+    "./toast": {
+      "import": {
+        "types": "./dist/toast/index.d.mts",
+        "default": "./dist/toast/index.mjs"
+      },
+      "require": {
+        "types": "./dist/toast/index.d.ts",
+        "default": "./dist/toast/index.js"
+      }
+    },
+    "./tooltip": {
+      "import": {
+        "types": "./dist/tooltip/index.d.mts",
+        "default": "./dist/tooltip/index.mjs"
+      },
+      "require": {
+        "types": "./dist/tooltip/index.d.ts",
+        "default": "./dist/tooltip/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "types:check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "framer-motion": "^11.15.0",
+    "zustand": "^5.0.2",
+    "tailwind-merge": "^2.6.0"
+  },
+  "peerDependencies": {
+    "@tahoe-ui/core": "workspace:*",
+    "@tahoe-ui/hooks": "workspace:*",
+    "@tahoe-ui/typography": "workspace:*",
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@tahoe-ui/typography": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@tahoe-ui/tsconfig": "workspace:*",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  },
+  "keywords": [
+    "tahoe-ui",
+    "modal",
+    "dialog",
+    "toast",
+    "tooltip",
+    "overlay",
+    "react",
+    "headlessui",
+    "framer-motion"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devshittu/tahoe-ui.git",
+    "directory": "packages/overlay"
+  }
+}
