@@ -1,0 +1,79 @@
+{
+  "name": "@tahoe-ui/hooks",
+  "version": "0.0.0",
+  "description": "Reusable React hooks for UI interactions",
+  "license": "MIT",
+  "author": "Muhammed Shittu <mshittu.work@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devshittu/tahoe-ui",
+    "directory": "packages/hooks"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./gestures": {
+      "import": {
+        "types": "./dist/gestures/index.d.ts",
+        "default": "./dist/gestures/index.js"
+      },
+      "require": {
+        "types": "./dist/gestures/index.d.cts",
+        "default": "./dist/gestures/index.cjs"
+      }
+    },
+    "./dom": {
+      "import": {
+        "types": "./dist/dom/index.d.ts",
+        "default": "./dist/dom/index.js"
+      },
+      "require": {
+        "types": "./dist/dom/index.d.cts",
+        "default": "./dist/dom/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@tahoe-ui/tsconfig": "workspace:*",
+    "@tahoe-ui/eslint-config": "workspace:*",
+    "@types/react": "^18",
+    "react": "^18 || ^19",
+    "tsup": "^8.3.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19"
+  },
+  "keywords": [
+    "react-hooks",
+    "gestures",
+    "focus-trap",
+    "tahoe-ui"
+  ]
+}
