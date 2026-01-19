@@ -1,19 +1,17 @@
+// src/components/Button/DropdownButton.stories.tsx
+
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import DropdownButton from './DropdownButton';
-import { AppProvider } from '@/providers/app'; // Adjust the import path as necessary
-import { FaChevronDown, FaEdit, FaTrash, FaUser } from 'react-icons/fa'; // Import react-icons
-import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx';
+import { AppProvider } from '@/providers/app';
+import { FaChevronDown, FaUser } from 'react-icons/fa';
 
-// Define the meta configuration
 const meta: Meta<typeof DropdownButton> = {
   title: 'Elements/Button/DropdownButton',
   component: DropdownButton,
   decorators: [
     (Story) => (
       <AppProvider>
-        {/* Container with padding and flex layout for better visualization */}
         <div className="p-4 flex flex-col items-center space-y-6 bg-gray-50 min-h-screen">
           <Story />
         </div>
@@ -24,19 +22,17 @@ const meta: Meta<typeof DropdownButton> = {
     variant: 'solid',
     color: 'primary',
     size: 'md',
-    rounded: 'md',
+    radius: 'md',
     isLoading: false,
     fullWidth: false,
-    focusable: true,
-    // children: 'Dropdown Button', // Removed to nest children
   },
   argTypes: {
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'text'],
+      options: ['solid', 'subtle', 'outline', 'ghost', 'glass'],
       description: 'Style variant of the button.',
       table: {
-        type: { summary: `'solid' | 'outline' | 'text'` },
+        type: { summary: `'solid' | 'subtle' | 'outline' | 'ghost' | 'glass'` },
         defaultValue: { summary: `'solid'` },
       },
     },
@@ -46,17 +42,15 @@ const meta: Meta<typeof DropdownButton> = {
         'primary',
         'secondary',
         'accent',
-        'blue',
-        'red',
-        'green',
-        'purple',
-        'foreground',
-        'background',
+        'neutral',
+        'success',
+        'warning',
+        'error',
       ],
       description: 'Color scheme of the button.',
       table: {
         type: {
-          summary: `'primary' | 'secondary' | 'accent' | 'blue' | 'red' | 'green' | 'purple' | 'foreground' | 'background'`,
+          summary: `'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error'`,
         },
         defaultValue: { summary: `'primary'` },
       },
@@ -70,7 +64,7 @@ const meta: Meta<typeof DropdownButton> = {
         defaultValue: { summary: `'md'` },
       },
     },
-    rounded: {
+    radius: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg', 'full'],
       description: 'Border radius of the button.',
@@ -95,20 +89,12 @@ const meta: Meta<typeof DropdownButton> = {
         defaultValue: { summary: 'false' },
       },
     },
-    focusable: {
-      control: 'boolean',
-      description: 'Determines if the button can receive focus.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
     menuItems: {
-      control: false, // Disable control for complex prop
+      control: false,
       description: 'Array of menu items with labels and click handlers.',
     },
     spinner: {
-      control: false, // Disable control since it's a ReactNode
+      control: false,
       description: 'Custom spinner element to display when loading.',
       table: {
         type: { summary: 'React.ReactNode' },
@@ -116,11 +102,11 @@ const meta: Meta<typeof DropdownButton> = {
       },
     },
     leftIcon: {
-      control: false, // Disable control to manage icons directly in stories
+      control: false,
       description: 'Icon to display on the left side of the button.',
     },
     rightIcon: {
-      control: false, // Disable control to manage icons directly in stories
+      control: false,
       description: 'Icon to display on the right side of the button.',
     },
     onClick: {
@@ -142,7 +128,6 @@ type Story = StoryObj<typeof DropdownButton>;
  */
 export const Default: Story = {
   args: {
-    // Define default menuItems
     menuItems: [
       { label: 'Profile', onClick: () => alert('Profile clicked') },
       { label: 'Settings', onClick: () => alert('Settings clicked') },
@@ -173,7 +158,7 @@ export const LoadingState: Story = {
 export const OutlineVariant: Story = {
   args: {
     variant: 'outline',
-    color: 'blue',
+    color: 'accent',
     menuItems: [
       { label: 'Dashboard', onClick: () => alert('Dashboard clicked') },
       { label: 'Reports', onClick: () => alert('Reports clicked') },
@@ -216,16 +201,14 @@ export const WithBothIcons: Story = {
 
 /**
  * DropdownButton with Combined Props.
- * Demonstrates multiple props applied together for enhanced styling and functionality.
  */
 export const CombinedProps: Story = {
   args: {
     variant: 'outline',
-    color: 'green',
+    color: 'success',
     size: 'lg',
-    rounded: 'full',
+    radius: 'full',
     fullWidth: true,
-    focusable: true,
     leftIcon: <FaUser />,
     rightIcon: <FaChevronDown />,
     menuItems: [
@@ -246,7 +229,6 @@ export const CombinedProps: Story = {
 export const Showcase: Story = {
   render: () => (
     <div className="space-y-6">
-      {/* 1) Default DropdownButton */}
       <DropdownButton
         menuItems={[
           { label: 'Profile', onClick: () => alert('Profile clicked') },
@@ -257,7 +239,6 @@ export const Showcase: Story = {
         Default Dropdown
       </DropdownButton>
 
-      {/* 2) Loading State */}
       <DropdownButton
         menuItems={[
           { label: 'Profile', onClick: () => alert('Profile clicked') },
@@ -269,10 +250,9 @@ export const Showcase: Story = {
         Loading Dropdown
       </DropdownButton>
 
-      {/* 3) Outline Variant */}
       <DropdownButton
         variant="outline"
-        color="blue"
+        color="accent"
         menuItems={[
           { label: 'Dashboard', onClick: () => alert('Dashboard clicked') },
           { label: 'Reports', onClick: () => alert('Reports clicked') },
@@ -282,7 +262,6 @@ export const Showcase: Story = {
         Outline Dropdown
       </DropdownButton>
 
-      {/* 4) With Left Icon */}
       <DropdownButton
         leftIcon={<FaUser />}
         menuItems={[
@@ -294,7 +273,6 @@ export const Showcase: Story = {
         User Menu
       </DropdownButton>
 
-      {/* 5) With Both Icons */}
       <DropdownButton
         leftIcon={<FaUser />}
         rightIcon={<FaChevronDown />}
@@ -307,14 +285,12 @@ export const Showcase: Story = {
         User Menu
       </DropdownButton>
 
-      {/* 6) Combined Props */}
       <DropdownButton
         variant="outline"
-        color="green"
+        color="success"
         size="lg"
-        rounded="full"
+        radius="full"
         fullWidth
-        focusable
         leftIcon={<FaUser />}
         rightIcon={<FaChevronDown />}
         className="shadow-lg"
@@ -329,5 +305,3 @@ export const Showcase: Story = {
     </div>
   ),
 };
-
-// src/components/Button/DropdownButton.stories.tsx

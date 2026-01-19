@@ -1,19 +1,17 @@
+// src/components/Button/ExpandableButton.stories.tsx
+
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import ExpandableButton from './ExpandableButton';
-import { AppProvider } from '@/providers/app'; // Adjust the import path as necessary
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa'; // Import react-icons
-import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx';
+import { AppProvider } from '@/providers/app';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
-// Define the meta configuration
 const meta: Meta<typeof ExpandableButton> = {
   title: 'Elements/Button/ExpandableButton',
   component: ExpandableButton,
   decorators: [
     (Story) => (
       <AppProvider>
-        {/* Container with padding and flex layout for better visualization */}
         <div className="p-4 flex flex-col items-center space-y-6 bg-gray-50 min-h-screen">
           <Story />
         </div>
@@ -24,19 +22,17 @@ const meta: Meta<typeof ExpandableButton> = {
     variant: 'solid',
     color: 'primary',
     size: 'md',
-    rounded: 'md',
+    radius: 'md',
     isLoading: false,
     fullWidth: false,
-    focusable: true,
-    // children: 'Expandable Button', // Removed to nest children
   },
   argTypes: {
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'text'],
+      options: ['solid', 'subtle', 'outline', 'ghost', 'glass'],
       description: 'Style variant of the button.',
       table: {
-        type: { summary: `'solid' | 'outline' | 'text'` },
+        type: { summary: `'solid' | 'subtle' | 'outline' | 'ghost' | 'glass'` },
         defaultValue: { summary: `'solid'` },
       },
     },
@@ -46,17 +42,15 @@ const meta: Meta<typeof ExpandableButton> = {
         'primary',
         'secondary',
         'accent',
-        'blue',
-        'red',
-        'green',
-        'purple',
-        'foreground',
-        'background',
+        'neutral',
+        'success',
+        'warning',
+        'error',
       ],
       description: 'Color scheme of the button.',
       table: {
         type: {
-          summary: `'primary' | 'secondary' | 'accent' | 'blue' | 'red' | 'green' | 'purple' | 'foreground' | 'background'`,
+          summary: `'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error'`,
         },
         defaultValue: { summary: `'primary'` },
       },
@@ -70,7 +64,7 @@ const meta: Meta<typeof ExpandableButton> = {
         defaultValue: { summary: `'md'` },
       },
     },
-    rounded: {
+    radius: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg', 'full'],
       description: 'Border radius of the button.',
@@ -95,20 +89,12 @@ const meta: Meta<typeof ExpandableButton> = {
         defaultValue: { summary: 'false' },
       },
     },
-    focusable: {
-      control: 'boolean',
-      description: 'Determines if the button can receive focus.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
     expandedContent: {
-      control: false, // Disable control for complex prop
+      control: false,
       description: 'Content to display when the button is expanded.',
     },
     spinner: {
-      control: false, // Disable control since it's a ReactNode
+      control: false,
       description: 'Custom spinner element to display when loading.',
       table: {
         type: { summary: 'React.ReactNode' },
@@ -116,11 +102,11 @@ const meta: Meta<typeof ExpandableButton> = {
       },
     },
     leftIcon: {
-      control: false, // Disable control to manage icons directly in stories
+      control: false,
       description: 'Icon to display on the left side of the button.',
     },
     rightIcon: {
-      control: false, // Disable control to manage icons directly in stories
+      control: false,
       description: 'Icon to display on the right side of the button.',
     },
     onClick: {
@@ -176,7 +162,7 @@ export const LoadingState: Story = {
 export const OutlineVariant: Story = {
   args: {
     variant: 'outline',
-    color: 'blue',
+    color: 'accent',
     expandedContent: (
       <div className="p-4">
         <p>Additional information in the outline variant.</p>
@@ -225,16 +211,14 @@ export const WithBothIcons: Story = {
 
 /**
  * ExpandableButton with Combined Props.
- * Demonstrates multiple props applied together for enhanced styling and functionality.
  */
 export const CombinedProps: Story = {
   args: {
     variant: 'outline',
-    color: 'green',
+    color: 'success',
     size: 'lg',
-    rounded: 'full',
+    radius: 'full',
     fullWidth: true,
-    focusable: true,
     leftIcon: <FaChevronDown />,
     rightIcon: <FaChevronUp />,
     expandedContent: (
@@ -255,7 +239,6 @@ export const CombinedProps: Story = {
 export const Showcase: Story = {
   render: () => (
     <div className="space-y-6">
-      {/* 1) Default ExpandableButton */}
       <ExpandableButton
         expandedContent={
           <div className="p-4">
@@ -266,7 +249,6 @@ export const Showcase: Story = {
         Default Expandable
       </ExpandableButton>
 
-      {/* 2) Loading State */}
       <ExpandableButton
         expandedContent={
           <div className="p-4">
@@ -278,10 +260,9 @@ export const Showcase: Story = {
         Loading Expandable
       </ExpandableButton>
 
-      {/* 3) Outline Variant */}
       <ExpandableButton
         variant="outline"
-        color="blue"
+        color="accent"
         expandedContent={
           <div className="p-4">
             <p>Additional information in the outline variant.</p>
@@ -291,7 +272,6 @@ export const Showcase: Story = {
         Outline Expandable
       </ExpandableButton>
 
-      {/* 4) With Left Icon */}
       <ExpandableButton
         leftIcon={<FaChevronDown />}
         expandedContent={
@@ -303,7 +283,6 @@ export const Showcase: Story = {
         Expand with Icon
       </ExpandableButton>
 
-      {/* 5) With Both Icons */}
       <ExpandableButton
         leftIcon={<FaChevronDown />}
         rightIcon={<FaChevronUp />}
@@ -316,14 +295,12 @@ export const Showcase: Story = {
         Full Icon Expandable
       </ExpandableButton>
 
-      {/* 6) Combined Props */}
       <ExpandableButton
         variant="outline"
-        color="green"
+        color="success"
         size="lg"
-        rounded="full"
+        radius="full"
         fullWidth
-        focusable
         leftIcon={<FaChevronDown />}
         rightIcon={<FaChevronUp />}
         expandedContent={
@@ -338,4 +315,3 @@ export const Showcase: Story = {
     </div>
   ),
 };
-// src/components/Button/ExpandableButton.stories.tsx

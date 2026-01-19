@@ -28,10 +28,9 @@ const meta: Meta<typeof IconButton> = {
     variant: 'solid',
     color: 'primary',
     size: 'md',
-    rounded: 'full',
+    radius: 'full',
     isLoading: false,
     fullWidth: false,
-    focusable: false,
     spinner: null,
     disabled: false,
     className: '',
@@ -61,10 +60,10 @@ const meta: Meta<typeof IconButton> = {
     },
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'text'],
+      options: ['solid', 'subtle', 'outline', 'ghost', 'glass'],
       description: 'Styling variant of the button.',
       table: {
-        type: { summary: `'solid' | 'outline' | 'text'` },
+        type: { summary: `'solid' | 'subtle' | 'outline' | 'ghost' | 'glass'` },
         defaultValue: { summary: `'solid'` },
       },
     },
@@ -74,17 +73,15 @@ const meta: Meta<typeof IconButton> = {
         'primary',
         'secondary',
         'accent',
-        'blue',
-        'red',
-        'green',
-        'purple',
-        'foreground',
-        'background',
+        'neutral',
+        'success',
+        'warning',
+        'error',
       ],
       description: 'Color scheme of the button.',
       table: {
         type: {
-          summary: `'primary' | 'secondary' | 'accent' | 'blue' | 'red' | 'green' | 'purple' | 'foreground' | 'background'`,
+          summary: `'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error'`,
         },
         defaultValue: { summary: `'primary'` },
       },
@@ -98,7 +95,7 @@ const meta: Meta<typeof IconButton> = {
         defaultValue: { summary: `'md'` },
       },
     },
-    rounded: {
+    radius: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg', 'full'],
       description: 'Corner rounding of the button.',
@@ -118,14 +115,6 @@ const meta: Meta<typeof IconButton> = {
     fullWidth: {
       control: 'boolean',
       description: 'Makes the button span the full width of its container.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
-    focusable: {
-      control: 'boolean',
-      description: 'Enables focus ring when true.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -193,21 +182,21 @@ export const Variants: Story = {
         icon={<FaCoffee />}
       />
       <IconButton
-        variant="text"
+        variant="ghost"
         color="accent"
-        ariaLabel="Accent Text"
+        ariaLabel="Accent Ghost"
         icon={<FaTrash />}
       />
       <IconButton
         variant="solid"
-        color="blue"
-        ariaLabel="Blue Solid"
+        color="accent"
+        ariaLabel="Accent Solid"
         icon={<FaEdit />}
       />
       <IconButton
         variant="outline"
-        color="red"
-        ariaLabel="Red Outline"
+        color="error"
+        ariaLabel="Error Outline"
         icon={<FaInfoCircle />}
       />
     </div>
@@ -219,7 +208,7 @@ export const Variants: Story = {
  */
 export const Sizes: Story = {
   render: () => (
-    <div className="space-x-2">
+    <div className="space-x-2 flex items-center">
       <IconButton size="xs" ariaLabel="Extra Small" icon={<FaBeer />} />
       <IconButton size="sm" ariaLabel="Small" icon={<FaCoffee />} />
       <IconButton size="md" ariaLabel="Medium" icon={<FaTrash />} />
@@ -265,42 +254,6 @@ export const FullWidth: Story = {
     ariaLabel: 'Full Width Icon Button',
     icon: <FaTrash />,
   },
-};
-
-/**
- * Focusable IconButton.
- */
-export const Focusable: Story = {
-  args: {
-    focusable: true,
-    ariaLabel: 'Focusable Icon Button',
-    icon: <FaEdit />,
-  },
-};
-
-/**
- * IconButton with Icons.
- * Note: IconButton is designed for single icons. Including multiple icons can affect accessibility.
- * However, for demonstration purposes, we'll show how it handles multiple icons by passing a fragment.
- */
-export const WithIcons: Story = {
-  render: () => (
-    <div className="space-x-4">
-      {/* Single Icon */}
-      <IconButton ariaLabel="Beer Icon" icon={<FaBeer />} />
-
-      {/* Multiple Icons - Not typical for IconButton, but shown here for flexibility */}
-      <IconButton
-        ariaLabel="Beer and Coffee Icons"
-        icon={
-          <>
-            <FaBeer />
-            <FaCoffee />
-          </>
-        }
-      />
-    </div>
-  ),
 };
 
 /**
@@ -370,12 +323,12 @@ export const CustomSpinner: Story = {
           r="10"
           stroke="currentColor"
           strokeWidth="4"
-        ></circle>
+        />
         <path
           className="opacity-75"
           fill="currentColor"
           d="M4 12a8 8 0 018-8v8H4z"
-        ></path>
+        />
       </svg>
     ),
   },
@@ -402,27 +355,27 @@ export const Showcase: Story = {
           icon={<FaCoffee />}
         />
         <IconButton
-          variant="text"
+          variant="ghost"
           color="accent"
-          ariaLabel="Accent Text"
+          ariaLabel="Accent Ghost"
           icon={<FaTrash />}
         />
         <IconButton
           variant="solid"
-          color="blue"
-          ariaLabel="Blue Solid"
+          color="accent"
+          ariaLabel="Accent Solid"
           icon={<FaEdit />}
         />
         <IconButton
           variant="outline"
-          color="red"
-          ariaLabel="Red Outline"
+          color="error"
+          ariaLabel="Error Outline"
           icon={<FaInfoCircle />}
         />
       </div>
 
       {/* Sizes */}
-      <div className="space-x-2">
+      <div className="space-x-2 flex items-center">
         <IconButton size="xs" ariaLabel="Extra Small" icon={<FaBeer />} />
         <IconButton size="sm" ariaLabel="Small" icon={<FaCoffee />} />
         <IconButton size="md" ariaLabel="Medium" icon={<FaTrash />} />
@@ -448,13 +401,13 @@ export const Showcase: Story = {
       <div className="space-x-4">
         <IconButton
           isLoading
-          color="blue"
+          color="accent"
           ariaLabel="Loading Icon Button"
           icon={<FaBeer />}
         />
         <IconButton
           disabled
-          color="red"
+          color="error"
           ariaLabel="Disabled Icon Button"
           icon={<FaTrash />}
         />
@@ -464,82 +417,18 @@ export const Showcase: Story = {
       <div>
         <IconButton
           fullWidth
-          color="green"
+          color="success"
           ariaLabel="Full Width Icon Button"
           icon={<FaEdit />}
         />
       </div>
 
-      {/* Focusable */}
-      <div>
-        <IconButton
-          focusable
-          color="purple"
-          ariaLabel="Focusable Icon Button"
-          icon={<FaInfoCircle />}
-        />
-      </div>
-
-      {/* With Icons */}
-      <div className="space-x-4">
-        {/* Single Icon */}
-        <IconButton ariaLabel="Beer Icon" icon={<FaBeer />} />
-
-        {/* Multiple Icons - Not typical for IconButton, but shown here for flexibility */}
-        <IconButton
-          ariaLabel="Beer and Coffee Icons"
-          icon={
-            <>
-              <FaBeer />
-              <FaCoffee />
-            </>
-          }
-        />
-      </div>
-
-      {/* Custom ClassName and Spinner */}
+      {/* Custom ClassName */}
       <div className="space-x-4">
         <IconButton
           className="bg-yellow-500 hover:bg-yellow-600 text-black"
           ariaLabel="Custom Styled Icon Button"
           icon={<FaEdit />}
-        />
-        <IconButton
-          isLoading
-          spinner={
-            <svg
-              className="animate-spin h-5 w-5 text-current"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"
-              ></path>
-            </svg>
-          }
-          color="accent"
-          ariaLabel="Custom Spinner Icon Button"
-          icon={<FaBeer />}
-        />
-      </div>
-
-      {/* Button with Ref */}
-      <div>
-        <IconButton
-          ref={useRef<HTMLButtonElement>(null)}
-          ariaLabel="Button with Ref"
-          icon={<FaInfoCircle />}
         />
       </div>
     </div>

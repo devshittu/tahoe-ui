@@ -10,20 +10,22 @@ const meta: Meta<typeof GlassButton> = {
   component: GlassButton,
   decorators: [
     (Story) => (
-      <div className="p-4 space-y-4 bg-gray-100 min-h-screen">
-        <Story />
+      <div className="p-8 space-y-4 min-h-screen relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500" />
+        <div className="relative">
+          <Story />
+        </div>
       </div>
     ),
   ],
   args: {
     children: 'Glass Button',
-    variant: 'solid',
+    variant: 'glass',
     color: 'primary',
     size: 'md',
-    rounded: 'md',
+    radius: 'md',
     isLoading: false,
     fullWidth: false,
-    focusable: false,
     leftIcon: null,
     rightIcon: null,
     disabled: false,
@@ -33,11 +35,11 @@ const meta: Meta<typeof GlassButton> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'text'],
+      options: ['solid', 'subtle', 'outline', 'ghost', 'glass'],
       description: 'Styling variant of the button.',
       table: {
-        type: { summary: `'solid' | 'outline' | 'text'` },
-        defaultValue: { summary: `'solid'` },
+        type: { summary: `'solid' | 'subtle' | 'outline' | 'ghost' | 'glass'` },
+        defaultValue: { summary: `'glass'` },
       },
     },
     color: {
@@ -46,17 +48,15 @@ const meta: Meta<typeof GlassButton> = {
         'primary',
         'secondary',
         'accent',
-        'blue',
-        'red',
-        'green',
-        'purple',
-        'foreground',
-        'background',
+        'neutral',
+        'success',
+        'warning',
+        'error',
       ],
       description: 'Color scheme of the button.',
       table: {
         type: {
-          summary: `'primary' | 'secondary' | 'accent' | 'blue' | 'red' | 'green' | 'purple' | 'foreground' | 'background'`,
+          summary: `'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error'`,
         },
         defaultValue: { summary: `'primary'` },
       },
@@ -70,7 +70,7 @@ const meta: Meta<typeof GlassButton> = {
         defaultValue: { summary: `'md'` },
       },
     },
-    rounded: {
+    radius: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg', 'full'],
       description: 'Corner rounding of the button.',
@@ -90,14 +90,6 @@ const meta: Meta<typeof GlassButton> = {
     fullWidth: {
       control: 'boolean',
       description: 'Makes the button span the full width of its container.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
-    focusable: {
-      control: 'boolean',
-      description: 'Enables focus ring when true.',
       table: {
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' },
@@ -150,38 +142,18 @@ export const Default: Story = {
 };
 
 /**
- * Variants of the GlassButton with different colors.
+ * Semantic Colors of the GlassButton.
  */
-export const Variants: Story = {
+export const SemanticColors: Story = {
   render: () => (
-    <div className="space-x-4">
-      <GlassButton variant="solid" color="primary">
-        Primary Solid
-      </GlassButton>
-      <GlassButton variant="outline" color="secondary">
-        Secondary Outline
-      </GlassButton>
-      <GlassButton variant="text" color="accent">
-        Accent Text
-      </GlassButton>
-      <GlassButton variant="solid" color="blue">
-        Blue Solid
-      </GlassButton>
-      <GlassButton variant="outline" color="red">
-        Red Outline
-      </GlassButton>
-      <GlassButton variant="text" color="green">
-        Green Text
-      </GlassButton>
-      <GlassButton variant="solid" color="purple">
-        Purple Solid
-      </GlassButton>
-      <GlassButton variant="outline" color="foreground">
-        Foreground Outline
-      </GlassButton>
-      <GlassButton variant="text" color="background">
-        Background Text
-      </GlassButton>
+    <div className="space-x-4 flex flex-wrap gap-2">
+      <GlassButton color="primary">Primary</GlassButton>
+      <GlassButton color="secondary">Secondary</GlassButton>
+      <GlassButton color="accent">Accent</GlassButton>
+      <GlassButton color="neutral">Neutral</GlassButton>
+      <GlassButton color="success">Success</GlassButton>
+      <GlassButton color="warning">Warning</GlassButton>
+      <GlassButton color="error">Error</GlassButton>
     </div>
   ),
 };
@@ -191,7 +163,7 @@ export const Variants: Story = {
  */
 export const Sizes: Story = {
   render: () => (
-    <div className="space-x-2">
+    <div className="space-x-2 flex items-end">
       <GlassButton size="xs">XS</GlassButton>
       <GlassButton size="sm">SM</GlassButton>
       <GlassButton size="md">MD</GlassButton>
@@ -202,16 +174,16 @@ export const Sizes: Story = {
 };
 
 /**
- * Rounded Corners of the GlassButton.
+ * Border Radius options.
  */
-export const Rounded: Story = {
+export const BorderRadius: Story = {
   render: () => (
-    <div className="space-x-2">
-      <GlassButton rounded="none">No Rounding</GlassButton>
-      <GlassButton rounded="sm">Small Round</GlassButton>
-      <GlassButton rounded="md">Medium Round</GlassButton>
-      <GlassButton rounded="lg">Large Round</GlassButton>
-      <GlassButton rounded="full">Full Round</GlassButton>
+    <div className="space-x-2 flex flex-wrap gap-2">
+      <GlassButton radius="none">No Rounding</GlassButton>
+      <GlassButton radius="sm">Small Round</GlassButton>
+      <GlassButton radius="md">Medium Round</GlassButton>
+      <GlassButton radius="lg">Large Round</GlassButton>
+      <GlassButton radius="full">Full Round</GlassButton>
     </div>
   ),
 };
@@ -237,31 +209,25 @@ export const FullWidth: Story = {
 };
 
 /**
- * Focusable GlassButton.
- */
-export const Focusable: Story = {
-  args: {
-    focusable: true,
-    children: 'Focusable Button',
-  },
-};
-
-/**
  * GlassButton with Icons.
  */
 export const WithIcons: Story = {
   render: () => (
-    <div className="space-x-4">
-      <GlassButton leftIcon={<FaBeer />} color="blue">
+    <div className="space-x-4 flex flex-wrap gap-2">
+      <GlassButton leftIcon={<FaBeer />} color="accent">
         Left Icon
       </GlassButton>
-      <GlassButton rightIcon={<FaCoffee />} color="red">
+      <GlassButton rightIcon={<FaCoffee />} color="error">
         Right Icon
       </GlassButton>
-      <GlassButton leftIcon={<FaBeer />} rightIcon={<FaCoffee />} color="green">
+      <GlassButton
+        leftIcon={<FaBeer />}
+        rightIcon={<FaCoffee />}
+        color="success"
+      >
         Both Icons
       </GlassButton>
-      <GlassButton leftIcon={<FaRocket />} variant="outline" color="purple">
+      <GlassButton leftIcon={<FaRocket />} variant="outline" color="secondary">
         Outline with Icon
       </GlassButton>
     </div>
@@ -284,7 +250,7 @@ export const Disabled: Story = {
 export const CustomClassName: Story = {
   args: {
     children: 'Custom Styled',
-    className: 'bg-yellow-500 hover:bg-yellow-600 text-black',
+    className: 'bg-yellow-500/30 hover:bg-yellow-500/50 text-black',
   },
 };
 
@@ -306,58 +272,23 @@ export const WithRef: Story = {
 };
 
 /**
- * GlassButton with Custom Spinner.
- */
-export const CustomSpinner: Story = {
-  args: {
-    isLoading: true,
-    children: 'Submitting...',
-    spinner: (
-      <svg
-        className="animate-spin mr-2 h-4 w-4 text-current"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-        ></circle>
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8v8H4z"
-        ></path>
-      </svg>
-    ),
-  },
-};
-
-/**
  * Showcase of various GlassButton usages.
  */
 export const Showcase: Story = {
   render: () => (
     <div className="space-y-6">
-      {/* Variants */}
-      <div className="space-x-4">
-        <GlassButton variant="solid" color="primary">
-          Primary Solid
-        </GlassButton>
-        <GlassButton variant="outline" color="secondary">
-          Secondary Outline
-        </GlassButton>
-        <GlassButton variant="text" color="accent">
-          Accent Text
-        </GlassButton>
+      {/* Semantic Colors */}
+      <div className="space-x-4 flex flex-wrap gap-2">
+        <GlassButton color="primary">Primary</GlassButton>
+        <GlassButton color="secondary">Secondary</GlassButton>
+        <GlassButton color="accent">Accent</GlassButton>
+        <GlassButton color="success">Success</GlassButton>
+        <GlassButton color="warning">Warning</GlassButton>
+        <GlassButton color="error">Error</GlassButton>
       </div>
 
       {/* Sizes */}
-      <div className="space-x-2">
+      <div className="space-x-2 flex items-end">
         <GlassButton size="xs">XS</GlassButton>
         <GlassButton size="sm">SM</GlassButton>
         <GlassButton size="md">MD</GlassButton>
@@ -365,98 +296,53 @@ export const Showcase: Story = {
         <GlassButton size="xl">XL</GlassButton>
       </div>
 
-      {/* Rounded Corners */}
-      <div className="space-x-2">
-        <GlassButton rounded="none">No Rounding</GlassButton>
-        <GlassButton rounded="sm">Small Round</GlassButton>
-        <GlassButton rounded="md">Medium Round</GlassButton>
-        <GlassButton rounded="lg">Large Round</GlassButton>
-        <GlassButton rounded="full">Full Round</GlassButton>
+      {/* Border Radius */}
+      <div className="space-x-2 flex flex-wrap gap-2">
+        <GlassButton radius="none">No Rounding</GlassButton>
+        <GlassButton radius="sm">Small Round</GlassButton>
+        <GlassButton radius="md">Medium Round</GlassButton>
+        <GlassButton radius="lg">Large Round</GlassButton>
+        <GlassButton radius="full">Full Round</GlassButton>
       </div>
 
       {/* Loading and Disabled */}
-      <div className="space-x-4">
-        <GlassButton isLoading color="blue">
+      <div className="space-x-4 flex flex-wrap gap-2">
+        <GlassButton isLoading color="accent">
           Loading...
         </GlassButton>
-        <GlassButton disabled color="red">
+        <GlassButton disabled color="error">
           Disabled
         </GlassButton>
       </div>
 
       {/* Full Width */}
       <div>
-        <GlassButton fullWidth color="green">
+        <GlassButton fullWidth color="success">
           Full Width Button
         </GlassButton>
       </div>
 
-      {/* Focusable */}
-      <div>
-        <GlassButton focusable color="purple">
-          Focusable Button
-        </GlassButton>
-      </div>
-
       {/* With Icons */}
-      <div className="space-x-4">
-        <GlassButton leftIcon={<FaBeer />} color="blue">
+      <div className="space-x-4 flex flex-wrap gap-2">
+        <GlassButton leftIcon={<FaBeer />} color="accent">
           Left Icon
         </GlassButton>
-        <GlassButton rightIcon={<FaCoffee />} color="red">
+        <GlassButton rightIcon={<FaCoffee />} color="error">
           Right Icon
         </GlassButton>
         <GlassButton
           leftIcon={<FaBeer />}
           rightIcon={<FaCoffee />}
-          color="green"
+          color="success"
         >
           Both Icons
         </GlassButton>
-        <GlassButton leftIcon={<FaRocket />} variant="outline" color="purple">
-          Outline with Icon
-        </GlassButton>
-      </div>
-
-      {/* Custom ClassName and Spinner */}
-      <div className="space-x-4">
-        <GlassButton className="bg-yellow-500 hover:bg-yellow-600 text-black">
-          Custom Styled
-        </GlassButton>
         <GlassButton
-          isLoading
-          spinner={
-            <svg
-              className="animate-spin mr-2 h-4 w-4 text-current"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"
-              ></path>
-            </svg>
-          }
-          color="accent"
+          leftIcon={<FaRocket />}
+          variant="outline"
+          color="secondary"
         >
-          Custom Spinner
-        </GlassButton>
-      </div>
-
-      {/* Button with Ref */}
-      <div>
-        <GlassButton ref={useRef<HTMLButtonElement>(null)}>
-          Button with Ref
+          Outline with Icon
         </GlassButton>
       </div>
     </div>
