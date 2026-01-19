@@ -3,7 +3,13 @@
 import React, { useCallback, useState, useRef, useMemo } from 'react';
 import { cn } from '@tahoe-ui/core';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UploadCloudIcon, FileIcon, ImageIcon, XIcon, AlertCircleIcon } from './icons';
+import {
+  UploadCloudIcon,
+  FileIcon,
+  ImageIcon,
+  XIcon,
+  AlertCircleIcon,
+} from './icons';
 import type { FileUploadProps, UploadedFile } from './types';
 
 /**
