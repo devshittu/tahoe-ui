@@ -67,18 +67,17 @@ export type HapticFeedback =
 /**
  * Button component props
  */
-export interface ButtonProps
-  extends Omit<
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    | 'color'
-    | 'onDrag'
-    | 'onDragStart'
-    | 'onDragEnd'
-    | 'onAnimationStart'
-    | 'onAnimationEnd'
-    | 'formAction' // Excluded for Framer Motion compatibility with React 19
-    | 'onToggle' // Reserved for ToggleButton component
-  > {
+export interface ButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  | 'color'
+  | 'onDrag'
+  | 'onDragStart'
+  | 'onDragEnd'
+  | 'onAnimationStart'
+  | 'onAnimationEnd'
+  | 'formAction' // Excluded for Framer Motion compatibility with React 19
+  | 'onToggle' // Reserved for ToggleButton component
+> {
   /** Form action URL (string only for Framer Motion compatibility) */
   formAction?: string;
   /** Visual style variant */
@@ -112,8 +111,10 @@ export interface ButtonProps
 /**
  * IconButton props - icon-only button variant
  */
-export interface IconButtonProps
-  extends Omit<ButtonProps, 'children' | 'leftIcon' | 'rightIcon'> {
+export interface IconButtonProps extends Omit<
+  ButtonProps,
+  'children' | 'leftIcon' | 'rightIcon'
+> {
   /** Accessible label for the button. Essential for screen readers. */
   ariaLabel: string;
   /** The icon to display within the button. */
