@@ -8,7 +8,13 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   splitting: false,
-  external: ['react', 'react-dom', 'framer-motion', '@headlessui/react', '@tahoe-ui/core'],
+  external: [
+    'react',
+    'react-dom',
+    'framer-motion',
+    '@headlessui/react',
+    '@tahoe-ui/core',
+  ],
   banner: {
     js: '"use client";',
   },
