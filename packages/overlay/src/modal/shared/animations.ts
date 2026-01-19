@@ -1,7 +1,12 @@
 'use client';
 
 import { Variants } from 'framer-motion';
-import { Position, SLIDE_TRANSITION, MOTION_DEFAULTS, SPACING_DEFAULTS } from './types';
+import {
+  Position,
+  SLIDE_TRANSITION,
+  MOTION_DEFAULTS,
+  SPACING_DEFAULTS,
+} from './types';
 
 /**
  * Generate slide animation variants based on position
