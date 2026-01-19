@@ -10,7 +10,12 @@ import {
 } from '@headlessui/react';
 import { cn } from '@tahoe-ui/core';
 import { motion } from 'framer-motion';
-import type { RadioGroupProps, RadioGroupSize, RadioGroupOrientation, RadioOption } from './types';
+import type {
+  RadioGroupProps,
+  RadioGroupSize,
+  RadioGroupOrientation,
+  RadioOption,
+} from './types';
 
 /**
  * RadioGroup - Accessible radio group using HeadlessUI
