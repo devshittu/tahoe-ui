@@ -160,15 +160,31 @@ export function Dialog({
   const canClose =
     !isInteractionLocked && a11y.closeOnOutsideClick && a11y.escapeClose;
 
-  // Styling
+  // Styling - Apple-inspired modal surface
+  // Uses design tokens for consistency (Principle #4)
+  // Shadow limited per Principle #10 (no heavier than 0 4px 12px rgba(0,0,0,0.08))
   const themeClass = themeable
-    ? 'dark:bg-gray-800 dark:text-gray-100 bg-white text-gray-900'
+    ? 'dark:bg-gray-900 dark:text-gray-100 bg-white text-gray-900'
     : 'bg-white text-gray-900';
 
   const dialogClasses = twMerge(
     'relative',
-    'shadow-xl rounded-2xl max-h-[90vh] flex flex-col overflow-hidden',
+    // Layout
+    'max-h-[90vh] flex flex-col overflow-hidden',
+    // Radius: 16px (matches RADIUS_TOKENS.component.modal.default)
+    'rounded-2xl',
+    // Subtle border for edge definition (Principle #1: Purpose-Driven)
+    'border border-gray-200/60 dark:border-gray-700/60',
+    // Refined shadow using token system (Principle #10)
+    'shadow-[0_8px_16px_rgba(0,0,0,0.08),0_4px_8px_rgba(0,0,0,0.04)]',
+    'dark:shadow-[0_8px_24px_rgba(0,0,0,0.4),0_4px_12px_rgba(0,0,0,0.3)]',
+    // Background with subtle top highlight for depth
     themeClass,
+    // Top edge highlight for premium layered look
+    'before:absolute before:inset-x-0 before:top-0 before:h-px',
+    'before:bg-gradient-to-r before:from-transparent before:via-white/80 before:to-transparent',
+    'dark:before:via-white/10',
+    'before:pointer-events-none before:z-10',
   );
 
   const contentPadding = getContentPadding(handlebarPosition);
@@ -199,13 +215,13 @@ export function Dialog({
         >
           <TransitionChild
             enter={
-              prefersReducedMotion ? 'duration-0' : 'ease-out duration-200'
+              prefersReducedMotion ? 'duration-0' : 'ease-out duration-300'
             }
-            enterFrom="opacity-0 scale-95"
+            enterFrom="opacity-0 scale-[0.97]"
             enterTo="opacity-100 scale-100"
-            leave={prefersReducedMotion ? 'duration-0' : 'ease-in duration-150'}
+            leave={prefersReducedMotion ? 'duration-0' : 'ease-in duration-200'}
             leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
+            leaveTo="opacity-0 scale-[0.97]"
           >
             <DialogPanel
               as={SafeMotionDiv}
@@ -248,6 +264,7 @@ export function Dialog({
                 onClick={handleClose}
                 isBeyondLimit={dragState.isBeyondLimit}
                 resistanceIntensity={dragState.resistanceIntensity}
+                closeProgress={closeProgress}
                 ariaLabel={a11y.handlebarAriaLabel}
                 loadingState={loadingConfig}
               />
