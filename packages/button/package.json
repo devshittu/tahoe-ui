@@ -1,0 +1,77 @@
+{
+  "name": "@tahoe-ui/button",
+  "version": "0.0.1",
+  "description": "Physics-based button components with spring animations for the Tahoe UI design system",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "types:check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tahoe-ui/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "framer-motion": ">=10.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "framer-motion": {
+      "optional": false
+    }
+  },
+  "devDependencies": {
+    "@tahoe-ui/tsconfig": "workspace:*",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "framer-motion": "^11.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.0"
+  },
+  "keywords": [
+    "react",
+    "button",
+    "component",
+    "tahoe-ui",
+    "design-system",
+    "framer-motion",
+    "physics",
+    "spring-animation",
+    "accessible"
+  ],
+  "author": "Tahoe UI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devshittu/tahoe-ui",
+    "directory": "packages/button"
+  },
+  "bugs": {
+    "url": "https://github.com/devshittu/tahoe-ui/issues"
+  },
+  "homepage": "https://github.com/devshittu/tahoe-ui/tree/main/packages/button#readme"
+}
