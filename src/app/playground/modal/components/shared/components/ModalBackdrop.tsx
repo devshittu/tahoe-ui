@@ -5,7 +5,7 @@ import React from 'react';
 import { TransitionChild } from '@headlessui/react';
 import { BackdropEffectsConfig, DEFAULT_BACKDROP_EFFECTS } from '../types';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { MOTION_TOKENS } from '@/config/tokens';
+// Token imports available if needed for future color customization
 
 /**
  * Props for ModalBackdrop component
@@ -22,19 +22,17 @@ export type ModalBackdropProps = {
 };
 
 /**
- * Shared backdrop component with blur, opacity, and transition effects
+ * ModalBackdrop - Apple-inspired backdrop with blur and depth
  *
- * Used by both Dialog and PageMode for consistent backdrop styling.
- * Respects reduced-motion preferences.
+ * Design principles applied:
+ * - #10 Confident Simplicity: Calm, professional dimming
+ * - #6 Purposeful Motion: Smooth fade transitions
+ * - #3 Intentional White Space: Creates focus on modal content
  *
- * @example
- * ```tsx
- * <ModalBackdrop
- *   backdropConfig={{ blur: true, blurAmount: '8px', backgroundOpacity: 0.3 }}
- *   onClose={handleClose}
- *   canClose={!isLoading}
- * />
- * ```
+ * Visual refinements:
+ * - Deeper opacity (0.4-0.5) for better content separation
+ * - Subtle vignette effect for cinematic depth
+ * - Smooth blur transition
  */
 export function ModalBackdrop({
   backdropConfig,
@@ -44,12 +42,20 @@ export function ModalBackdrop({
 }: ModalBackdropProps) {
   const { prefersReducedMotion } = useReducedMotion();
 
-  // Merge with defaults
-  const config = { ...DEFAULT_BACKDROP_EFFECTS, ...backdropConfig };
+  // Merge with defaults, but use slightly deeper opacity for better contrast
+  const config = {
+    ...DEFAULT_BACKDROP_EFFECTS,
+    ...backdropConfig,
+  };
 
-  // Build backdrop styles
+  // Increase minimum opacity for better modal separation (Apple-like depth)
+  const effectiveOpacity = Math.max(config.backgroundOpacity, 0.4);
+
+  // Build backdrop styles with vignette effect
   const backdropStyles: React.CSSProperties = {
-    backgroundColor: `rgba(0, 0, 0, ${config.backgroundOpacity})`,
+    // Base dark overlay
+    backgroundColor: `rgba(0, 0, 0, ${effectiveOpacity})`,
+    // Blur effect
     backdropFilter: config.blur ? `blur(${config.blurAmount})` : undefined,
     WebkitBackdropFilter: config.blur
       ? `blur(${config.blurAmount})`
@@ -60,9 +66,9 @@ export function ModalBackdrop({
   // Click handler
   const handleClick = canClose && onClose ? onClose : undefined;
 
-  // Transition durations (faster for reduced motion)
-  const enterDuration = prefersReducedMotion ? 'duration-0' : 'duration-200';
-  const leaveDuration = prefersReducedMotion ? 'duration-0' : 'duration-150';
+  // Transition durations (slightly longer for premium feel)
+  const enterDuration = prefersReducedMotion ? 'duration-0' : 'duration-250';
+  const leaveDuration = prefersReducedMotion ? 'duration-0' : 'duration-200';
 
   return (
     <TransitionChild
@@ -78,7 +84,16 @@ export function ModalBackdrop({
         style={backdropStyles}
         aria-hidden="true"
         onClick={handleClick}
-      />
+      >
+        {/* Subtle vignette overlay for cinematic depth */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.15) 100%)',
+          }}
+        />
+      </div>
     </TransitionChild>
   );
 }
