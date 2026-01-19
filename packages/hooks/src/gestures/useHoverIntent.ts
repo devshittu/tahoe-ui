@@ -36,7 +36,7 @@ const DEFAULT_SENSITIVITY = 6;
 const DEFAULT_INTERVAL = 100;
 
 export function useHoverIntent(
-  options: UseHoverIntentOptions = {}
+  options: UseHoverIntentOptions = {},
 ): UseHoverIntentReturn {
   const {
     openDelay = DEFAULT_OPEN_DELAY,
@@ -104,10 +104,10 @@ export function useHoverIntent(
     intervalRef.current = setInterval(() => {
       if (prevCoordsRef.current && currentCoordsRef.current) {
         const dx = Math.abs(
-          currentCoordsRef.current.x - prevCoordsRef.current.x
+          currentCoordsRef.current.x - prevCoordsRef.current.x,
         );
         const dy = Math.abs(
-          currentCoordsRef.current.y - prevCoordsRef.current.y
+          currentCoordsRef.current.y - prevCoordsRef.current.y,
         );
         const speed = Math.sqrt(dx * dx + dy * dy);
 
