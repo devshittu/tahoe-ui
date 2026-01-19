@@ -1,0 +1,13 @@
+{
+  "name": "@tahoe-ui/tailwind-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "base.js",
+  "files": [
+    "base.js"
+  ],
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}
