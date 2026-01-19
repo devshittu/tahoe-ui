@@ -1,19 +1,17 @@
+// src/components/Button/AnimatedButton.stories.tsx
+
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import AnimatedButton from './AnimatedButton';
-import { AppProvider } from '@/providers/app'; // Adjust the import path as necessary
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Import react-icons
-import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx';
+import { AppProvider } from '@/providers/app';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
-// Define the meta configuration
 const meta: Meta<typeof AnimatedButton> = {
   title: 'Elements/Button/AnimatedButton',
   component: AnimatedButton,
   decorators: [
     (Story) => (
       <AppProvider>
-        {/* Container with padding and flex layout for better visualization */}
         <div className="p-4 flex flex-col items-center space-y-6 bg-gray-50 min-h-screen">
           <Story />
         </div>
@@ -24,21 +22,19 @@ const meta: Meta<typeof AnimatedButton> = {
     variant: 'solid',
     color: 'primary',
     size: 'md',
-    rounded: 'md',
+    radius: 'md',
     isLoading: false,
     fullWidth: false,
-    focusable: true,
     animationType: 'pulse',
     children: 'Animated Button',
-    // Removed leftIcon and rightIcon from default args
   },
   argTypes: {
     variant: {
       control: 'select',
-      options: ['solid', 'outline', 'text'],
+      options: ['solid', 'subtle', 'outline', 'ghost', 'glass'],
       description: 'Style variant of the button.',
       table: {
-        type: { summary: `'solid' | 'outline' | 'text'` },
+        type: { summary: `'solid' | 'subtle' | 'outline' | 'ghost' | 'glass'` },
         defaultValue: { summary: `'solid'` },
       },
     },
@@ -48,17 +44,15 @@ const meta: Meta<typeof AnimatedButton> = {
         'primary',
         'secondary',
         'accent',
-        'blue',
-        'red',
-        'green',
-        'purple',
-        'foreground',
-        'background',
+        'neutral',
+        'success',
+        'warning',
+        'error',
       ],
       description: 'Color scheme of the button.',
       table: {
         type: {
-          summary: `'primary' | 'secondary' | 'accent' | 'blue' | 'red' | 'green' | 'purple' | 'foreground' | 'background'`,
+          summary: `'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'error'`,
         },
         defaultValue: { summary: `'primary'` },
       },
@@ -72,7 +66,7 @@ const meta: Meta<typeof AnimatedButton> = {
         defaultValue: { summary: `'md'` },
       },
     },
-    rounded: {
+    radius: {
       control: 'select',
       options: ['none', 'sm', 'md', 'lg', 'full'],
       description: 'Border radius of the button.',
@@ -97,14 +91,6 @@ const meta: Meta<typeof AnimatedButton> = {
         defaultValue: { summary: 'false' },
       },
     },
-    focusable: {
-      control: 'boolean',
-      description: 'Determines if the button can receive focus.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-      },
-    },
     animationType: {
       control: 'select',
       options: ['pulse', 'shake', 'bounce'],
@@ -115,7 +101,7 @@ const meta: Meta<typeof AnimatedButton> = {
       },
     },
     spinner: {
-      control: false, // Disable control since it's a ReactNode
+      control: false,
       description: 'Custom spinner element to display when loading.',
       table: {
         type: { summary: 'React.ReactNode' },
@@ -123,11 +109,11 @@ const meta: Meta<typeof AnimatedButton> = {
       },
     },
     leftIcon: {
-      control: false, // Disable control to manage icons directly in stories
+      control: false,
       description: 'Icon to display on the left side of the button.',
     },
     rightIcon: {
-      control: false, // Disable control to manage icons directly in stories
+      control: false,
       description: 'Icon to display on the right side of the button.',
     },
     onClick: {
@@ -232,14 +218,13 @@ export const WithBothIcons: Story = {
 
 /**
  * AnimatedButton with Combined Props.
- * Demonstrates multiple props applied together for enhanced styling and functionality.
  */
 export const CombinedProps: Story = {
   args: {
     variant: 'outline',
-    color: 'green',
+    color: 'success',
     size: 'lg',
-    rounded: 'full',
+    radius: 'full',
     animationType: 'bounce',
     leftIcon: <FaArrowLeft />,
     rightIcon: <FaArrowRight />,
@@ -254,45 +239,36 @@ export const CombinedProps: Story = {
 export const Showcase: Story = {
   render: (args) => (
     <div className="space-y-6">
-      {/* 1) Default AnimatedButton */}
       <AnimatedButton {...args}>Default Button</AnimatedButton>
 
-      {/* 2) Pulse Animation */}
       <AnimatedButton {...args} animationType="pulse">
         Pulse Animation
       </AnimatedButton>
 
-      {/* 3) Shake Animation */}
       <AnimatedButton {...args} animationType="shake">
         Shake Animation
       </AnimatedButton>
 
-      {/* 4) Bounce Animation */}
       <AnimatedButton {...args} animationType="bounce">
         Bounce Animation
       </AnimatedButton>
 
-      {/* 5) Loading State */}
       <AnimatedButton {...args} isLoading>
         Loading...
       </AnimatedButton>
 
-      {/* 6) Full Width */}
       <AnimatedButton {...args} fullWidth>
         Full Width Button
       </AnimatedButton>
 
-      {/* 7) With Left Icon */}
       <AnimatedButton {...args} leftIcon={<FaArrowLeft />}>
         Back
       </AnimatedButton>
 
-      {/* 8) With Right Icon */}
       <AnimatedButton {...args} rightIcon={<FaArrowRight />}>
         Next
       </AnimatedButton>
 
-      {/* 9) With Both Icons */}
       <AnimatedButton
         {...args}
         leftIcon={<FaArrowLeft />}
@@ -301,13 +277,12 @@ export const Showcase: Story = {
         Navigate
       </AnimatedButton>
 
-      {/* 10) Combined Props */}
       <AnimatedButton
         {...args}
         variant="outline"
-        color="green"
+        color="success"
         size="lg"
-        rounded="full"
+        radius="full"
         animationType="bounce"
         leftIcon={<FaArrowLeft />}
         rightIcon={<FaArrowRight />}
@@ -318,4 +293,3 @@ export const Showcase: Story = {
     </div>
   ),
 };
-// src/components/Button/AnimatedButton.stories.tsx
