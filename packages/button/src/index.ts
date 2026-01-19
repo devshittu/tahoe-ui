@@ -47,12 +47,24 @@
 export { Button, default } from './Button';
 
 // Button variants
-export { AnimatedButton, default as AnimatedButtonDefault } from './AnimatedButton';
-export { DropdownButton, default as DropdownButtonDefault } from './DropdownButton';
-export { ExpandableButton, default as ExpandableButtonDefault } from './ExpandableButton';
+export {
+  AnimatedButton,
+  default as AnimatedButtonDefault,
+} from './AnimatedButton';
+export {
+  DropdownButton,
+  default as DropdownButtonDefault,
+} from './DropdownButton';
+export {
+  ExpandableButton,
+  default as ExpandableButtonDefault,
+} from './ExpandableButton';
 export { GlassButton, default as GlassButtonDefault } from './GlassButton';
 export { IconButton, default as IconButtonDefault } from './IconButton';
-export { SkeletonButton, default as SkeletonButtonDefault } from './SkeletonButton';
+export {
+  SkeletonButton,
+  default as SkeletonButtonDefault,
+} from './SkeletonButton';
 export { ToggleButton, default as ToggleButtonDefault } from './ToggleButton';
 
 // Types
