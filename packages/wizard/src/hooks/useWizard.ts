@@ -1,21 +1,27 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import type { WizardState, WizardStep, StepDataMap, WizardTheme } from '../types';
+import type {
+  WizardState,
+  WizardStep,
+  StepDataMap,
+  WizardTheme,
+} from '../types';
 
 /**
  * Context type that includes wizard state and optional theme
  */
-export type WizardContextType<TSteps extends WizardStep[]> = WizardState<TSteps> & {
-  theme?: WizardTheme;
-};
+export type WizardContextType<TSteps extends WizardStep[]> =
+  WizardState<TSteps> & {
+    theme?: WizardTheme;
+  };
 
 /**
  * Wizard context - must be used within WizardProvider
  */
-export const WizardContext = createContext<WizardContextType<WizardStep[]> | null>(
-  null
-);
+export const WizardContext = createContext<WizardContextType<
+  WizardStep[]
+> | null>(null);
 
 /**
  * Hook to access the entire wizard state and theme
@@ -43,9 +49,9 @@ export const useWizard = <TSteps extends WizardStep[] = WizardStep[]>() => {
  */
 export const useWizardStep = <
   TSteps extends WizardStep[],
-  TStepId extends TSteps[number]['id']
+  TStepId extends TSteps[number]['id'],
 >(
-  stepId: TStepId
+  stepId: TStepId,
 ) => {
   const wizard = useWizard<TSteps>();
   const isStepValid = wizard.validationStatus[stepId] ?? false;
