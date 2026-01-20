@@ -37,7 +37,7 @@ const defaultConfig: WizardConfig = {
 export const createWizardStore = <TSteps extends WizardStep[]>(
   steps: TSteps,
   hooks?: WizardHooks,
-  config: WizardConfig = defaultConfig
+  config: WizardConfig = defaultConfig,
 ) => {
   const mergedConfig = { ...defaultConfig, ...config };
 
@@ -53,7 +53,7 @@ export const createWizardStore = <TSteps extends WizardStep[]>(
     get visibleSteps() {
       const { stepData } = get();
       return steps.filter(
-        (step) => !step.condition || step.condition(stepData)
+        (step) => !step.condition || step.condition(stepData),
       );
     },
 
@@ -75,7 +75,7 @@ export const createWizardStore = <TSteps extends WizardStep[]>(
       }
 
       return visibleSteps.filter(
-        (step, index) => index === currentStepIndex || step.lazy
+        (step, index) => index === currentStepIndex || step.lazy,
       );
     },
 
