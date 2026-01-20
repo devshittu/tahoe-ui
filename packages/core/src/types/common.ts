@@ -72,11 +72,12 @@ export type PolymorphicComponentWithRef<
 /**
  * Extract the element type from a component
  */
-export type ElementOf<T> = T extends React.ElementType<infer P>
-  ? P extends { ref?: React.Ref<infer E> }
-    ? E
-    : never
-  : never;
+export type ElementOf<T> =
+  T extends React.ElementType<infer P>
+    ? P extends { ref?: React.Ref<infer E> }
+      ? E
+      : never
+    : never;
 
 /**
  * Make specific properties required

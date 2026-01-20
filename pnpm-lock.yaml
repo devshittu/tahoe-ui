@@ -228,6 +228,34 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/feedback:
+    dependencies:
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      tailwind-merge:
+        specifier: ^3.0.2
+        version: 3.4.0
+    devDependencies:
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.27
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.7(@types/react@18.3.27)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/form:
     dependencies:
       '@tahoe-ui/core':
@@ -287,6 +315,37 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/icon:
+    dependencies:
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      react-icons:
+        specifier: ^5.4.0
+        version: 5.5.0(react@19.0.1)
+      tailwind-merge:
+        specifier: ^3.0.2
+        version: 3.4.0
+    devDependencies:
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.27
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.7(@types/react@18.3.27)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/layout:
     dependencies:
       '@tahoe-ui/core':
@@ -315,6 +374,86 @@ importers:
         specifier: ^5.9.0-beta
         version: 5.9.3
 
+  packages/navigation:
+    dependencies:
+      '@headlessui/react':
+        specifier: ^2.2.0
+        version: 2.2.9(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      framer-motion:
+        specifier: ^11.18.0
+        version: 11.18.2(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      tailwind-merge:
+        specifier: ^3.0.2
+        version: 3.4.0
+    devDependencies:
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.27
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.7(@types/react@18.3.27)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/overlay:
+    dependencies:
+      '@headlessui/react':
+        specifier: ^2.2.0
+        version: 2.2.9(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      '@tahoe-ui/core':
+        specifier: workspace:*
+        version: link:../core
+      '@tahoe-ui/hooks':
+        specifier: workspace:*
+        version: link:../hooks
+      '@tahoe-ui/typography':
+        specifier: workspace:*
+        version: link:../typography
+      framer-motion:
+        specifier: ^11.15.0
+        version: 11.18.2(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      tailwind-merge:
+        specifier: ^2.6.0
+        version: 2.6.0
+      zustand:
+        specifier: ^5.0.2
+        version: 5.0.10(@types/react@19.2.8)(react@19.0.1)(use-sync-external-store@1.6.0(react@19.0.1))
+    devDependencies:
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.8
+      '@types/react-dom':
+        specifier: ^19.0.0
+        version: 19.2.3(@types/react@19.2.8)
+      react:
+        specifier: ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      tsup:
+        specifier: ^8.3.5
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   packages/typography:
     dependencies:
       '@tahoe-ui/core':
@@ -341,6 +480,43 @@ importers:
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
       typescript:
         specifier: ^5.9.0-beta
+        version: 5.9.3
+
+  packages/wizard:
+    dependencies:
+      framer-motion:
+        specifier: ^11.18.0
+        version: 11.18.2(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      mitt:
+        specifier: ^3.0.1
+        version: 3.0.1
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      tailwind-merge:
+        specifier: ^3.0.2
+        version: 3.4.0
+      zustand:
+        specifier: ^5.0.2
+        version: 5.0.10(@types/react@18.3.27)(react@19.0.1)(use-sync-external-store@1.6.0(react@19.0.1))
+    devDependencies:
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.27
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.7(@types/react@18.3.27)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
         version: 5.9.3
 
   tooling/eslint-config:
@@ -5467,6 +5643,9 @@ packages:
 
   tailwind-merge@2.6.0:
     resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
+
+  tailwind-merge@3.4.0:
+    resolution: {integrity: sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g==}
 
   tailwindcss@3.4.19:
     resolution: {integrity: sha512-3ofp+LL8E+pK/JuPLPggVAIaEuhvIz4qNcf3nA1Xn2o/7fb7s/TYpHhwGDv1ZU3PkBluUVaF8PyCHcm48cKLWQ==}
@@ -11726,6 +11905,8 @@ snapshots:
 
   tailwind-merge@2.6.0: {}
 
+  tailwind-merge@3.4.0: {}
+
   tailwindcss@3.4.19(yaml@2.8.2):
     dependencies:
       '@alloc/quick-lru': 5.2.0
@@ -12211,6 +12392,12 @@ snapshots:
   zustand@5.0.10(@types/react@18.3.27)(react@19.0.1)(use-sync-external-store@1.6.0(react@19.0.1)):
     optionalDependencies:
       '@types/react': 18.3.27
+      react: 19.0.1
+      use-sync-external-store: 1.6.0(react@19.0.1)
+
+  zustand@5.0.10(@types/react@19.2.8)(react@19.0.1)(use-sync-external-store@1.6.0(react@19.0.1)):
+    optionalDependencies:
+      '@types/react': 19.2.8
       react: 19.0.1
       use-sync-external-store: 1.6.0(react@19.0.1)
 

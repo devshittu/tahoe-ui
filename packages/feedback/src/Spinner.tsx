@@ -63,7 +63,7 @@ export function Spinner({
           'inline-block animate-spin rounded-full',
           'border-2 border-solid border-current border-r-transparent',
           SPINNER_COLORS[color],
-          className
+          className,
         )}
         style={{
           width: numericSize,
@@ -92,7 +92,7 @@ export function Spinner({
             key={i}
             className={twMerge(
               'rounded-full animate-bounce',
-              DOT_COLORS[color]
+              DOT_COLORS[color],
             )}
             style={{
               width: dotSize,
@@ -133,7 +133,7 @@ export function Spinner({
         {/* Animated arc */}
         <circle
           className={twMerge(
-            SPINNER_COLORS[color].replace('border-', 'stroke-')
+            SPINNER_COLORS[color].replace('border-', 'stroke-'),
           )}
           cx="25"
           cy="25"
@@ -169,7 +169,7 @@ export function LoadingOverlay({
       className={twMerge(
         'fixed inset-0 z-50 flex flex-col items-center justify-center',
         'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm',
-        className
+        className,
       )}
     >
       <Spinner size="lg" color={color} label={label} />

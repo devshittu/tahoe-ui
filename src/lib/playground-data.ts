@@ -348,6 +348,16 @@ export const playgroundCategories: PlaygroundCategory[] = [
         tags: ['input', 'form', 'tag', 'filter'],
         featured: true,
       },
+      {
+        id: 'wizard',
+        name: 'Wizard',
+        description:
+          'Multi-step forms with headless compound components and spring animations',
+        href: '/playground/wizard',
+        status: 'done',
+        tags: ['form', 'multi-step', 'animation', 'validation'],
+        featured: true,
+      },
     ],
   },
   {

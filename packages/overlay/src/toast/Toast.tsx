@@ -71,10 +71,13 @@ function useSimpleSwipe(onSwipe: () => void, disabled: boolean) {
     setOffsetX(0);
   }, []);
 
-  const handleMove = useCallback((x: number) => {
-    if (!isDragging) return;
-    setOffsetX(x - startX);
-  }, [isDragging, startX]);
+  const handleMove = useCallback(
+    (x: number) => {
+      if (!isDragging) return;
+      setOffsetX(x - startX);
+    },
+    [isDragging, startX],
+  );
 
   const handleEnd = useCallback(() => {
     if (Math.abs(offsetX) > 60 && !disabled) {
@@ -109,7 +112,7 @@ export function Toast({ toast, position, index }: ToastProps) {
 
   const { offset, isSwiping, handlers } = useSimpleSwipe(
     () => dismiss(toast.id),
-    !canSwipe
+    !canSwipe,
   );
 
   useEffect(() => {
@@ -267,9 +270,7 @@ export function Toast({ toast, position, index }: ToastProps) {
           {toast.dismissMode === 'gesture' &&
             !toast.action &&
             toast.duration === 0 && (
-              <p className="mt-2 text-xs opacity-60">
-                Swipe to dismiss
-              </p>
+              <p className="mt-2 text-xs opacity-60">Swipe to dismiss</p>
             )}
         </div>
       </div>

@@ -48,7 +48,7 @@ const DEFAULT_PREVIEW_DELAY = 200;
 const DEFAULT_READY_DELAY = 400;
 
 export function useLongPress(
-  options: UseLongPressOptions = {}
+  options: UseLongPressOptions = {},
 ): UseLongPressReturn {
   const {
     threshold = DEFAULT_THRESHOLD,
@@ -175,7 +175,7 @@ export function useLongPress(
       onStart,
       onComplete,
       startProgressLoop,
-    ]
+    ],
   );
 
   const endPress = useCallback(() => {
@@ -201,7 +201,7 @@ export function useLongPress(
         cancel();
       }
     },
-    [cancelOnMoveDistance, cancel]
+    [cancelOnMoveDistance, cancel],
   );
 
   const handlePointerDown = useCallback(
@@ -210,7 +210,7 @@ export function useLongPress(
       e.preventDefault();
       startPress(e.clientX, e.clientY);
     },
-    [disabled, startPress]
+    [disabled, startPress],
   );
 
   const handlePointerUp = useCallback(() => {
@@ -223,7 +223,7 @@ export function useLongPress(
         checkMovement(e.clientX, e.clientY);
       }
     },
-    [isPressing, checkMovement]
+    [isPressing, checkMovement],
   );
 
   const handlePointerCancel = useCallback(() => {
@@ -242,7 +242,7 @@ export function useLongPress(
         e.preventDefault();
       }
     },
-    [disabled]
+    [disabled],
   );
 
   const handleKeyDown = useCallback(
@@ -253,7 +253,7 @@ export function useLongPress(
         startPress(0, 0, true);
       }
     },
-    [disabled, startPress]
+    [disabled, startPress],
   );
 
   const handleKeyUp = useCallback(
@@ -263,7 +263,7 @@ export function useLongPress(
         endPress();
       }
     },
-    [endPress]
+    [endPress],
   );
 
   useEffect(() => {

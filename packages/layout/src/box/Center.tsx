@@ -47,7 +47,8 @@ export interface CenterOwnProps {
 }
 
 export interface CenterProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'color'>,
+  extends
+    Omit<HTMLAttributes<HTMLElement>, 'color'>,
     BaseLayoutProps,
     CenterOwnProps {
   as?: ElementType;

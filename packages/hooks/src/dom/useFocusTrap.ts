@@ -26,7 +26,7 @@ export interface UseFocusTrapReturn<T extends HTMLElement = HTMLElement> {
 }
 
 export function useFocusTrap<T extends HTMLElement = HTMLElement>(
-  options: UseFocusTrapOptions = {}
+  options: UseFocusTrapOptions = {},
 ): UseFocusTrapReturn<T> {
   const {
     enabled = true,
@@ -79,7 +79,7 @@ export function useFocusTrap<T extends HTMLElement = HTMLElement>(
         }
       }
     },
-    [enabled, getFocusableElements]
+    [enabled, getFocusableElements],
   );
 
   useEffect(() => {

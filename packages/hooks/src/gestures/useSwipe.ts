@@ -16,7 +16,7 @@ export interface UseSwipeOptions {
   onSwipeDown?: (velocity: number) => void;
   onSwiping?: (
     offset: { x: number; y: number },
-    direction: SwipeDirection
+    direction: SwipeDirection,
   ) => void;
   onSwipeStart?: () => void;
   onSwipeEnd?: () => void;
@@ -97,7 +97,7 @@ export function useSwipe(options: UseSwipeOptions = {}): UseSwipeReturn {
 
       return null;
     },
-    [axis]
+    [axis],
   );
 
   const handleStart = useCallback(
@@ -111,7 +111,7 @@ export function useSwipe(options: UseSwipeOptions = {}): UseSwipeReturn {
       setOffset({ x: 0, y: 0 });
       onSwipeStart?.();
     },
-    [disabled, onSwipeStart]
+    [disabled, onSwipeStart],
   );
 
   const handleMove = useCallback(
@@ -147,7 +147,7 @@ export function useSwipe(options: UseSwipeOptions = {}): UseSwipeReturn {
       setDirection(currentDirection);
       onSwiping?.(effectiveOffset, currentDirection);
     },
-    [disabled, axis, getDirection, onSwiping, preventScroll]
+    [disabled, axis, getDirection, onSwiping, preventScroll],
   );
 
   const handleEnd = useCallback(() => {
@@ -212,7 +212,7 @@ export function useSwipe(options: UseSwipeOptions = {}): UseSwipeReturn {
       const touch = e.touches[0];
       handleStart(touch.clientX, touch.clientY);
     },
-    [handleStart]
+    [handleStart],
   );
 
   const handleTouchMove = useCallback(
@@ -220,7 +220,7 @@ export function useSwipe(options: UseSwipeOptions = {}): UseSwipeReturn {
       const touch = e.touches[0];
       handleMove(touch.clientX, touch.clientY, e);
     },
-    [handleMove]
+    [handleMove],
   );
 
   const handleTouchEnd = useCallback(() => {
@@ -232,7 +232,7 @@ export function useSwipe(options: UseSwipeOptions = {}): UseSwipeReturn {
       isMouseDownRef.current = true;
       handleStart(e.clientX, e.clientY);
     },
-    [handleStart]
+    [handleStart],
   );
 
   const handleMouseMove = useCallback(
@@ -241,7 +241,7 @@ export function useSwipe(options: UseSwipeOptions = {}): UseSwipeReturn {
         handleMove(e.clientX, e.clientY);
       }
     },
-    [handleMove]
+    [handleMove],
   );
 
   const handleMouseUp = useCallback(() => {

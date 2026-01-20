@@ -95,7 +95,8 @@ export function Tooltip({
   // Get styles
   const variantStyles = TOOLTIP_VARIANT_STYLES[variant];
   const sizeStyles = TOOLTIP_SIZE_STYLES[size];
-  const placementClass = PLACEMENT_CLASSES[placement] || PLACEMENT_CLASSES['top'];
+  const placementClass =
+    PLACEMENT_CLASSES[placement] || PLACEMENT_CLASSES['top'];
   const arrowClass = ARROW_CLASSES[placement] || ARROW_CLASSES['top'];
   const arrowColor = ARROW_COLORS[variant];
 

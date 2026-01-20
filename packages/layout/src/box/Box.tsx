@@ -27,8 +27,7 @@ import type { BaseLayoutProps } from '../types';
  */
 
 export interface BoxProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'color'>,
-    BaseLayoutProps {
+  extends Omit<HTMLAttributes<HTMLElement>, 'color'>, BaseLayoutProps {
   as?: ElementType;
 }
 

@@ -18,7 +18,7 @@ let idCounter = 0;
 
 export function useEscapeKey(
   callback: () => void,
-  options: UseEscapeKeyOptions = {}
+  options: UseEscapeKeyOptions = {},
 ): void {
   const {
     enabled = true,
@@ -38,7 +38,7 @@ export function useEscapeKey(
     if (!enabled) {
       if (idRef.current !== null) {
         const index = escapeStack.findIndex(
-          (item) => item.id === idRef.current
+          (item) => item.id === idRef.current,
         );
         if (index !== -1) {
           escapeStack.splice(index, 1);
@@ -60,7 +60,7 @@ export function useEscapeKey(
     return () => {
       if (idRef.current !== null) {
         const index = escapeStack.findIndex(
-          (item) => item.id === idRef.current
+          (item) => item.id === idRef.current,
         );
         if (index !== -1) {
           escapeStack.splice(index, 1);
@@ -76,7 +76,7 @@ export function useEscapeKey(
       if (escapeStack.length === 0) return;
 
       const ourIndex = escapeStack.findIndex(
-        (item) => item.id === idRef.current
+        (item) => item.id === idRef.current,
       );
       if (ourIndex === -1) return;
 
@@ -91,7 +91,7 @@ export function useEscapeKey(
 
       callbackRef.current();
     },
-    [preventDefault, stopPropagation]
+    [preventDefault, stopPropagation],
   );
 
   useEffect(() => {

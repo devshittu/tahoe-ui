@@ -9,7 +9,12 @@ import {
 } from '@headlessui/react';
 import { cn } from '@tahoe-ui/core';
 import { CheckIcon, ChevronDownIcon } from './icons';
-import type { SelectProps, SelectSize, SelectState, SelectOption } from './types';
+import type {
+  SelectProps,
+  SelectSize,
+  SelectState,
+  SelectOption,
+} from './types';
 
 /**
  * Select - Dropdown select using HeadlessUI Listbox
@@ -102,9 +107,7 @@ export function Select<T = string>({
             {selectedOption?.label || placeholder}
           </span>
           <span className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <ChevronDownIcon
-              className="w-4 h-4 text-gray-400 dark:text-gray-500"
-            />
+            <ChevronDownIcon className="w-4 h-4 text-gray-400 dark:text-gray-500" />
           </span>
         </ListboxButton>
 

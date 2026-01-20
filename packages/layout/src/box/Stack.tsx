@@ -57,8 +57,7 @@ export type StackJustify =
   | 'evenly';
 
 export interface StackProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'color'>,
-    BaseLayoutProps {
+  extends Omit<HTMLAttributes<HTMLElement>, 'color'>, BaseLayoutProps {
   as?: ElementType;
   direction?: StackDirection;
   gap?: GapValue;

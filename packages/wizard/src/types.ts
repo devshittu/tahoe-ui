@@ -92,7 +92,7 @@ export interface WizardState<TSteps extends WizardStep[]> extends WizardHooks {
   /** Update data for a specific step */
   setStepData: <TStepId extends TSteps[number]['id']>(
     stepId: TStepId,
-    data: StepDataMap<TSteps>[TStepId]
+    data: StepDataMap<TSteps>[TStepId],
   ) => void;
   /** Set an error */
   setError: (error: WizardError | null) => void;
@@ -149,7 +149,8 @@ export const defaultTheme: WizardTheme = {
   button:
     'px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
   buttonDisabled: 'opacity-50 cursor-not-allowed',
-  error: 'text-red-600 dark:text-red-400 mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg',
+  error:
+    'text-red-600 dark:text-red-400 mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg',
   description: 'text-sm text-gray-600 dark:text-gray-300 mt-2',
   title: 'text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2',
   progress: 'flex items-center justify-center gap-2 mb-6',

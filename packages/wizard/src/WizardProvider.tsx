@@ -2,7 +2,12 @@
 
 import React, { useMemo } from 'react';
 import { WizardContext } from './hooks/useWizard';
-import type { WizardStep, WizardHooks, WizardConfig, WizardTheme } from './types';
+import type {
+  WizardStep,
+  WizardHooks,
+  WizardConfig,
+  WizardTheme,
+} from './types';
 import { defaultTheme } from './types';
 import { createWizardStore } from './store';
 
@@ -52,14 +57,14 @@ export function WizardProvider<TSteps extends WizardStep[]>({
   // Initialize the store - memoized to prevent recreation
   const useWizardStore = useMemo(
     () => createWizardStore(steps, hooks, config),
-    [steps, hooks, config]
+    [steps, hooks, config],
   );
   const wizardState = useWizardStore();
 
   // Merge custom theme with defaults
   const mergedTheme: WizardTheme = useMemo(
     () => ({ ...defaultTheme, ...theme }),
-    [theme]
+    [theme],
   );
 
   return (

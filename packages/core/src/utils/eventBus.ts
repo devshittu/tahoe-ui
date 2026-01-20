@@ -28,7 +28,7 @@ const eventBus = mitt<WizardEventMap>();
 // Utility for emitting validation requests
 export const validateStep = async (
   stepId: string,
-  data: unknown
+  data: unknown,
 ): Promise<boolean> => {
   return new Promise((resolve) => {
     eventBus.emit(EVENT_STEP_VALIDATE, { stepId, data, resolve });
@@ -38,8 +38,8 @@ export const validateStep = async (
 // Subscribe to validation status updates
 export const onValidationStatus = (
   callback: (
-    event: WizardEventMap[typeof EVENT_STEP_VALIDATION_STATUS]
-  ) => void
+    event: WizardEventMap[typeof EVENT_STEP_VALIDATION_STATUS],
+  ) => void,
 ) => {
   eventBus.on(EVENT_STEP_VALIDATION_STATUS, callback);
 };
@@ -47,8 +47,8 @@ export const onValidationStatus = (
 // Unsubscribe from validation status updates
 export const offValidationStatus = (
   callback: (
-    event: WizardEventMap[typeof EVENT_STEP_VALIDATION_STATUS]
-  ) => void
+    event: WizardEventMap[typeof EVENT_STEP_VALIDATION_STATUS],
+  ) => void,
 ) => {
   eventBus.off(EVENT_STEP_VALIDATION_STATUS, callback);
 };

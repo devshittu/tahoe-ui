@@ -8,7 +8,7 @@ First, run the development server:
 
 ```bash
 
-DEV_PORT=3004 docker compose -f docker-compose.dev.yml up app-dev 
+DEV_PORT=3004 docker compose -f docker-compose.dev.yml up app-dev
 # Create a network, which allows containers to communicate
 # with each other, by using their container name as a hostname
 docker network create my_network

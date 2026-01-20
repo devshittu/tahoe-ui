@@ -12,8 +12,16 @@
 // Components
 export { Dialog, type DialogProps } from './modal/Dialog';
 export { PageMode, type PageModeProps } from './modal/PageMode';
-export { HandlebarZone, type HandlebarZoneProps } from './modal/shared/HandlebarZone';
-export { ModalBackdrop, CloseIndicator, type ModalBackdropProps, type CloseIndicatorProps } from './modal/shared/components';
+export {
+  HandlebarZone,
+  type HandlebarZoneProps,
+} from './modal/shared/HandlebarZone';
+export {
+  ModalBackdrop,
+  CloseIndicator,
+  type ModalBackdropProps,
+  type CloseIndicatorProps,
+} from './modal/shared/components';
 
 // Store and Hooks
 export {
@@ -41,7 +49,11 @@ export {
 // Shared Utilities
 export { useDragResistance } from './modal/shared/useDragResistance';
 export { useSquashStretch } from './modal/shared/useSquashStretch';
-export { useFocusTrap, useScreenReaderAnnouncement, generateUniqueId } from './modal/shared/a11yUtils';
+export {
+  useFocusTrap,
+  useScreenReaderAnnouncement,
+  generateUniqueId,
+} from './modal/shared/a11yUtils';
 
 // Modal Types
 export type {

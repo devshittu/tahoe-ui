@@ -14,7 +14,7 @@ export interface UseClickOutsideReturn<T extends HTMLElement = HTMLElement> {
 
 export function useClickOutside<T extends HTMLElement = HTMLElement>(
   callback: () => void,
-  options: UseClickOutsideOptions = {}
+  options: UseClickOutsideOptions = {},
 ): UseClickOutsideReturn<T> {
   const { enabled = true, ignoreRefs = [], includeTouch = true } = options;
 
@@ -39,7 +39,7 @@ export function useClickOutside<T extends HTMLElement = HTMLElement>(
 
       callbackRef.current();
     },
-    [enabled, ignoreRefs]
+    [enabled, ignoreRefs],
   );
 
   useEffect(() => {

@@ -234,14 +234,20 @@ export type InlineCodeProps = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
   className?: string;
 };
 
-export type PreformattedProps = Omit<HTMLAttributes<HTMLPreElement>, 'children'> & {
+export type PreformattedProps = Omit<
+  HTMLAttributes<HTMLPreElement>,
+  'children'
+> & {
   children: ReactNode;
   className?: string;
 };
 
 // ============ Blockquote Props ============
 
-export type BlockquoteProps = Omit<HTMLAttributes<HTMLQuoteElement>, 'children'> & {
+export type BlockquoteProps = Omit<
+  HTMLAttributes<HTMLQuoteElement>,
+  'children'
+> & {
   children: ReactNode;
   cite?: string;
   className?: string;

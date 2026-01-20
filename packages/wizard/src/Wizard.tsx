@@ -124,7 +124,11 @@ export function Wizard({
 
       {/* Progress indicator */}
       {showProgress && (
-        <div className={theme?.progress} role="navigation" aria-label="Wizard progress">
+        <div
+          className={theme?.progress}
+          role="navigation"
+          aria-label="Wizard progress"
+        >
           {visibleSteps.map((step, index) => {
             const isCompleted = index < currentStepIndex;
             const isActive = index === currentStepIndex;
@@ -135,15 +139,11 @@ export function Wizard({
                 className={twMerge(
                   theme?.progressItem,
                   isActive && theme?.progressItemActive,
-                  isCompleted && theme?.progressItemCompleted
+                  isCompleted && theme?.progressItemCompleted,
                 )}
                 aria-current={isActive ? 'step' : undefined}
               >
-                {isCompleted ? (
-                  <CheckIcon />
-                ) : (
-                  index + 1
-                )}
+                {isCompleted ? <CheckIcon /> : index + 1}
               </div>
             );
           })}
@@ -165,10 +165,7 @@ export function Wizard({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className={twMerge(
-                theme?.step,
-                theme?.activeStep
-              )}
+              className={twMerge(theme?.step, theme?.activeStep)}
             >
               {/* Step title */}
               <h2 className={theme?.title}>{step.title}</h2>
@@ -181,17 +178,13 @@ export function Wizard({
               {/* Step content */}
               {step.render ? step.render() : <p>Step content goes here.</p>}
             </motion.div>
-          ) : null
+          ) : null,
         )}
       </AnimatePresence>
 
       {/* Error display */}
       {error && (
-        <div
-          className={theme?.error}
-          role="alert"
-          aria-live="assertive"
-        >
+        <div className={theme?.error} role="alert" aria-live="assertive">
           {error.userMessage}
         </div>
       )}
@@ -203,7 +196,7 @@ export function Wizard({
           disabled={currentStepIndex === 0}
           className={twMerge(
             theme?.button,
-            currentStepIndex === 0 && theme?.buttonDisabled
+            currentStepIndex === 0 && theme?.buttonDisabled,
           )}
           aria-label="Go to the previous step"
         >
@@ -214,9 +207,11 @@ export function Wizard({
           disabled={!isNextEnabled}
           className={twMerge(
             theme?.button,
-            !isNextEnabled && theme?.buttonDisabled
+            !isNextEnabled && theme?.buttonDisabled,
           )}
-          aria-label={isLastStep ? 'Complete the wizard' : 'Go to the next step'}
+          aria-label={
+            isLastStep ? 'Complete the wizard' : 'Go to the next step'
+          }
         >
           {isLastStep ? labels.finish : labels.next}
         </button>
