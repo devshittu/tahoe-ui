@@ -202,14 +202,15 @@ export function Toast({ toast, position, index }: ToastProps) {
             toast.showHandlebar ? 'top-4' : 'top-0',
           )}
         >
+          {/* Progress bar (CSS variable-backed via @tahoe-ui/tailwind-preset) */}
           <div
             ref={progressRef}
             className={twMerge(
               'h-full',
-              toast.variant === 'success' && 'bg-emerald-500',
-              toast.variant === 'error' && 'bg-red-500',
-              toast.variant === 'warning' && 'bg-amber-500',
-              toast.variant === 'info' && 'bg-blue-500',
+              toast.variant === 'success' && 'bg-success',
+              toast.variant === 'error' && 'bg-error',
+              toast.variant === 'warning' && 'bg-warning',
+              toast.variant === 'info' && 'bg-info',
               toast.variant === 'default' && 'bg-gray-400 dark:bg-gray-500',
             )}
           />
@@ -243,6 +244,7 @@ export function Toast({ toast, position, index }: ToastProps) {
             )}
           </div>
 
+          {/* Action button (CSS variable-backed via @tahoe-ui/tailwind-preset) */}
           {toast.action && (
             <button
               onClick={handleActionClick}
@@ -254,13 +256,13 @@ export function Toast({ toast, position, index }: ToastProps) {
                 toast.variant === 'default' &&
                   'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200 focus:ring-gray-500',
                 toast.variant === 'success' &&
-                  'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500',
+                  'bg-success text-white hover:bg-success-dark focus:ring-success',
                 toast.variant === 'error' &&
-                  'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+                  'bg-error text-white hover:bg-error-dark focus:ring-error',
                 toast.variant === 'warning' &&
-                  'bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
+                  'bg-warning text-white hover:bg-warning-dark focus:ring-warning',
                 toast.variant === 'info' &&
-                  'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+                  'bg-info text-white hover:bg-info-dark focus:ring-info',
               )}
             >
               {toast.action.label}
