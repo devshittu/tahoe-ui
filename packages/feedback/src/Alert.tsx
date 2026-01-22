@@ -4,7 +4,7 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import type { AlertProps, AlertVariant, FeedbackColor } from './types';
 
-// Variant + Color style mappings
+// Variant + Color style mappings (CSS variable-backed via @tahoe-ui/tailwind-preset)
 const getAlertStyles = (
   variant: AlertVariant,
   color: FeedbackColor,
@@ -12,34 +12,36 @@ const getAlertStyles = (
   const styles: Record<AlertVariant, Record<FeedbackColor, string>> = {
     filled: {
       default: 'bg-gray-600 text-white',
-      primary: 'bg-blue-600 text-white',
+      primary: 'bg-brand-primary-600 text-white',
       secondary: 'bg-gray-500 text-white',
-      success: 'bg-green-600 text-white',
-      warning: 'bg-amber-500 text-white',
-      error: 'bg-red-600 text-white',
-      info: 'bg-sky-600 text-white',
+      success: 'bg-success text-white',
+      warning: 'bg-warning text-white',
+      error: 'bg-error text-white',
+      info: 'bg-info text-white',
     },
     outlined: {
-      default:
-        'border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300',
-      primary: 'border border-blue-500 text-blue-700 dark:text-blue-400',
+      default: 'border border-border-default text-text-secondary',
+      primary:
+        'border border-brand-primary-500 text-brand-primary-700 dark:text-brand-primary-400',
       secondary: 'border border-gray-400 text-gray-600 dark:text-gray-400',
-      success: 'border border-green-500 text-green-700 dark:text-green-400',
-      warning: 'border border-amber-500 text-amber-700 dark:text-amber-400',
-      error: 'border border-red-500 text-red-700 dark:text-red-400',
-      info: 'border border-sky-500 text-sky-700 dark:text-sky-400',
+      success: 'border border-success text-success-dark dark:text-success',
+      warning: 'border border-warning text-warning-dark dark:text-warning',
+      error: 'border border-error text-error-dark dark:text-error',
+      info: 'border border-info text-info-dark dark:text-info',
     },
     soft: {
-      default: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
-      primary: 'bg-blue-50 dark:bg-blue-950 text-blue-800 dark:text-blue-300',
+      default: 'bg-bg-secondary text-text-secondary',
+      primary:
+        'bg-brand-primary-50 dark:bg-brand-primary-950 text-brand-primary-800 dark:text-brand-primary-300',
       secondary:
         'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
       success:
-        'bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-300',
+        'bg-success-light dark:bg-success-dark/20 text-success-dark dark:text-success',
       warning:
-        'bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300',
-      error: 'bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-300',
-      info: 'bg-sky-50 dark:bg-sky-950 text-sky-800 dark:text-sky-300',
+        'bg-warning-light dark:bg-warning-dark/20 text-warning-dark dark:text-warning',
+      error:
+        'bg-error-light dark:bg-error-dark/20 text-error-dark dark:text-error',
+      info: 'bg-info-light dark:bg-info-dark/20 text-info-dark dark:text-info',
     },
   };
 

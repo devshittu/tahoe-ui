@@ -5,25 +5,25 @@ import { twMerge } from 'tailwind-merge';
 import type { SpinnerProps, FeedbackColor, FeedbackSize } from './types';
 import { SIZE_SCALE } from './types';
 
-// Spinner color mappings
+// Spinner color mappings (CSS variable-backed via @tahoe-ui/tailwind-preset)
 const SPINNER_COLORS: Record<FeedbackColor, string> = {
   default: 'border-gray-600 dark:border-gray-400',
-  primary: 'border-blue-600 dark:border-blue-500',
+  primary: 'border-brand-primary-600 dark:border-brand-primary-500',
   secondary: 'border-gray-500',
-  success: 'border-green-600 dark:border-green-500',
-  warning: 'border-amber-500',
-  error: 'border-red-600 dark:border-red-500',
-  info: 'border-sky-600 dark:border-sky-500',
+  success: 'border-success',
+  warning: 'border-warning',
+  error: 'border-error',
+  info: 'border-info',
 };
 
 const DOT_COLORS: Record<FeedbackColor, string> = {
   default: 'bg-gray-600 dark:bg-gray-400',
-  primary: 'bg-blue-600 dark:bg-blue-500',
+  primary: 'bg-brand-primary-600 dark:bg-brand-primary-500',
   secondary: 'bg-gray-500',
-  success: 'bg-green-600 dark:bg-green-500',
-  warning: 'bg-amber-500',
-  error: 'bg-red-600 dark:bg-red-500',
-  info: 'bg-sky-600 dark:bg-sky-500',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  error: 'bg-error',
+  info: 'bg-info',
 };
 
 /**
@@ -168,14 +168,12 @@ export function LoadingOverlay({
     <div
       className={twMerge(
         'fixed inset-0 z-50 flex flex-col items-center justify-center',
-        'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm',
+        'bg-bg-primary/80 backdrop-blur-sm',
         className,
       )}
     >
       <Spinner size="lg" color={color} label={label} />
-      {showLabel && (
-        <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">{label}</p>
-      )}
+      {showLabel && <p className="mt-4 text-sm text-text-secondary">{label}</p>}
     </div>
   );
 }
