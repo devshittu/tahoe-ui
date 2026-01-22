@@ -10,7 +10,7 @@
  * ```tsx
  * import {
  *   Input, Textarea, Select,
- *   Checkbox, RadioGroup, Switch,
+ *   Checkbox, RadioGroup, Switch, Chip, SegmentedControl,
  *   Slider, DatePicker, FileUpload,
  *   FormField, FormGroup
  * } from '@tahoe-ui/form';
@@ -48,11 +48,47 @@ export { Select, default as SelectDefault } from './Select';
 export { Checkbox, default as CheckboxDefault } from './Checkbox';
 export { RadioGroup, default as RadioGroupDefault } from './RadioGroup';
 export { Switch, default as SwitchDefault } from './Switch';
+export { Chip, default as ChipDefault } from './Chip';
+export {
+  SegmentedControl,
+  default as SegmentedControlDefault,
+} from './SegmentedControl';
 
 // Advanced components
 export { Slider, default as SliderDefault } from './Slider';
 export { DatePicker, default as DatePickerDefault } from './DatePicker';
 export { FileUpload, default as FileUploadDefault } from './FileUpload';
+
+// Digit Input
+export {
+  DigitInput,
+  DigitInputDefault,
+  useDigitInput,
+  useDigitInputDefault,
+  Numpad,
+  NumpadDefault,
+  CompactNumpad,
+  DIGIT_INPUT_CONFIG,
+  DIGIT_INPUT_SIZE_CONFIG,
+  DIGIT_INPUT_VARIANT_STYLES,
+  NUMPAD_BUTTON_STYLES,
+  DIGIT_INPUT_SPRING_CONFIGS,
+  DIGIT_INPUT_HAPTIC_PATTERNS,
+} from './digitinput';
+export type {
+  DigitInputRef,
+  UseDigitInputOptions,
+  CompactNumpadProps,
+  DigitInputProps,
+  DigitInputMode,
+  DigitInputVariant,
+  DigitInputSize,
+  DigitInputState,
+  DigitInputConfig,
+  BoxAnimationState,
+  UseDigitInputReturn,
+  NumpadProps,
+} from './digitinput';
 
 // Types
 export type {
@@ -96,4 +132,13 @@ export type {
   FormFieldProps,
   FormGroupProps,
   FormGroupOrientation,
+  // Chip
+  ChipProps,
+  ChipSize,
+  ChipVariant,
+  ChipColor,
+  // SegmentedControl
+  SegmentedControlProps,
+  SegmentedControlSize,
+  SegmentOption,
 } from './types';
