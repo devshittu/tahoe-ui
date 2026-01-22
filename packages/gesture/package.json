@@ -1,0 +1,62 @@
+{
+  "name": "@tahoe-ui/gesture",
+  "version": "0.0.1",
+  "description": "Gesture hooks for Tahoe UI - Long press, swipe, hover intent detection",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "types:check": "tsc --noEmit",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@tahoe-ui/tsconfig": "workspace:*",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devshittu/tahoe-ui.git",
+    "directory": "packages/gesture"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "gesture",
+    "long-press",
+    "swipe",
+    "hover-intent",
+    "touch",
+    "mobile"
+  ],
+  "author": "devshittu",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
