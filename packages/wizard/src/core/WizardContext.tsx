@@ -219,7 +219,8 @@ export function useWizardStep<TData = unknown>(
   return {
     data,
     setData: (newData: TData) => state.setStepData(stepId, newData),
-    updateData: (updates: Partial<TData>) => state.updateStepData(stepId, updates),
+    updateData: (updates: Partial<TData>) =>
+      state.updateStepData(stepId, updates),
     status: stepState.status,
     isActive,
     isValidating: stepState.isValidating,
@@ -289,7 +290,11 @@ export function useWizardProgress(): UseWizardProgressReturn {
   const state = useWizardStore(storeApi);
 
   // Compute visible steps with their state
-  const { steps: progressSteps, currentIndex, completedCount } = useMemo(() => {
+  const {
+    steps: progressSteps,
+    currentIndex,
+    completedCount,
+  } = useMemo(() => {
     const visibleSteps = state.getVisibleSteps();
     const currentStep = state.steps[state.currentStepIndex];
     const currentStepId = currentStep?.id;
@@ -330,7 +335,8 @@ export function useWizardProgress(): UseWizardProgressReturn {
   }, [state.steps, state.data, state.stepStates, state.currentStepIndex]);
 
   const totalSteps = progressSteps.length;
-  const progress = totalSteps === 0 ? 0 : Math.round((completedCount / totalSteps) * 100);
+  const progress =
+    totalSteps === 0 ? 0 : Math.round((completedCount / totalSteps) * 100);
 
   return {
     steps: progressSteps,
@@ -338,6 +344,7 @@ export function useWizardProgress(): UseWizardProgressReturn {
     totalSteps,
     completedCount,
     progress,
-    goToStep: (stepId: string) => state.goToStep(stepId, { skipValidation: true }),
+    goToStep: (stepId: string) =>
+      state.goToStep(stepId, { skipValidation: true }),
   };
 }

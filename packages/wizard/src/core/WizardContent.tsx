@@ -156,7 +156,10 @@ export function WizardContent({
   }
 
   // Animated version
-  const variants = createVariants(animConfig.direction ?? 'horizontal', direction);
+  const variants = createVariants(
+    animConfig.direction ?? 'horizontal',
+    direction,
+  );
 
   return (
     <div
