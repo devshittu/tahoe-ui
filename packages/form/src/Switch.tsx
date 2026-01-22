@@ -36,23 +36,23 @@ const sizeClasses: Record<
   }
 > = {
   sm: {
-    track: 'w-8 h-5',
-    thumb: 'w-3.5 h-3.5',
-    translateX: 14, // 3.5 * 4
+    track: 'w-8 h-5', // 32px x 20px
+    thumb: 'w-3.5 h-3.5', // 14px x 14px
+    translateX: 14, // 32 - 14 - 4 = 14 (4px padding right)
     label: 'text-sm',
     desc: 'text-xs',
   },
   md: {
-    track: 'w-11 h-6',
-    thumb: 'w-4 h-4',
-    translateX: 20, // 5 * 4
+    track: 'w-11 h-6', // 44px x 24px
+    thumb: 'w-4 h-4', // 16px x 16px
+    translateX: 24, // 44 - 16 - 4 = 24 (4px padding right)
     label: 'text-base',
     desc: 'text-sm',
   },
   lg: {
-    track: 'w-14 h-8',
-    thumb: 'w-6 h-6',
-    translateX: 24, // 6 * 4
+    track: 'w-14 h-8', // 56px x 32px
+    thumb: 'w-6 h-6', // 24px x 24px
+    translateX: 28, // 56 - 24 - 4 = 28 (4px padding right)
     label: 'text-lg',
     desc: 'text-base',
   },
@@ -86,9 +86,7 @@ export function Switch({
               className={cn(
                 sizes.label,
                 'font-medium',
-                disabled
-                  ? 'text-gray-400 dark:text-gray-600'
-                  : 'text-gray-900 dark:text-gray-100',
+                disabled ? 'text-text-muted' : 'text-text-primary',
                 !disabled && 'cursor-pointer',
               )}
             >
@@ -96,9 +94,7 @@ export function Switch({
             </Label>
           )}
           {description && (
-            <Description
-              className={cn(sizes.desc, 'text-gray-500 dark:text-gray-400')}
-            >
+            <Description className={cn(sizes.desc, 'text-text-secondary')}>
               {description}
             </Description>
           )}
@@ -110,28 +106,27 @@ export function Switch({
         onChange={onChange}
         name={name}
         className={cn(
-          // Base
-          'relative inline-flex shrink-0 rounded-full',
+          // Base - use flexbox for vertical centering
+          'relative inline-flex items-center shrink-0 rounded-full',
           'transition-colors duration-200',
           sizes.track,
-          // Background
+          // Background - ON: brand primary, OFF: subtle gray
           checked
-            ? 'bg-gray-900 dark:bg-gray-100'
-            : 'bg-gray-200 dark:bg-gray-700',
+            ? 'bg-brand-primary-600 dark:bg-brand-primary-500'
+            : 'bg-bg-secondary dark:bg-bg-tertiary',
           // Focus
           'focus:outline-none focus:ring-2 focus:ring-offset-2',
-          'focus:ring-gray-900 dark:focus:ring-gray-100',
+          'focus:ring-brand-primary-500 dark:focus:ring-brand-primary-400',
           // Cursor
           disabled ? 'cursor-not-allowed' : 'cursor-pointer',
         )}
       >
         <motion.span
           className={cn(
-            'inline-block rounded-full shadow-sm',
+            'pointer-events-none inline-block rounded-full shadow-sm',
             sizes.thumb,
-            // Background
-            'bg-white dark:bg-gray-900',
-            checked ? 'dark:bg-gray-900' : '',
+            // Thumb - white for contrast against colored track
+            'bg-white',
           )}
           initial={false}
           animate={{
@@ -141,12 +136,6 @@ export function Switch({
             type: 'spring',
             stiffness: 500,
             damping: 30,
-          }}
-          style={{
-            y: '50%',
-            top: '50%',
-            position: 'absolute',
-            transform: 'translateY(-50%)',
           }}
         />
       </HeadlessSwitch>
