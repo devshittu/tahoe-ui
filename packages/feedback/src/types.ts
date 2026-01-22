@@ -131,47 +131,63 @@ export interface BadgeProps {
 }
 
 // ============================================================================
-// Style Mappings
+// Style Mappings (CSS Variable-backed)
 // ============================================================================
 
+/**
+ * Background colors for filled variants
+ * Maps to CSS variables via @tahoe-ui/tailwind-preset
+ */
 export const FEEDBACK_COLORS: Record<FeedbackColor, string> = {
   default: 'bg-gray-200 dark:bg-gray-700',
-  primary: 'bg-blue-500',
+  primary: 'bg-brand-primary-500',
   secondary: 'bg-gray-500',
-  success: 'bg-green-500',
-  warning: 'bg-amber-500',
-  error: 'bg-red-500',
-  info: 'bg-sky-500',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  error: 'bg-error',
+  info: 'bg-info',
 };
 
+/**
+ * Text colors for labels and content
+ * Maps to CSS variables via @tahoe-ui/tailwind-preset
+ */
 export const FEEDBACK_TEXT_COLORS: Record<FeedbackColor, string> = {
-  default: 'text-gray-700 dark:text-gray-300',
-  primary: 'text-blue-600 dark:text-blue-400',
+  default: 'text-text-secondary',
+  primary: 'text-brand-primary-600 dark:text-brand-primary-400',
   secondary: 'text-gray-600 dark:text-gray-400',
-  success: 'text-green-600 dark:text-green-400',
-  warning: 'text-amber-600 dark:text-amber-400',
-  error: 'text-red-600 dark:text-red-400',
-  info: 'text-sky-600 dark:text-sky-400',
+  success: 'text-success-dark dark:text-success',
+  warning: 'text-warning-dark dark:text-warning',
+  error: 'text-error-dark dark:text-error',
+  info: 'text-info-dark dark:text-info',
 };
 
+/**
+ * Border colors for outlined variants
+ * Maps to CSS variables via @tahoe-ui/tailwind-preset
+ */
 export const FEEDBACK_BORDER_COLORS: Record<FeedbackColor, string> = {
-  default: 'border-gray-300 dark:border-gray-600',
-  primary: 'border-blue-500',
+  default: 'border-border-default',
+  primary: 'border-brand-primary-500',
   secondary: 'border-gray-500',
-  success: 'border-green-500',
-  warning: 'border-amber-500',
-  error: 'border-red-500',
-  info: 'border-sky-500',
+  success: 'border-success',
+  warning: 'border-warning',
+  error: 'border-error',
+  info: 'border-info',
 };
 
+/**
+ * Soft/muted background colors
+ * Maps to CSS variables via @tahoe-ui/tailwind-preset
+ */
 export const FEEDBACK_BG_SOFT: Record<FeedbackColor, string> = {
-  default: 'bg-gray-100 dark:bg-gray-800',
-  primary: 'bg-blue-50 dark:bg-blue-950',
+  default: 'bg-bg-secondary dark:bg-gray-800',
+  primary: 'bg-brand-primary-50 dark:bg-brand-primary-950',
   secondary: 'bg-gray-100 dark:bg-gray-800',
-  success: 'bg-green-50 dark:bg-green-950',
-  warning: 'bg-amber-50 dark:bg-amber-950',
-  error: 'bg-red-50 dark:bg-red-950',
-  info: 'bg-sky-50 dark:bg-sky-950',
+  success: 'bg-success-light dark:bg-success-dark/20',
+  warning: 'bg-warning-light dark:bg-warning-dark/20',
+  error: 'bg-error-light dark:bg-error-dark/20',
+  info: 'bg-info-light dark:bg-info-dark/20',
 };
 
 export const SIZE_SCALE: Record<FeedbackSize, number> = {

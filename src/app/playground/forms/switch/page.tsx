@@ -17,7 +17,7 @@ export default function SwitchPlayground() {
   const [autoSave, setAutoSave] = useState(true);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
+    <div className="min-h-screen bg-bg-primary py-12 px-4">
       <div className="max-w-5xl mx-auto space-y-12">
         <HeadlineBlock
           headline="Switch"
@@ -26,17 +26,17 @@ export default function SwitchPlayground() {
         />
 
         {/* Configuration */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 space-y-6">
+        <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-6 space-y-6">
           <Text fontWeight="medium" color="primary" className="text-lg">
             Configuration
           </Text>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <SmallText className="text-gray-500">Size</SmallText>
+              <SmallText className="text-text-secondary">Size</SmallText>
               <select
                 value={size}
                 onChange={(e) => setSize(e.target.value as SwitchSize)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-border-default bg-bg-elevated text-sm text-text-primary"
               >
                 {SIZES.map((s) => (
                   <option key={s} value={s}>
@@ -46,7 +46,7 @@ export default function SwitchPlayground() {
               </select>
             </div>
             <div className="space-y-2">
-              <SmallText className="text-gray-500">Options</SmallText>
+              <SmallText className="text-text-secondary">Options</SmallText>
               <label className="flex items-center gap-2 mt-2">
                 <input
                   type="checkbox"
@@ -65,7 +65,7 @@ export default function SwitchPlayground() {
           <Text fontWeight="medium" color="primary" className="text-lg">
             Live Demo
           </Text>
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-8">
+          <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-8">
             <div className="max-w-md mx-auto">
               <Switch
                 checked={notifications}
@@ -84,8 +84,8 @@ export default function SwitchPlayground() {
           <Text fontWeight="medium" color="primary" className="text-lg">
             Settings Example
           </Text>
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
-            <div className="max-w-lg mx-auto divide-y divide-gray-200 dark:divide-gray-800">
+          <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-6">
+            <div className="max-w-lg mx-auto divide-y divide-border-subtle">
               <div className="py-4 first:pt-0">
                 <Switch
                   checked={notifications}
@@ -126,7 +126,7 @@ export default function SwitchPlayground() {
           <Text fontWeight="medium" color="primary" className="text-lg">
             Sizes
           </Text>
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
+          <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-6">
             <div className="space-y-6">
               {SIZES.map((s) => (
                 <Switch
@@ -146,7 +146,7 @@ export default function SwitchPlayground() {
           <Text fontWeight="medium" color="primary" className="text-lg">
             States
           </Text>
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
+          <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <Switch checked label="Checked" />
@@ -165,7 +165,7 @@ export default function SwitchPlayground() {
           <Text fontWeight="medium" color="primary" className="text-lg">
             Standalone (no label)
           </Text>
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
+          <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-6">
             <div className="flex items-center gap-8">
               <Switch size="sm" checked />
               <Switch size="md" checked />
@@ -176,11 +176,11 @@ export default function SwitchPlayground() {
 
         {/* API Reference */}
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 space-y-4">
+          <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-6 space-y-4">
             <Text fontWeight="medium" color="primary">
               Props
             </Text>
-            <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="space-y-2 text-sm text-text-secondary">
               <p>
                 <InlineCode>checked</InlineCode> - boolean
               </p>
@@ -201,21 +201,21 @@ export default function SwitchPlayground() {
               </p>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 space-y-4">
+          <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-6 space-y-4">
             <Text fontWeight="medium" color="primary">
               Animation
             </Text>
-            <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="space-y-2 text-sm text-text-secondary">
               <p>Spring-based toggle animation</p>
               <p>Smooth color transitions</p>
               <p>Respects prefers-reduced-motion</p>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 space-y-4">
+          <div className="bg-bg-elevated rounded-2xl border border-border-subtle p-6 space-y-4">
             <Text fontWeight="medium" color="primary">
               Accessibility
             </Text>
-            <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="space-y-2 text-sm text-text-secondary">
               <p>
                 <InlineCode>role=&quot;switch&quot;</InlineCode>
               </p>
@@ -229,11 +229,11 @@ export default function SwitchPlayground() {
         </div>
 
         {/* Code Example */}
-        <div className="bg-gray-900 dark:bg-gray-800 rounded-2xl p-6">
-          <Text fontWeight="medium" className="text-white mb-4">
+        <div className="bg-bg-tertiary rounded-2xl p-6">
+          <Text fontWeight="medium" className="text-text-primary mb-4">
             Usage
           </Text>
-          <pre className="text-gray-300 text-sm overflow-x-auto">
+          <pre className="text-text-secondary text-sm overflow-x-auto">
             <code>{`import { Switch } from '@/components/Form';
 
 <Switch

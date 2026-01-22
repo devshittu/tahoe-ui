@@ -59,8 +59,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white`}
       >
-        {/* ThemeProviders wraps the entire application to provide theme context */}
-        <ThemeProviders attribute="class" defaultTheme="system" enableSystem>
+        {/* ThemeProviders wraps the entire application to provide theme context and CSS variables */}
+        <ThemeProviders attribute="class" defaultMode="system">
           <SplashScreenWrapper splashConfig={splashConfig}>
             {/* ThemeToggle component placed outside AppProvider but within ThemeProvider context */}
             <div className="fixed top-4 right-4 z-[60]">

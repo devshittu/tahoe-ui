@@ -148,6 +148,74 @@ export {
 } from './tooltip/types';
 
 // ============================================================================
+// HoverCard System
+// ============================================================================
+
+// Components
+export { HoverCard, HoverCardDefault } from './hovercard';
+
+// Hooks
+export { useHoverIntent, useHoverCardGroup } from './hovercard';
+
+// Types
+export type {
+  HoverCardProps,
+  HoverCardPlacement,
+  HoverCardSize,
+  UseHoverIntentOptions,
+  UseHoverIntentReturn,
+} from './hovercard';
+
+export { HOVER_CARD_SIZES, HOVER_CARD_CONFIG } from './hovercard';
+
+// ============================================================================
+// ContextMenu System
+// ============================================================================
+
+// Components
+export {
+  ContextMenu,
+  ContextMenuDefault,
+  ContextMenuItem,
+} from './contextmenu';
+
+// Types
+export type {
+  ContextMenuProps,
+  ContextMenuItemProps,
+  ContextMenuItemData,
+  ContextMenuItemType,
+  ContextMenuBehavior,
+  ContextMenuState,
+  MenuPosition,
+} from './contextmenu';
+
+export { CONTEXT_MENU_CONFIG, CONTEXT_MENU_STYLES } from './contextmenu';
+
+// ============================================================================
+// CommandMenu System
+// ============================================================================
+
+// Components
+export { CommandMenu, CommandMenuDefault } from './commandmenu';
+
+// Types
+export type {
+  CommandMenuProps,
+  CommandItem,
+  CommandGroup,
+  CommandMenuSize,
+  CommandMenuConfig,
+  HandlebarPosition,
+} from './commandmenu';
+
+export {
+  DEFAULT_COMMAND_CONFIG,
+  COMMAND_SIZE_CLASSES,
+  COMMAND_MENU_STYLES,
+} from './commandmenu';
+
+// ============================================================================
 // Shared Utilities
 // ============================================================================
 

@@ -54,16 +54,13 @@ const sizeClasses: Record<InputSize, { input: string; icon: string }> = {
   },
 };
 
+// State classes (CSS variable-backed via @tahoe-ui/tailwind-preset)
 const stateClasses: Record<NonNullable<InputState>, string> = {
-  error: cn(
-    'border-red-500 dark:border-red-400',
-    'focus:border-red-500 dark:focus:border-red-400',
-    'focus:ring-red-500/20',
-  ),
+  error: cn('border-error', 'focus:border-error', 'focus:ring-error/20'),
   success: cn(
-    'border-green-500 dark:border-green-400',
-    'focus:border-green-500 dark:focus:border-green-400',
-    'focus:ring-green-500/20',
+    'border-success',
+    'focus:border-success',
+    'focus:ring-success/20',
   ),
 };
 

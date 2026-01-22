@@ -1,16 +1,68 @@
 // File: src/providers/theme-provider.tsx
 'use client';
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { type ThemeProviderProps } from 'next-themes';
 import * as React from 'react';
+import {
+  TahoeThemeProvider,
+  useThemeMode,
+  useThemeConfig,
+  type TahoeThemeProviderProps,
+} from '@tahoe-ui/theme';
 
 /**
- * Custom ThemeProvider component to wrap the application.
- * This component is a client component and provides the theme context
- * to all child components using the `useTheme` hook from next-themes.
- * It's designed to be used directly in the root layout.
+ * ThemeProviders - Wrapper for Tahoe UI theming system
+ *
+ * This component wraps TahoeThemeProvider to provide:
+ * - CSS variable injection for design tokens
+ * - Dark/light mode support with system preference detection
+ * - Theme context for accessing theme configuration
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <ThemeProviders>
+ *   <App />
+ * </ThemeProviders>
+ *
+ * // With custom theme
+ * import { createTheme } from '@tahoe-ui/theme';
+ *
+ * const myTheme = createTheme({
+ *   name: 'my-brand',
+ *   brand: { primary: '#6366F1' },
+ * });
+ *
+ * <ThemeProviders theme={myTheme}>
+ *   <App />
+ * </ThemeProviders>
+ * ```
  */
-export function ThemeProviders({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+export function ThemeProviders({
+  children,
+  theme,
+  defaultMode = 'system',
+  forcedMode,
+  storageKey,
+  attribute = 'class',
+  enableTransitions = true,
+  styleSelector,
+  disableStyleInjection,
+}: Omit<TahoeThemeProviderProps, 'children'> & { children: React.ReactNode }) {
+  return (
+    <TahoeThemeProvider
+      theme={theme}
+      defaultMode={defaultMode}
+      forcedMode={forcedMode}
+      storageKey={storageKey}
+      attribute={attribute}
+      enableTransitions={enableTransitions}
+      styleSelector={styleSelector}
+      disableStyleInjection={disableStyleInjection}
+    >
+      {children}
+    </TahoeThemeProvider>
+  );
 }
+
+// Re-export hooks for convenience
+export { useThemeMode, useThemeConfig };

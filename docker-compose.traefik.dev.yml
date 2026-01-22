@@ -13,10 +13,12 @@ services:
       - HOSTNAME=0.0.0.0
       - NEXT_PUBLIC_BASE_PATH=/tahoe
       - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
     volumes:
       - .:/app
       - /app/node_modules
       - /app/.next
+      - /app/.pnpm-store
     networks:
       - traefik-public
     labels:
@@ -27,13 +29,13 @@ services:
       - "traefik.http.routers.tahoe-ui.middlewares=chain-web@file"
       - "traefik.http.routers.tahoe-ui.priority=100"
       - "traefik.http.services.tahoe-ui.loadbalancer.server.port=3000"
-    command: yarn dev
+    command: sh -c "pnpm exec turbo dev --filter='./packages/*' --concurrency 15 & sleep 20 && pnpm exec next dev"
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/tahoe', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/tahoe/playground"]
       interval: 30s
       timeout: 10s
-      start_period: 60s
-      retries: 3
+      start_period: 120s
+      retries: 5
 
 networks:
   traefik-public:

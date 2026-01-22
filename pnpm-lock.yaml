@@ -20,6 +20,12 @@ importers:
       '@monaco-editor/react':
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.55.1)(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      '@tahoe-ui/tailwind-preset':
+        specifier: workspace:*
+        version: link:packages/tailwind-preset
+      '@tahoe-ui/theme':
+        specifier: workspace:*
+        version: link:packages/theme
       '@tailwindcss/postcss':
         specifier: ^4.0.0
         version: 4.1.18
@@ -203,6 +209,46 @@ importers:
         specifier: ^5.9.0
         version: 5.9.3
 
+  packages/code:
+    dependencies:
+      '@tahoe-ui/core':
+        specifier: workspace:*
+        version: link:../core
+      framer-motion:
+        specifier: '>=11.0.0'
+        version: 11.18.2(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      shiki:
+        specifier: '>=1.0.0'
+        version: 3.21.0
+      tailwind-merge:
+        specifier: '>=2.0.0'
+        version: 2.6.0
+    devDependencies:
+      '@tahoe-ui/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint-config
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.8
+      '@types/react-dom':
+        specifier: ^19.0.0
+        version: 19.2.3(@types/react@19.2.8)
+      react:
+        specifier: ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
   packages/core:
     dependencies:
       clsx:
@@ -223,6 +269,40 @@ importers:
         version: link:../../tooling/tsconfig
       tsup:
         specifier: ^8.3.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/disclosure:
+    dependencies:
+      framer-motion:
+        specifier: ^11.0.0
+        version: 11.18.2(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1(react@19.0.1)
+      react-icons:
+        specifier: ^5.0.0
+        version: 5.5.0(react@19.0.1)
+      tailwind-merge:
+        specifier: ^3.0.2
+        version: 3.4.0
+    devDependencies:
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.27
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.7(@types/react@18.3.27)
+      tsup:
+        specifier: ^8.5.0
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
       typescript:
         specifier: ^5.9.3
@@ -288,6 +368,31 @@ importers:
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
       typescript:
         specifier: ^5.9.0
+        version: 5.9.3
+
+  packages/gesture:
+    dependencies:
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1
+      react-dom:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.0.1(react@19.0.1)
+    devDependencies:
+      '@tahoe-ui/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/tsconfig
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.27
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.7(@types/react@18.3.27)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
         version: 5.9.3
 
   packages/hooks:
@@ -452,6 +557,47 @@ importers:
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
       typescript:
         specifier: ^5.7.2
+        version: 5.9.3
+
+  packages/tailwind-preset:
+    dependencies:
+      '@tahoe-ui/theme':
+        specifier: workspace:*
+        version: link:../theme
+    devDependencies:
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.19(yaml@2.8.2)
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(jiti@1.21.7)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.0-dev.20250409
+        version: 5.9.3
+
+  packages/theme:
+    dependencies:
+      '@tahoe-ui/core':
+        specifier: workspace:*
+        version: link:../core
+      react-dom:
+        specifier: '>=18.0.0'
+        version: 19.0.1(react@19.0.1)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.8
+      next-themes:
+        specifier: ^0.4.4
+        version: 0.4.6(react-dom@19.0.1(react@19.0.1))(react@19.0.1)
+      react:
+        specifier: ^19.0.0
+        version: 19.0.1
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
         version: 5.9.3
 
   packages/typography:
@@ -12033,6 +12179,34 @@ snapshots:
       strip-bom: 3.0.0
 
   tslib@2.8.1: {}
+
+  tsup@8.5.1(jiti@1.21.7)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2):
+    dependencies:
+      bundle-require: 5.1.0(esbuild@0.27.2)
+      cac: 6.7.14
+      chokidar: 4.0.3
+      consola: 3.4.2
+      debug: 4.4.3
+      esbuild: 0.27.2
+      fix-dts-default-cjs-exports: 1.0.1
+      joycon: 3.1.1
+      picocolors: 1.1.1
+      postcss-load-config: 6.0.1(jiti@1.21.7)(postcss@8.5.6)(yaml@2.8.2)
+      resolve-from: 5.0.0
+      rollup: 4.55.1
+      source-map: 0.7.6
+      sucrase: 3.35.1
+      tinyexec: 0.3.2
+      tinyglobby: 0.2.15
+      tree-kill: 1.2.2
+    optionalDependencies:
+      postcss: 8.5.6
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - jiti
+      - supports-color
+      - tsx
+      - yaml
 
   tsup@8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2):
     dependencies:

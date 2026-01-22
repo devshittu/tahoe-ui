@@ -49,9 +49,10 @@ const sizeClasses: Record<SelectSize, { button: string; option: string }> = {
   },
 };
 
+// State classes (CSS variable-backed via @tahoe-ui/tailwind-preset)
 const stateClasses: Record<NonNullable<SelectState>, string> = {
-  error: 'border-red-500 dark:border-red-400 focus:ring-red-500/20',
-  success: 'border-green-500 dark:border-green-400 focus:ring-green-500/20',
+  error: 'border-error focus:ring-error/20',
+  success: 'border-success focus:ring-success/20',
 };
 
 export function Select<T = string>({

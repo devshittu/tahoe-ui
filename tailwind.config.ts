@@ -1,22 +1,31 @@
 // tailwind.config.ts
 import type { Config } from 'tailwindcss';
-const { fontFamily } = require('tailwindcss/defaultTheme');
+import { fontFamily } from 'tailwindcss/defaultTheme';
+import { tahoePreset } from '@tahoe-ui/tailwind-preset';
 
-export default {
+const config: Config = {
+  // Use the Tahoe UI preset for theme CSS variable integration
+  presets: [tahoePreset()],
+
   content: [
-    './src/**/*.{js,ts,jsx,tsx,mdx}', // Scans all files in src
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}', // Explicitly include pages
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}', // Explicitly include components
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}', // Explicitly include app directory
-    // './manual-safelist.html', // Keep if still needed for other purposes
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    // Include packages for component scanning
+    './packages/*/src/**/*.{js,ts,jsx,tsx}',
   ],
-  darkMode: 'class', // Enable dark mode based on the 'dark' class on the HTML tag
+
+  darkMode: 'class',
+
   theme: {
     extend: {
       colors: {
+        // Legacy color references (for backwards compatibility during migration)
         background: 'var(--background)',
         foreground: 'var(--foreground)',
 
+        // Legacy hardcoded colors (to be migrated to theme tokens)
         primary: '#333333',
         secondary: '#666666',
         accent: '#FF5733',
@@ -31,7 +40,7 @@ export default {
         yellow: {
           100: '#FEF3C7',
           200: '#FDE68A',
-          400: '#FACC15', // Added for theme-toggle sun icon
+          400: '#FACC15',
         },
         green: {
           500: '#10B981',
@@ -39,42 +48,37 @@ export default {
         purple: {
           500: '#8B5CF6',
         },
-
         'apple-gray': {
           50: '#F5F5F5',
           100: '#E5E7EB',
-          // More shades if needed
         },
         'apple-green': {
           100: '#E6FFFA',
           500: '#34D399',
         },
       },
+
       dropShadow: {
         md: '0 4px 6px rgba(0, 0, 0, 0.05)',
       },
+
       fontFamily: {
         inter: ['Inter', ...fontFamily.sans],
         'roboto-mono': ['Roboto Mono', ...fontFamily.mono],
         'source-serif-pro': ['Source Serif Pro', ...fontFamily.serif],
-
-        // Ensure these custom fonts are correctly loaded or fallback to system fonts
-        sans: ['var(--font-geist-sans)', ...fontFamily.sans], // Using Geist Sans variable
-        mono: ['var(--font-geist-mono)', ...fontFamily.mono], // Using Geist Mono variable
-        serif: [...fontFamily.serif], // Default serif
+        sans: ['var(--font-geist-sans)', ...fontFamily.sans],
+        mono: ['var(--font-geist-mono)', ...fontFamily.mono],
+        serif: [...fontFamily.serif],
       },
+
       keyframes: {
         rotation: {
           '0%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(360deg)' },
         },
         scroll: {
-          from: {
-            transform: 'translateX(0);',
-          },
-          to: {
-            transform: 'translateX(calc(-100% - 1rem));',
-          },
+          from: { transform: 'translateX(0);' },
+          to: { transform: 'translateX(calc(-100% - 1rem));' },
         },
         'fade-in': {
           '0%': { opacity: '0' },
@@ -107,9 +111,7 @@ export default {
           },
         },
         'loader-grow': {
-          '0%, 50%': {
-            transform: 'translate3d(-50%, -50%, -1px) scale(1)',
-          },
+          '0%, 50%': { transform: 'translate3d(-50%, -50%, -1px) scale(1)' },
           '85%, 100%': {
             transform: 'translate3d(-50%, -50%, -1px) scale(100)',
           },
@@ -136,6 +138,7 @@ export default {
           '100%': { backgroundPosition: '40px 0' },
         },
       },
+
       animation: {
         scroll: 'scroll 10s linear infinite',
         'fade-in': 'fade-in 10s',
@@ -151,7 +154,7 @@ export default {
         'loader-dash':
           'loader-dash 2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
         'loader-grow':
-          'loader-grow  2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
+          'loader-grow 2.5s cubic-bezier(.8, 0, .3, 1) alternate infinite',
         'loader-slide': 'loader-slide 0.8s ease-in-out forwards',
         rotation: 'rotation 3s linear infinite',
         shake: 'shake 0.5s ease-in-out',
@@ -159,78 +162,45 @@ export default {
         shimmer: 'shimmer 2s linear infinite',
         stripes: 'stripes 1s linear infinite',
       },
+
       zIndex: {
         '10': '10',
         '20': '20',
         '30': '30',
       },
+
       borderRadius: {
         '15px': '15px',
       },
     },
   },
-  safelist: [
-    {
-      pattern: /^bg-/,
-    },
-    {
-      pattern: /^text-/,
-    },
-    {
-      pattern: /^border-/,
-    },
-    {
-      pattern: /^shadow-/,
-    },
-    {
-      pattern: /^rounded-/,
-    },
-    {
-      pattern: /^flex-/,
-    },
-    {
-      pattern: /^grid-/,
-    },
-    {
-      pattern: /^gap-/,
-    },
-    {
-      pattern: /^p-/,
-    },
-    {
-      pattern: /^m-/,
-    },
-    {
-      pattern: /^justify-/,
-    },
-    {
-      pattern: /^items-/,
-    },
-    {
-      pattern: /^flex-wrap-/,
-    },
-    {
-      pattern: /^text-(blue|red|green|yellow|purple|pink|cyan|indigo)-500$/,
-    },
-    {
-      pattern: /^bg-gradient-to-r$/,
-    },
-    {
-      pattern: /^from-(blue|red|green|yellow|purple|pink|cyan|indigo)-400$/,
-    },
-    {
-      pattern: /^to-(blue|red|green|yellow|purple|pink|cyan|indigo)-600$/,
-    },
-    {
-      pattern: /^text-transparent$/,
-    },
-    {
-      pattern: /^bg-clip-text$/,
-    },
-    {
-      pattern: /^opacity-(10|20|30|40|50|60|70|80|90|100)$/,
-    },
-  ],
-} satisfies Config;
 
-// tailwind.config.ts
+  safelist: [
+    { pattern: /^bg-/ },
+    { pattern: /^text-/ },
+    { pattern: /^border-/ },
+    { pattern: /^shadow-/ },
+    { pattern: /^rounded-/ },
+    { pattern: /^flex-/ },
+    { pattern: /^grid-/ },
+    { pattern: /^gap-/ },
+    { pattern: /^p-/ },
+    { pattern: /^m-/ },
+    { pattern: /^justify-/ },
+    { pattern: /^items-/ },
+    { pattern: /^flex-wrap-/ },
+    { pattern: /^text-(blue|red|green|yellow|purple|pink|cyan|indigo)-500$/ },
+    { pattern: /^bg-gradient-to-r$/ },
+    { pattern: /^from-(blue|red|green|yellow|purple|pink|cyan|indigo)-400$/ },
+    { pattern: /^to-(blue|red|green|yellow|purple|pink|cyan|indigo)-600$/ },
+    { pattern: /^text-transparent$/ },
+    { pattern: /^bg-clip-text$/ },
+    { pattern: /^opacity-(10|20|30|40|50|60|70|80|90|100)$/ },
+    // Safelist theme colors for dynamic usage
+    { pattern: /^bg-brand-/ },
+    { pattern: /^text-brand-/ },
+    { pattern: /^border-brand-/ },
+  ],
+};
+
+export default config;

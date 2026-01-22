@@ -69,7 +69,14 @@ export function WizardPanel<TData = unknown>({
   // Register panel validation on mount
   useEffect(() => {
     if (validate) {
-      storeApi.getState().registerPanelValidation(stepId, validate as (data: unknown) => boolean | string | Promise<boolean | string>);
+      storeApi
+        .getState()
+        .registerPanelValidation(
+          stepId,
+          validate as (
+            data: unknown,
+          ) => boolean | string | Promise<boolean | string>,
+        );
     }
 
     return () => {
@@ -90,7 +97,8 @@ export function WizardPanel<TData = unknown>({
   };
 
   // Determine content
-  const content = typeof children === 'function' ? children(renderProps) : children;
+  const content =
+    typeof children === 'function' ? children(renderProps) : children;
 
   return (
     <div

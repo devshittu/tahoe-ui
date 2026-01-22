@@ -2,15 +2,18 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Install wget for healthcheck
+RUN apk add --no-cache wget
+
+# Enable corepack for pnpm
+RUN corepack enable
+
+# Copy all package files for monorepo
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages ./packages
+
 # Install dependencies
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-    if [ -f yarn.lock ]; then yarn install --frozen-lockfile && yarn cache clean; \
-    elif [ -f package-lock.json ]; then npm ci && npm cache clean --force; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-    else echo "Warning: Lockfile not found. It is recommended to commit lockfiles to version control." && \
-    yarn install && yarn cache clean; \
-    fi
+RUN pnpm install --frozen-lockfile
 
 # Disable ESLint in dev for faster startup
 ENV NEXT_LINT_WARNONLY=true
@@ -26,21 +29,9 @@ ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
 # Next.js collects completely anonymous telemetry data about general usage.
-# Uncomment the following line to disable telemetry at run time
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+# Health check (removed - using docker-compose healthcheck instead)
 
-# Start Next.js in development mode with HTTPS
-CMD \
-    if [ -f yarn.lock ]; then yarn dev:https; \
-    elif [ -f package-lock.json ]; then npm run dev:https; \
-    elif [ -f pnpm-lock.yaml ]; then pnpm dev:https; \
-    else yarn dev:https; \
-    fi
-
-
-# Path: tahoe-ui/Dockerfile.dev
-# /Users/mshittu/programming-projects/javascript/react/tahoe-ui/Dockerfile.dev
+# Default command (overridden by docker-compose)
+CMD ["pnpm", "dev", "--concurrency", "15"]

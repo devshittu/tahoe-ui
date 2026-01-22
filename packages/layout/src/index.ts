@@ -8,7 +8,7 @@
  *
  * @example
  * ```tsx
- * import { Box, Flex, Grid, Stack, Center, Container, Section, Spacer } from '@tahoe-ui/layout';
+ * import { Box, Flex, Grid, Stack, Center, Container, Section, Spacer, Divider } from '@tahoe-ui/layout';
  *
  * // Flexbox layout
  * <Flex gap="4" align="center">
@@ -58,6 +58,14 @@ export {
   type SpacerProps,
   type SpacerSize,
   type SpacerDirection,
+  Divider,
+  type DividerProps,
+  type DividerOrientation,
+  type DividerVariant,
+  type DividerThickness,
+  type DividerAlign,
+  type DividerColor,
+  type DividerSpacing,
 } from './box';
 
 // Container primitives

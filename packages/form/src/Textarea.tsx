@@ -47,16 +47,13 @@ const sizeClasses: Record<TextareaSize, string> = {
   lg: 'px-4 py-4 text-lg',
 };
 
+// State classes (CSS variable-backed via @tahoe-ui/tailwind-preset)
 const stateClasses: Record<NonNullable<TextareaState>, string> = {
-  error: cn(
-    'border-red-500 dark:border-red-400',
-    'focus:border-red-500 dark:focus:border-red-400',
-    'focus:ring-red-500/20',
-  ),
+  error: cn('border-error', 'focus:border-error', 'focus:ring-error/20'),
   success: cn(
-    'border-green-500 dark:border-green-400',
-    'focus:border-green-500 dark:focus:border-green-400',
-    'focus:ring-green-500/20',
+    'border-success',
+    'focus:border-success',
+    'focus:ring-success/20',
   ),
 };
 
@@ -164,9 +161,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           <span
             className={cn(
               'absolute bottom-2 right-3 text-xs',
-              currentLength >= maxLength
-                ? 'text-red-500 dark:text-red-400'
-                : 'text-gray-400 dark:text-gray-500',
+              currentLength >= maxLength ? 'text-error' : 'text-text-muted',
             )}
           >
             {currentLength}/{maxLength}

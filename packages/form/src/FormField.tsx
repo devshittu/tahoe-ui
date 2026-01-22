@@ -73,11 +73,9 @@ export function FormField({
           )}
         >
           {label}
+          {/* Required indicator (CSS variable-backed via @tahoe-ui/tailwind-preset) */}
           {required && (
-            <span
-              className="ml-0.5 text-red-500 dark:text-red-400"
-              aria-hidden="true"
-            >
+            <span className="ml-0.5 text-error" aria-hidden="true">
               *
             </span>
           )}
@@ -99,9 +97,10 @@ export function FormField({
             transition={{ duration: 0.15 }}
             className={cn(
               'text-sm',
-              hasError && 'text-red-500 dark:text-red-400',
-              hasSuccess && 'text-green-600 dark:text-green-400',
-              !hasError && !hasSuccess && 'text-gray-500 dark:text-gray-400',
+              // Status colors (CSS variable-backed via @tahoe-ui/tailwind-preset)
+              hasError && 'text-error',
+              hasSuccess && 'text-success',
+              !hasError && !hasSuccess && 'text-text-muted',
             )}
             role={hasError ? 'alert' : undefined}
             aria-live={hasError ? 'polite' : undefined}

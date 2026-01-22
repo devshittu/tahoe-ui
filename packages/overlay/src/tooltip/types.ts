@@ -96,7 +96,7 @@ export const DEFAULT_TOOLTIP_CONFIG = {
 } as const;
 
 /**
- * Variant-specific styles
+ * Variant-specific styles (CSS variable-backed via @tahoe-ui/tailwind-preset)
  */
 export const TOOLTIP_VARIANT_STYLES: Record<
   TooltipVariant,
@@ -113,24 +113,24 @@ export const TOOLTIP_VARIANT_STYLES: Record<
     border: 'border-gray-900',
   },
   light: {
-    bg: 'bg-white dark:bg-gray-800',
-    text: 'text-gray-900 dark:text-gray-100',
-    border: 'border-gray-200 dark:border-gray-700',
+    bg: 'bg-bg-primary',
+    text: 'text-text-primary',
+    border: 'border-border-default',
   },
   info: {
-    bg: 'bg-blue-600',
+    bg: 'bg-info',
     text: 'text-white',
-    border: 'border-blue-600',
+    border: 'border-info',
   },
   warning: {
-    bg: 'bg-amber-500',
+    bg: 'bg-warning',
     text: 'text-white',
-    border: 'border-amber-500',
+    border: 'border-warning',
   },
   error: {
-    bg: 'bg-red-600',
+    bg: 'bg-error',
     text: 'text-white',
-    border: 'border-red-600',
+    border: 'border-error',
   },
 } as const;
 
@@ -206,13 +206,13 @@ export const ARROW_CLASSES: Record<TooltipPlacement, string> = {
 };
 
 /**
- * Arrow fill colors for each variant
+ * Arrow fill colors for each variant (CSS variable-backed via @tahoe-ui/tailwind-preset)
  */
 export const ARROW_COLORS: Record<TooltipVariant, string> = {
   default: 'text-gray-900 dark:text-gray-100',
   dark: 'text-gray-900',
-  light: 'text-white dark:text-gray-800',
-  info: 'text-blue-600',
-  warning: 'text-amber-500',
-  error: 'text-red-600',
+  light: 'text-bg-primary',
+  info: 'text-info',
+  warning: 'text-warning',
+  error: 'text-error',
 };

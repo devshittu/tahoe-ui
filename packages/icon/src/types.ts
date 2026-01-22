@@ -29,15 +29,16 @@ export type IconColor =
   | 'inherit'
   | 'currentColor';
 
+// Icon colors (CSS variable-backed via @tahoe-ui/tailwind-preset)
 export const ICON_COLORS: Record<IconColor, string> = {
-  default: 'text-gray-700 dark:text-gray-300',
-  muted: 'text-gray-400 dark:text-gray-500',
-  primary: 'text-blue-600 dark:text-blue-400',
-  secondary: 'text-gray-600 dark:text-gray-400',
-  success: 'text-green-600 dark:text-green-400',
-  warning: 'text-amber-600 dark:text-amber-400',
-  error: 'text-red-600 dark:text-red-400',
-  info: 'text-blue-500 dark:text-blue-400',
+  default: 'text-text-primary',
+  muted: 'text-text-muted',
+  primary: 'text-brand-primary-600 dark:text-brand-primary-400',
+  secondary: 'text-text-secondary',
+  success: 'text-success',
+  warning: 'text-warning',
+  error: 'text-error',
+  info: 'text-info',
   inherit: 'text-inherit',
   currentColor: 'text-current',
 };

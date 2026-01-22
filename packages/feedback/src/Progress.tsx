@@ -11,15 +11,15 @@ const SIZE_HEIGHT: Record<FeedbackSize, string> = {
   lg: 'h-3',
 };
 
-// Color mappings for progress bar
+// Color mappings for progress bar (CSS variable-backed via @tahoe-ui/tailwind-preset)
 const PROGRESS_COLORS: Record<FeedbackColor, string> = {
   default: 'bg-gray-600 dark:bg-gray-400',
-  primary: 'bg-blue-600 dark:bg-blue-500',
+  primary: 'bg-brand-primary-600 dark:bg-brand-primary-500',
   secondary: 'bg-gray-500',
-  success: 'bg-green-600 dark:bg-green-500',
-  warning: 'bg-amber-500',
-  error: 'bg-red-600 dark:bg-red-500',
-  info: 'bg-sky-600 dark:bg-sky-500',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  error: 'bg-error',
+  info: 'bg-info',
 };
 
 /**
@@ -76,11 +76,9 @@ export function Progress({
       {/* Label row */}
       {(showLabel || label) && (
         <div className="flex justify-between mb-1 text-sm">
-          <span className="text-gray-700 dark:text-gray-300">
-            {label ?? 'Progress'}
-          </span>
+          <span className="text-text-primary">{label ?? 'Progress'}</span>
           {showLabel && !isIndeterminate && (
-            <span className="text-gray-600 dark:text-gray-400">
+            <span className="text-text-secondary">
               {Math.round(percentage)}%
             </span>
           )}
@@ -143,15 +141,15 @@ export function CircularProgress({
     ? 0
     : circumference - (percentage / 100) * circumference;
 
-  // Color for stroke
+  // Color for stroke (CSS variable-backed via @tahoe-ui/tailwind-preset)
   const strokeColors: Record<FeedbackColor, string> = {
     default: 'stroke-gray-600 dark:stroke-gray-400',
-    primary: 'stroke-blue-600 dark:stroke-blue-500',
+    primary: 'stroke-brand-primary-600 dark:stroke-brand-primary-500',
     secondary: 'stroke-gray-500',
-    success: 'stroke-green-600 dark:stroke-green-500',
-    warning: 'stroke-amber-500',
-    error: 'stroke-red-600 dark:stroke-red-500',
-    info: 'stroke-sky-600 dark:stroke-sky-500',
+    success: 'stroke-success',
+    warning: 'stroke-warning',
+    error: 'stroke-error',
+    info: 'stroke-info',
   };
 
   return (
@@ -201,7 +199,7 @@ export function CircularProgress({
       {showLabel && !isIndeterminate && numericSize >= 40 && (
         <div className="absolute inset-0 flex items-center justify-center">
           <span
-            className="text-xs font-medium text-gray-700 dark:text-gray-300"
+            className="text-xs font-medium text-text-primary"
             style={{ fontSize: numericSize * 0.25 }}
           >
             {Math.round(percentage)}%

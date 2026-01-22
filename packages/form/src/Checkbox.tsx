@@ -90,11 +90,11 @@ export function Checkbox({
           checked || indeterminate
             ? 'bg-gray-900 dark:bg-gray-100'
             : 'bg-white dark:bg-gray-900',
-          // Border
+          // Border (CSS variable-backed via @tahoe-ui/tailwind-preset)
           checked || indeterminate
             ? 'border-transparent'
             : error
-              ? 'border-2 border-red-500 dark:border-red-400'
+              ? 'border-2 border-error'
               : 'border-2 border-gray-300 dark:border-gray-600',
           // Focus
           'focus:outline-none focus:ring-2 focus:ring-offset-2',

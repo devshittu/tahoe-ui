@@ -71,9 +71,9 @@ export function FormGroup({
         {children}
       </div>
 
-      {/* Group error */}
+      {/* Group error (CSS variable-backed via @tahoe-ui/tailwind-preset) */}
       {error && (
-        <p className="text-sm text-red-500 dark:text-red-400 mt-2" role="alert">
+        <p className="text-sm text-error mt-2" role="alert">
           {error}
         </p>
       )}

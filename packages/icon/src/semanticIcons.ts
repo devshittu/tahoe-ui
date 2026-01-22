@@ -58,13 +58,13 @@ export const SEMANTIC_ICONS: Record<SemanticIconType, IconType> = {
 };
 
 /**
- * Semantic color mappings for feedback icons
+ * Semantic color mappings for feedback icons (CSS variable-backed via @tahoe-ui/tailwind-preset)
  */
 export const SEMANTIC_ICON_COLORS: Partial<Record<SemanticIconType, string>> = {
-  success: 'text-green-600 dark:text-green-400',
-  error: 'text-red-600 dark:text-red-400',
-  warning: 'text-amber-600 dark:text-amber-400',
-  info: 'text-blue-600 dark:text-blue-400',
+  success: 'text-success',
+  error: 'text-error',
+  warning: 'text-warning',
+  info: 'text-info',
 };
 
 /**

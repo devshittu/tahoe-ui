@@ -30,12 +30,12 @@ export function Skeleton({
   lines = 1,
   className,
 }: SkeletonProps) {
-  // Determine animation class
+  // Determine animation class (CSS variable-backed via @tahoe-ui/tailwind-preset)
   const animationClass =
     animation === 'pulse'
       ? 'animate-pulse'
       : animation === 'shimmer'
-        ? 'animate-shimmer bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 bg-[length:200%_100%]'
+        ? 'animate-shimmer bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 bg-[length:200%_100%]'
         : '';
 
   // Variant-specific styles
@@ -76,9 +76,9 @@ export function Skeleton({
   const heightClass =
     typeof height === 'string' && height.startsWith('h-') ? height : '';
 
-  // Base skeleton element
+  // Base skeleton element (CSS variable-backed via @tahoe-ui/tailwind-preset)
   const baseClasses = twMerge(
-    'bg-gray-200 dark:bg-gray-700',
+    'bg-bg-secondary',
     variantStyles[variant],
     animationClass,
     widthClass,

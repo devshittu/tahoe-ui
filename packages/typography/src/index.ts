@@ -90,3 +90,22 @@ export {
   type ListProps,
   type ListItemProps,
 } from './Lists';
+
+// Headline components
+export {
+  Headline,
+  HeadlineDefault,
+  Subheadline,
+  SubheadlineDefault,
+  HeadlineBlock,
+  HeadlineBlockDefault,
+  HEADLINE_SIZE_CONFIG,
+  HEADLINE_ALIGN_CLASSES,
+  HEADLINE_SPACING_CLASSES,
+  type HeadlineProps,
+  type SubheadlineProps,
+  type HeadlineBlockProps,
+  type HeadlineSize,
+  type HeadlineAlign,
+  type HeadlineLevel,
+} from './headline';

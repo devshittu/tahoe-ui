@@ -89,38 +89,39 @@ export const DEFAULT_TOAST_CONFIG = {
   gap: 12,
 } as const;
 
+// Toast variant styles (CSS variable-backed via @tahoe-ui/tailwind-preset)
 export const TOAST_VARIANT_STYLES: Record<
   ToastVariant,
   { bg: string; border: string; icon: string; text: string }
 > = {
   default: {
-    bg: 'bg-white dark:bg-gray-900',
-    border: 'border-gray-200 dark:border-gray-800',
-    icon: 'text-gray-500 dark:text-gray-400',
-    text: 'text-gray-900 dark:text-gray-100',
+    bg: 'bg-bg-primary',
+    border: 'border-border-default',
+    icon: 'text-text-muted',
+    text: 'text-text-primary',
   },
   success: {
-    bg: 'bg-emerald-50 dark:bg-emerald-950/50',
-    border: 'border-emerald-200 dark:border-emerald-800',
-    icon: 'text-emerald-500 dark:text-emerald-400',
-    text: 'text-emerald-900 dark:text-emerald-100',
+    bg: 'bg-success-light dark:bg-success-dark/20',
+    border: 'border-success/30',
+    icon: 'text-success',
+    text: 'text-success-dark dark:text-success',
   },
   error: {
-    bg: 'bg-red-50 dark:bg-red-950/50',
-    border: 'border-red-200 dark:border-red-800',
-    icon: 'text-red-500 dark:text-red-400',
-    text: 'text-red-900 dark:text-red-100',
+    bg: 'bg-error-light dark:bg-error-dark/20',
+    border: 'border-error/30',
+    icon: 'text-error',
+    text: 'text-error-dark dark:text-error',
   },
   warning: {
-    bg: 'bg-amber-50 dark:bg-amber-950/50',
-    border: 'border-amber-200 dark:border-amber-800',
-    icon: 'text-amber-500 dark:text-amber-400',
-    text: 'text-amber-900 dark:text-amber-100',
+    bg: 'bg-warning-light dark:bg-warning-dark/20',
+    border: 'border-warning/30',
+    icon: 'text-warning',
+    text: 'text-warning-dark dark:text-warning',
   },
   info: {
-    bg: 'bg-blue-50 dark:bg-blue-950/50',
-    border: 'border-blue-200 dark:border-blue-800',
-    icon: 'text-blue-500 dark:text-blue-400',
-    text: 'text-blue-900 dark:text-blue-100',
+    bg: 'bg-info-light dark:bg-info-dark/20',
+    border: 'border-info/30',
+    icon: 'text-info',
+    text: 'text-info-dark dark:text-info',
   },
 } as const;
