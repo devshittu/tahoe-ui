@@ -1,0 +1,52 @@
+{
+  "name": "@tahoe-ui/tailwind-preset",
+  "version": "0.0.1",
+  "description": "Tailwind CSS preset for Tahoe UI theme integration",
+  "sideEffects": false,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "types:check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "tailwindcss",
+    "preset",
+    "tahoe-ui",
+    "design-system",
+    "css-variables"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@tahoe-ui/theme": "workspace:*"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=3.0.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.0-dev.20250409"
+  }
+}
