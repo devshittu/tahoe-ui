@@ -246,8 +246,9 @@ export function FileUpload({
                 'flex items-center gap-3 p-3 rounded-lg',
                 'bg-gray-50 dark:bg-gray-800/50',
                 'border border-gray-200 dark:border-gray-700',
+                // Error state (CSS variable-backed via @tahoe-ui/tailwind-preset)
                 uploadedFile.error &&
-                  'border-red-500 dark:border-red-400 bg-red-50 dark:bg-red-950/20',
+                  'border-error bg-error-light dark:bg-error-dark/20',
               )}
             >
               {/* Preview or icon */}
@@ -285,9 +286,9 @@ export function FileUpload({
                     </div>
                   )}
 
-                {/* Error */}
+                {/* Error (CSS variable-backed via @tahoe-ui/tailwind-preset) */}
                 {uploadedFile.error && (
-                  <p className="text-xs text-red-500 dark:text-red-400 mt-1 flex items-center gap-1">
+                  <p className="text-xs text-error mt-1 flex items-center gap-1">
                     <AlertCircleIcon className="w-3 h-3" />
                     {uploadedFile.error}
                   </p>

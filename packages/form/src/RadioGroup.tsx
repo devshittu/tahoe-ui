@@ -104,9 +104,9 @@ export function RadioGroup<T = string>({
               'relative flex items-center justify-center rounded-full',
               'transition-all duration-150',
               sizes.radio,
-              // Border
+              // Border (CSS variable-backed via @tahoe-ui/tailwind-preset)
               error
-                ? 'border-2 border-red-500 dark:border-red-400'
+                ? 'border-2 border-error'
                 : 'border-2 border-gray-300 dark:border-gray-600',
               // Background
               'bg-white dark:bg-gray-900',

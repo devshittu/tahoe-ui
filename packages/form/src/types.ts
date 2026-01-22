@@ -327,6 +327,77 @@ export interface FormFieldProps {
 }
 
 // ============================================================================
+// SegmentedControl Types
+// ============================================================================
+
+export type SegmentedControlSize = 'sm' | 'md' | 'lg';
+
+export interface SegmentOption<T = string> {
+  /** Unique value for this segment */
+  value: T;
+  /** Display label */
+  label: string;
+  /** Optional icon (renders before label) */
+  icon?: ReactNode;
+  /** Disabled state for this segment */
+  disabled?: boolean;
+}
+
+export interface SegmentedControlProps<T = string> {
+  /** Segment options */
+  options: SegmentOption<T>[];
+  /** Currently selected value */
+  value?: T;
+  /** Selection change handler */
+  onChange?: (value: T) => void;
+  /** Size variant */
+  size?: SegmentedControlSize;
+  /** Disable all segments */
+  disabled?: boolean;
+  /** Expand to fill container width */
+  fullWidth?: boolean;
+  /** Name attribute for form submission */
+  name?: string;
+  /** Additional className for container */
+  className?: string;
+}
+
+// ============================================================================
+// Chip Types
+// ============================================================================
+
+export type ChipSize = 'sm' | 'md';
+export type ChipVariant = 'filled' | 'outlined' | 'subtle';
+export type ChipColor = 'default' | 'primary' | 'success' | 'warning' | 'error';
+
+export interface ChipProps {
+  /** Chip content (text label) */
+  children: ReactNode;
+  /** Visual variant */
+  variant?: ChipVariant;
+  /** Color theme */
+  color?: ChipColor;
+  /** Size variant */
+  size?: ChipSize;
+  /** Optional leading icon */
+  icon?: ReactNode;
+  /** Show dismiss button */
+  dismissible?: boolean;
+  /** Dismiss callback */
+  onDismiss?: () => void;
+  /** Make chip clickable/selectable */
+  clickable?: boolean;
+  /** Click callback */
+  onClick?: (e: import('react').MouseEvent<HTMLElement>) => void;
+  /** Selected state (for selectable chips) */
+  selected?: boolean;
+  /** Disabled state */
+  disabled?: boolean;
+  /** Additional className */
+  className?: string;
+}
+
+// ============================================================================
 // FormGroup Types
 // ============================================================================
 
