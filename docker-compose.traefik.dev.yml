@@ -29,7 +29,7 @@ services:
       - "traefik.http.routers.tahoe-ui.middlewares=chain-web@file"
       - "traefik.http.routers.tahoe-ui.priority=100"
       - "traefik.http.services.tahoe-ui.loadbalancer.server.port=3000"
-    command: sh -c "pnpm exec turbo dev --filter='./packages/*' --concurrency 15 & sleep 20 && pnpm exec next dev"
+    command: sh -c "pnpm exec turbo dev --filter='./packages/*' --concurrency 20 & sleep 20 && pnpm exec next dev"
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/tahoe/playground"]
       interval: 30s
