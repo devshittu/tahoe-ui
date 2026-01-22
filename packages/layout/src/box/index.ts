@@ -21,3 +21,13 @@ export {
   type SpacerSize,
   type SpacerDirection,
 } from './Spacer';
+export {
+  Divider,
+  type DividerProps,
+  type DividerOrientation,
+  type DividerVariant,
+  type DividerThickness,
+  type DividerAlign,
+  type DividerColor,
+  type DividerSpacing,
+} from './Divider';
