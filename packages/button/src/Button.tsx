@@ -174,8 +174,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'transition-colors duration-150',
 
           // Focus ring (always enabled for accessibility)
+          // Uses CSS variable-backed focus colors from theme
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-          'focus-visible:ring-blue-500 dark:focus-visible:ring-blue-400',
+          'focus-visible:ring-brand-primary-500 dark:focus-visible:ring-brand-primary-400',
           'dark:focus-visible:ring-offset-gray-900',
 
           // Size

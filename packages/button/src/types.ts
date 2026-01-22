@@ -232,42 +232,114 @@ export const BUTTON_RADIUS_CONFIG = {
 
 /**
  * Color configuration per variant
- * Follows design token system
+ *
+ * Uses CSS variable-backed Tailwind classes from @tahoe-ui/tailwind-preset.
+ * Primary/Secondary/Accent use brand color scales, while feedback colors
+ * (success, warning, error) use semantic feedback tokens.
+ *
+ * The brand-primary, brand-secondary, brand-accent, and gray classes
+ * are mapped to CSS variables (e.g., bg-brand-primary-600 uses
+ * var(--tahoe-color-brand-primary-600)) allowing runtime theme customization.
  */
 export const BUTTON_COLOR_CONFIG = {
   primary: {
     solid: {
-      base: 'bg-gray-900 text-white dark:bg-white dark:text-gray-900',
-      hover: 'hover:bg-gray-800 dark:hover:bg-gray-100',
-      active: 'bg-gray-950 dark:bg-gray-200',
+      base: 'bg-brand-primary-600 text-white dark:bg-brand-primary-500',
+      hover: 'hover:bg-brand-primary-700 dark:hover:bg-brand-primary-400',
+      active: 'bg-brand-primary-800 dark:bg-brand-primary-300',
       shadow: 'shadow-sm hover:shadow-md',
     },
     subtle: {
-      base: 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100',
-      hover: 'hover:bg-gray-200 dark:hover:bg-gray-700',
-      active: 'bg-gray-300 dark:bg-gray-600',
+      base: 'bg-brand-primary-50 text-brand-primary-700 dark:bg-brand-primary-950 dark:text-brand-primary-300',
+      hover: 'hover:bg-brand-primary-100 dark:hover:bg-brand-primary-900',
+      active: 'bg-brand-primary-200 dark:bg-brand-primary-800',
       shadow: '',
     },
     outline: {
-      base: 'border border-gray-300 text-gray-900 dark:border-gray-600 dark:text-gray-100 bg-transparent',
-      hover: 'hover:bg-gray-50 dark:hover:bg-gray-800/50',
-      active: 'bg-gray-100 dark:bg-gray-800',
+      base: 'border border-brand-primary-500 text-brand-primary-600 dark:text-brand-primary-400 bg-transparent',
+      hover: 'hover:bg-brand-primary-50 dark:hover:bg-brand-primary-950',
+      active: 'bg-brand-primary-100 dark:bg-brand-primary-900',
       shadow: '',
     },
     ghost: {
-      base: 'bg-transparent text-gray-900 dark:text-gray-100',
-      hover: 'hover:bg-gray-100 dark:hover:bg-gray-800',
-      active: 'bg-gray-200 dark:bg-gray-700',
+      base: 'bg-transparent text-brand-primary-600 dark:text-brand-primary-400',
+      hover: 'hover:bg-brand-primary-50 dark:hover:bg-brand-primary-950',
+      active: 'bg-brand-primary-100 dark:bg-brand-primary-900',
       shadow: '',
     },
     glass: {
-      base: 'bg-white/70 text-gray-900 backdrop-blur-xl border border-white/20 dark:bg-gray-900/70 dark:text-gray-100 dark:border-gray-700/30',
-      hover: 'hover:bg-white/80 dark:hover:bg-gray-900/80',
-      active: 'bg-white/90 dark:bg-gray-900/90',
-      shadow: 'shadow-lg shadow-black/5',
+      base: 'bg-brand-primary-500/20 text-brand-primary-700 backdrop-blur-xl border border-brand-primary-500/20 dark:text-brand-primary-300',
+      hover: 'hover:bg-brand-primary-500/30',
+      active: 'bg-brand-primary-500/40',
+      shadow: 'shadow-lg shadow-brand-primary-500/10',
     },
   },
   secondary: {
+    solid: {
+      base: 'bg-brand-secondary-600 text-white dark:bg-brand-secondary-500',
+      hover: 'hover:bg-brand-secondary-700 dark:hover:bg-brand-secondary-400',
+      active: 'bg-brand-secondary-800 dark:bg-brand-secondary-300',
+      shadow: 'shadow-sm hover:shadow-md',
+    },
+    subtle: {
+      base: 'bg-brand-secondary-50 text-brand-secondary-700 dark:bg-brand-secondary-950 dark:text-brand-secondary-300',
+      hover: 'hover:bg-brand-secondary-100 dark:hover:bg-brand-secondary-900',
+      active: 'bg-brand-secondary-200 dark:bg-brand-secondary-800',
+      shadow: '',
+    },
+    outline: {
+      base: 'border border-brand-secondary-400 text-brand-secondary-700 dark:border-brand-secondary-500 dark:text-brand-secondary-300 bg-transparent',
+      hover: 'hover:bg-brand-secondary-50 dark:hover:bg-brand-secondary-950',
+      active: 'bg-brand-secondary-100 dark:bg-brand-secondary-900',
+      shadow: '',
+    },
+    ghost: {
+      base: 'bg-transparent text-brand-secondary-700 dark:text-brand-secondary-300',
+      hover: 'hover:bg-brand-secondary-50 dark:hover:bg-brand-secondary-950',
+      active: 'bg-brand-secondary-100 dark:bg-brand-secondary-900',
+      shadow: '',
+    },
+    glass: {
+      base: 'bg-brand-secondary-500/20 text-brand-secondary-700 backdrop-blur-xl border border-brand-secondary-500/20 dark:text-brand-secondary-300',
+      hover: 'hover:bg-brand-secondary-500/30',
+      active: 'bg-brand-secondary-500/40',
+      shadow: 'shadow-lg shadow-black/5',
+    },
+  },
+  accent: {
+    solid: {
+      base: 'bg-brand-accent-600 text-white dark:bg-brand-accent-500',
+      hover: 'hover:bg-brand-accent-700 dark:hover:bg-brand-accent-400',
+      active: 'bg-brand-accent-800 dark:bg-brand-accent-300',
+      shadow:
+        'shadow-sm shadow-brand-accent-500/25 hover:shadow-md hover:shadow-brand-accent-500/30',
+    },
+    subtle: {
+      base: 'bg-brand-accent-50 text-brand-accent-700 dark:bg-brand-accent-950 dark:text-brand-accent-300',
+      hover: 'hover:bg-brand-accent-100 dark:hover:bg-brand-accent-900',
+      active: 'bg-brand-accent-200 dark:bg-brand-accent-800',
+      shadow: '',
+    },
+    outline: {
+      base: 'border border-brand-accent-500 text-brand-accent-600 dark:text-brand-accent-400 bg-transparent',
+      hover: 'hover:bg-brand-accent-50 dark:hover:bg-brand-accent-950',
+      active: 'bg-brand-accent-100 dark:bg-brand-accent-900',
+      shadow: '',
+    },
+    ghost: {
+      base: 'bg-transparent text-brand-accent-600 dark:text-brand-accent-400',
+      hover: 'hover:bg-brand-accent-50 dark:hover:bg-brand-accent-950',
+      active: 'bg-brand-accent-100 dark:bg-brand-accent-900',
+      shadow: '',
+    },
+    glass: {
+      base: 'bg-brand-accent-500/20 text-brand-accent-700 backdrop-blur-xl border border-brand-accent-500/20 dark:text-brand-accent-300',
+      hover: 'hover:bg-brand-accent-500/30',
+      active: 'bg-brand-accent-500/40',
+      shadow: 'shadow-lg shadow-brand-accent-500/10',
+    },
+  },
+  neutral: {
     solid: {
       base: 'bg-gray-600 text-white dark:bg-gray-500',
       hover: 'hover:bg-gray-700 dark:hover:bg-gray-400',
@@ -281,78 +353,13 @@ export const BUTTON_COLOR_CONFIG = {
       shadow: '',
     },
     outline: {
-      base: 'border border-gray-400 text-gray-700 dark:border-gray-500 dark:text-gray-300 bg-transparent',
-      hover: 'hover:bg-gray-50 dark:hover:bg-gray-800/50',
-      active: 'bg-gray-100 dark:bg-gray-800',
+      base: 'border border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300 bg-transparent',
+      hover: 'hover:bg-gray-50 dark:hover:bg-gray-800',
+      active: 'bg-gray-100 dark:bg-gray-700',
       shadow: '',
     },
     ghost: {
       base: 'bg-transparent text-gray-700 dark:text-gray-300',
-      hover: 'hover:bg-gray-100 dark:hover:bg-gray-800',
-      active: 'bg-gray-200 dark:bg-gray-700',
-      shadow: '',
-    },
-    glass: {
-      base: 'bg-gray-500/20 text-gray-900 backdrop-blur-xl border border-gray-500/20 dark:text-gray-100',
-      hover: 'hover:bg-gray-500/30',
-      active: 'bg-gray-500/40',
-      shadow: 'shadow-lg shadow-black/5',
-    },
-  },
-  accent: {
-    solid: {
-      base: 'bg-blue-600 text-white',
-      hover: 'hover:bg-blue-700',
-      active: 'bg-blue-800',
-      shadow:
-        'shadow-sm shadow-blue-500/25 hover:shadow-md hover:shadow-blue-500/30',
-    },
-    subtle: {
-      base: 'bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
-      hover: 'hover:bg-blue-100 dark:hover:bg-blue-950/70',
-      active: 'bg-blue-200 dark:bg-blue-900/50',
-      shadow: '',
-    },
-    outline: {
-      base: 'border border-blue-500 text-blue-600 dark:text-blue-400 bg-transparent',
-      hover: 'hover:bg-blue-50 dark:hover:bg-blue-950/30',
-      active: 'bg-blue-100 dark:bg-blue-950/50',
-      shadow: '',
-    },
-    ghost: {
-      base: 'bg-transparent text-blue-600 dark:text-blue-400',
-      hover: 'hover:bg-blue-50 dark:hover:bg-blue-950/30',
-      active: 'bg-blue-100 dark:bg-blue-950/50',
-      shadow: '',
-    },
-    glass: {
-      base: 'bg-blue-500/20 text-blue-700 backdrop-blur-xl border border-blue-500/20 dark:text-blue-300',
-      hover: 'hover:bg-blue-500/30',
-      active: 'bg-blue-500/40',
-      shadow: 'shadow-lg shadow-blue-500/10',
-    },
-  },
-  neutral: {
-    solid: {
-      base: 'bg-gray-500 text-white',
-      hover: 'hover:bg-gray-600',
-      active: 'bg-gray-700',
-      shadow: 'shadow-sm hover:shadow-md',
-    },
-    subtle: {
-      base: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
-      hover: 'hover:bg-gray-200 dark:hover:bg-gray-700',
-      active: 'bg-gray-300 dark:bg-gray-600',
-      shadow: '',
-    },
-    outline: {
-      base: 'border border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 bg-transparent',
-      hover: 'hover:bg-gray-50 dark:hover:bg-gray-800/50',
-      active: 'bg-gray-100 dark:bg-gray-800',
-      shadow: '',
-    },
-    ghost: {
-      base: 'bg-transparent text-gray-600 dark:text-gray-400',
       hover: 'hover:bg-gray-100 dark:hover:bg-gray-800',
       active: 'bg-gray-200 dark:bg-gray-700',
       shadow: '',
@@ -366,101 +373,98 @@ export const BUTTON_COLOR_CONFIG = {
   },
   success: {
     solid: {
-      base: 'bg-green-600 text-white',
-      hover: 'hover:bg-green-700',
-      active: 'bg-green-800',
-      shadow:
-        'shadow-sm shadow-green-500/25 hover:shadow-md hover:shadow-green-500/30',
+      base: 'bg-success text-white',
+      hover: 'hover:bg-success-dark',
+      active: 'bg-success-dark',
+      shadow: 'shadow-sm hover:shadow-md',
     },
     subtle: {
-      base: 'bg-green-50 text-green-700 dark:bg-green-950/50 dark:text-green-300',
-      hover: 'hover:bg-green-100 dark:hover:bg-green-950/70',
-      active: 'bg-green-200 dark:bg-green-900/50',
+      base: 'bg-success-light text-success-dark',
+      hover: 'hover:bg-success-light/80',
+      active: 'bg-success-light/60',
       shadow: '',
     },
     outline: {
-      base: 'border border-green-500 text-green-600 dark:text-green-400 bg-transparent',
-      hover: 'hover:bg-green-50 dark:hover:bg-green-950/30',
-      active: 'bg-green-100 dark:bg-green-950/50',
+      base: 'border border-success text-success dark:text-success bg-transparent',
+      hover: 'hover:bg-success-light/30',
+      active: 'bg-success-light/50',
       shadow: '',
     },
     ghost: {
-      base: 'bg-transparent text-green-600 dark:text-green-400',
-      hover: 'hover:bg-green-50 dark:hover:bg-green-950/30',
-      active: 'bg-green-100 dark:bg-green-950/50',
+      base: 'bg-transparent text-success',
+      hover: 'hover:bg-success-light/30',
+      active: 'bg-success-light/50',
       shadow: '',
     },
     glass: {
-      base: 'bg-green-500/20 text-green-700 backdrop-blur-xl border border-green-500/20 dark:text-green-300',
-      hover: 'hover:bg-green-500/30',
-      active: 'bg-green-500/40',
-      shadow: 'shadow-lg shadow-green-500/10',
+      base: 'bg-success/20 text-success-dark backdrop-blur-xl border border-success/20',
+      hover: 'hover:bg-success/30',
+      active: 'bg-success/40',
+      shadow: 'shadow-lg shadow-success/10',
     },
   },
   warning: {
     solid: {
-      base: 'bg-amber-500 text-white',
-      hover: 'hover:bg-amber-600',
-      active: 'bg-amber-700',
-      shadow:
-        'shadow-sm shadow-amber-500/25 hover:shadow-md hover:shadow-amber-500/30',
+      base: 'bg-warning text-white',
+      hover: 'hover:bg-warning-dark',
+      active: 'bg-warning-dark',
+      shadow: 'shadow-sm hover:shadow-md',
     },
     subtle: {
-      base: 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
-      hover: 'hover:bg-amber-100 dark:hover:bg-amber-950/70',
-      active: 'bg-amber-200 dark:bg-amber-900/50',
+      base: 'bg-warning-light text-warning-dark',
+      hover: 'hover:bg-warning-light/80',
+      active: 'bg-warning-light/60',
       shadow: '',
     },
     outline: {
-      base: 'border border-amber-500 text-amber-600 dark:text-amber-400 bg-transparent',
-      hover: 'hover:bg-amber-50 dark:hover:bg-amber-950/30',
-      active: 'bg-amber-100 dark:bg-amber-950/50',
+      base: 'border border-warning text-warning dark:text-warning bg-transparent',
+      hover: 'hover:bg-warning-light/30',
+      active: 'bg-warning-light/50',
       shadow: '',
     },
     ghost: {
-      base: 'bg-transparent text-amber-600 dark:text-amber-400',
-      hover: 'hover:bg-amber-50 dark:hover:bg-amber-950/30',
-      active: 'bg-amber-100 dark:bg-amber-950/50',
+      base: 'bg-transparent text-warning',
+      hover: 'hover:bg-warning-light/30',
+      active: 'bg-warning-light/50',
       shadow: '',
     },
     glass: {
-      base: 'bg-amber-500/20 text-amber-700 backdrop-blur-xl border border-amber-500/20 dark:text-amber-300',
-      hover: 'hover:bg-amber-500/30',
-      active: 'bg-amber-500/40',
-      shadow: 'shadow-lg shadow-amber-500/10',
+      base: 'bg-warning/20 text-warning-dark backdrop-blur-xl border border-warning/20',
+      hover: 'hover:bg-warning/30',
+      active: 'bg-warning/40',
+      shadow: 'shadow-lg shadow-warning/10',
     },
   },
   error: {
     solid: {
-      base: 'bg-red-600 text-white',
-      hover: 'hover:bg-red-700',
-      active: 'bg-red-800',
-      shadow:
-        'shadow-sm shadow-red-500/25 hover:shadow-md hover:shadow-red-500/30',
+      base: 'bg-error text-white',
+      hover: 'hover:bg-error-dark',
+      active: 'bg-error-dark',
+      shadow: 'shadow-sm hover:shadow-md',
     },
     subtle: {
-      base: 'bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-300',
-      hover: 'hover:bg-red-100 dark:hover:bg-red-950/70',
-      active: 'bg-red-200 dark:bg-red-900/50',
+      base: 'bg-error-light text-error-dark',
+      hover: 'hover:bg-error-light/80',
+      active: 'bg-error-light/60',
       shadow: '',
     },
     outline: {
-      base: 'border border-red-500 text-red-600 dark:text-red-400 bg-transparent',
-      hover: 'hover:bg-red-50 dark:hover:bg-red-950/30',
-      active: 'bg-red-100 dark:bg-red-950/50',
+      base: 'border border-error text-error dark:text-error bg-transparent',
+      hover: 'hover:bg-error-light/30',
+      active: 'bg-error-light/50',
       shadow: '',
     },
     ghost: {
-      base: 'bg-transparent text-red-600 dark:text-red-400',
-      hover: 'hover:bg-red-50 dark:hover:bg-red-950/30',
-      active: 'bg-red-100 dark:bg-red-950/50',
+      base: 'bg-transparent text-error',
+      hover: 'hover:bg-error-light/30',
+      active: 'bg-error-light/50',
       shadow: '',
     },
     glass: {
-      base: 'bg-red-500/20 text-red-700 backdrop-blur-xl border border-red-500/20 dark:text-red-300',
-      hover: 'hover:bg-red-500/30',
-      active: 'bg-red-500/40',
-      shadow: 'shadow-lg shadow-red-500/10',
+      base: 'bg-error/20 text-error-dark backdrop-blur-xl border border-error/20',
+      hover: 'hover:bg-error/30',
+      active: 'bg-error/40',
+      shadow: 'shadow-lg shadow-error/10',
     },
   },
 } as const;
