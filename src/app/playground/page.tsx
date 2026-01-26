@@ -1,9 +1,9 @@
 // src/app/playground/page.tsx
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { PlaygroundGrid } from './components/PlaygroundGrid';
+import { PlaygroundGrid, type ViewMode } from './components/PlaygroundGrid';
 import { getAllComponents } from '@/lib/playground-data';
 import { Heading, Paragraph, Text, SmallText } from '@/components/Typography';
 import { FiSearch, FiGrid, FiList } from 'react-icons/fi';
@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils';
  * - #11 Content-First Layout: Grid adapts to content
  */
 export default function PlaygroundPage() {
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const allComponents = getAllComponents();
   const doneCount = allComponents.filter((c) => c.status === 'done').length;
   const totalCount = allComponents.length;
@@ -114,32 +115,36 @@ export default function PlaygroundPage() {
 
         <div className="flex items-center gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">
           <button
+            onClick={() => setViewMode('grid')}
             className={cn(
-              'p-2 rounded-md',
-              'bg-white dark:bg-gray-700 shadow-sm',
-              'text-gray-700 dark:text-gray-300',
+              'p-2 rounded-md transition-all',
+              viewMode === 'grid'
+                ? 'bg-white dark:bg-gray-700 shadow-sm text-gray-700 dark:text-gray-300'
+                : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400',
             )}
             aria-label="Grid view"
+            aria-pressed={viewMode === 'grid'}
           >
             <FiGrid className="w-4 h-4" />
           </button>
           <button
+            onClick={() => setViewMode('list')}
             className={cn(
-              'p-2 rounded-md',
-              'text-gray-400 dark:text-gray-500',
-              'hover:text-gray-600 dark:hover:text-gray-400',
-              'transition-colors',
+              'p-2 rounded-md transition-all',
+              viewMode === 'list'
+                ? 'bg-white dark:bg-gray-700 shadow-sm text-gray-700 dark:text-gray-300'
+                : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400',
             )}
             aria-label="List view"
-            disabled // Future feature
+            aria-pressed={viewMode === 'list'}
           >
             <FiList className="w-4 h-4" />
           </button>
         </div>
       </motion.div>
 
-      {/* Component Grid */}
-      <PlaygroundGrid />
+      {/* Component Grid/List */}
+      <PlaygroundGrid viewMode={viewMode} />
     </motion.div>
   );
 }

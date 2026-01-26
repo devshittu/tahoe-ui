@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Heading, Paragraph, Text, SmallText } from '@/components/Typography';
+import { Heading, Text, SmallText } from '@/components/Typography';
 import {
   playgroundCategories,
   statusColors,
@@ -22,6 +22,9 @@ import {
   FiArrowRight,
   FiCheck,
 } from 'react-icons/fi';
+
+/** View mode type for grid/list toggle */
+export type ViewMode = 'grid' | 'list';
 
 /**
  * Icon mapping for categories
@@ -67,6 +70,8 @@ interface PlaygroundGridProps {
   categoryFilter?: string;
   /** Show category headers */
   showCategories?: boolean;
+  /** View mode: grid or list */
+  viewMode?: ViewMode;
 }
 
 /**
@@ -89,6 +94,7 @@ export function PlaygroundGrid({
   className,
   categoryFilter,
   showCategories = true,
+  viewMode = 'grid',
 }: PlaygroundGridProps) {
   const categories = categoryFilter
     ? playgroundCategories.filter((cat) => cat.id === categoryFilter)
@@ -106,6 +112,7 @@ export function PlaygroundGrid({
           key={category.id}
           category={category}
           showHeader={showCategories}
+          viewMode={viewMode}
         />
       ))}
     </motion.div>
@@ -115,9 +122,10 @@ export function PlaygroundGrid({
 interface CategoryGridProps {
   category: PlaygroundCategory;
   showHeader: boolean;
+  viewMode: ViewMode;
 }
 
-function CategoryGrid({ category, showHeader }: CategoryGridProps) {
+function CategoryGrid({ category, showHeader, viewMode }: CategoryGridProps) {
   const Icon = categoryIcons[category.id] || FiBox;
 
   return (
@@ -136,11 +144,19 @@ function CategoryGrid({ category, showHeader }: CategoryGridProps) {
         </motion.div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {category.items.map((item) => (
-          <ComponentCard key={item.id} item={item} />
-        ))}
-      </div>
+      {viewMode === 'grid' ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {category.items.map((item) => (
+            <ComponentCard key={item.id} item={item} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {category.items.map((item) => (
+            <ComponentListCard key={item.id} item={item} />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
@@ -216,6 +232,85 @@ function ComponentCard({ item }: ComponentCardProps) {
             </div>
           )}
         </div>
+      </CardWrapper>
+    </motion.div>
+  );
+}
+
+/**
+ * Horizontal List Card Component
+ *
+ * Dense horizontal card layout for list view.
+ * Full-width cards stacked vertically like GitHub issues.
+ */
+function ComponentListCard({ item }: ComponentCardProps) {
+  const isClickable =
+    item.status === 'done' ||
+    item.status === 'ready' ||
+    item.status === 'in-progress';
+
+  const CardWrapper = isClickable ? Link : 'div';
+  const cardProps = isClickable ? { href: item.href } : {};
+
+  return (
+    <motion.div variants={itemVariants}>
+      <CardWrapper
+        {...(cardProps as any)}
+        className={cn(
+          'group flex items-center gap-4',
+          'px-4 py-3 rounded-xl',
+          'border border-gray-200 dark:border-gray-800',
+          'bg-white dark:bg-gray-900',
+          'transition-all duration-200',
+          isClickable && [
+            'hover:border-gray-300 dark:hover:border-gray-700',
+            'hover:shadow-md dark:hover:shadow-gray-950/50',
+            'hover:bg-gray-50 dark:hover:bg-gray-800/50',
+            'cursor-pointer',
+          ],
+          !isClickable && 'opacity-60 cursor-not-allowed',
+        )}
+      >
+        {/* Status indicator bar */}
+        <div
+          className={cn(
+            'w-1 h-10 rounded-full shrink-0',
+            item.status === 'done' && 'bg-emerald-500',
+            item.status === 'ready' && 'bg-blue-500',
+            item.status === 'in-progress' && 'bg-amber-500',
+            item.status === 'planned' && 'bg-gray-300 dark:bg-gray-600',
+          )}
+        />
+
+        {/* Main content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
+            <Text fontWeight="medium" color="primary" className="truncate">
+              {item.name}
+            </Text>
+            <StatusBadge status={item.status} />
+          </div>
+          <SmallText className="line-clamp-1">{item.description}</SmallText>
+        </div>
+
+        {/* Tags */}
+        {item.tags && item.tags.length > 0 && (
+          <div className="hidden sm:flex items-center gap-1.5 shrink-0">
+            {item.tags.slice(0, 2).map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 text-[10px] font-medium rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Arrow */}
+        {isClickable && (
+          <FiArrowRight className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 group-hover:translate-x-0.5 transition-all shrink-0" />
+        )}
       </CardWrapper>
     </motion.div>
   );
